@@ -4,6 +4,12 @@ A compiler for the **Visual Basic .NET** programming language.
 
 The project includes lexer, parser, semantics and translation to bytecode.
 
+## Run application
+
+Build project: `docker compose build`
+
+Run project: `docker compose run --rm vbc <file_path>`
+
 ## Documentation
 
 Official Microsoft Visual Basic Language Reference:

@@ -1,0 +1,8 @@
+services:
+  vbc:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app
+    volumes:
+      - .:/app
