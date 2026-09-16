@@ -218,7 +218,7 @@ Xor              { printf("KEYWORD Xor\n"); }
 \>\>    { printf("OPERATOR >>\n"); }
 \<\<    { printf("OPERATOR <<\n"); }
 
-\\=     { printf("OPERATOR \\\=\n"); }
+\\=     { printf("OPERATOR \\=\n"); }
 \/=     { printf("OPERATOR /=\n"); }
 
     /* Comments */
