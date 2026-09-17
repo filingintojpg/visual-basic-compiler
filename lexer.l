@@ -9,7 +9,7 @@ BIN_DIGIT   [0-1]
 OCT_DIGIT   [0-7]
 HEX_DIGIT   [a-fA-F0-9]
 
-NUMBER      {DIGIT}(\_*{DIGIT}*)*
+NUMBER      {DIGIT}(\_*{DIGIT})*
 EXPONENT    [Ee][+-]?{NUMBER}
 
 INTEGER_SUFFIX          (S|US|I|UI|L|UL)
@@ -276,6 +276,10 @@ Xor              { printf("KEYWORD Xor\n"); }
 
     /* Number literals */
 
+\_+{NUMBER}\_*{INTEGER_SUFFIX}?|\_*{NUMBER}\_+{INTEGER_SUFFIX}? {
+    printf("ERROR: Invalid underscore character in number literal at line %d: %s\n", yylineno, yytext);
+}
+
 {NUMBER}{INTEGER_SUFFIX}? {
     std::string message("LITERAL ");
     std::string lexeme(yytext);
@@ -292,7 +296,11 @@ Xor              { printf("KEYWORD Xor\n"); }
     printf("%s%s\n", message.c_str(), yytext);
 }
 
-&H{HEX_DIGIT}(\_*{HEX_DIGIT}*)*{INTEGER_SUFFIX}? {
+&H\_*{HEX_DIGIT}(\_*{HEX_DIGIT}*)*\_+{INTEGER_SUFFIX}? {
+    printf("ERROR: Invalid underscore character in hex number literal at line %d: %s\n", yylineno, yytext);
+}
+
+&H\_*{HEX_DIGIT}(\_*{HEX_DIGIT}*)*{INTEGER_SUFFIX}? {
     std::string message("LITERAL HEX ");
     std::string lexeme(yytext);
 
@@ -308,7 +316,11 @@ Xor              { printf("KEYWORD Xor\n"); }
     printf("%s%s\n", message.c_str(), yytext);
 }
 
-&O{OCT_DIGIT}(\_*{OCT_DIGIT}*)*{INTEGER_SUFFIX}? {
+&O\_*{OCT_DIGIT}(\_*{OCT_DIGIT}*)*\_+{INTEGER_SUFFIX}? {
+    printf("ERROR: Invalid underscore character in oct number literal at line %d: %s\n", yylineno, yytext);
+}
+
+&O\_*{OCT_DIGIT}(\_*{OCT_DIGIT}*)*{INTEGER_SUFFIX}? {
     std::string message("LITERAL OCT ");
     std::string lexeme(yytext);
 
@@ -324,7 +336,11 @@ Xor              { printf("KEYWORD Xor\n"); }
     printf("%s%s\n", message.c_str(), yytext);
 }
 
-&B{BIN_DIGIT}(\_*{BIN_DIGIT}*)*{INTEGER_SUFFIX}? {
+&B\_*{BIN_DIGIT}(\_*{BIN_DIGIT}*)*\_+{INTEGER_SUFFIX}? {
+    printf("ERROR: Invalid underscore character in bin number literal at line %d: %s\n", yylineno, yytext);
+}
+
+&B\_*{BIN_DIGIT}(\_*{BIN_DIGIT}*)*{INTEGER_SUFFIX}? {
     std::string message("LITERAL BIN ");
     std::string lexeme(yytext);
 
@@ -357,6 +373,10 @@ Xor              { printf("KEYWORD Xor\n"); }
 
     /* Identifiers */
 
+\[{ID}{TYPE_CHAR}\] {
+    printf("ERROR: Invalid type char in escaped identifier at line %d: %s\n", yylineno, yytext);
+}
+
 \[{ID}\] {
     std::string lexeme(yytext);
     std::string id = lexeme.substr(1, lexeme.length() - 2);
@@ -366,7 +386,6 @@ Xor              { printf("KEYWORD Xor\n"); }
 {ID}{TYPE_CHAR}? {
     std::string message("IDENTIFIER ");
     std::string lexeme(yytext);
-    std::string id(yytext);
 
     if      (lexeme.ends_with("%")) { message += "INTEGER "; }
     else if (lexeme.ends_with("&")) { message += "LONG "; }
@@ -375,12 +394,7 @@ Xor              { printf("KEYWORD Xor\n"); }
     else if (lexeme.ends_with("#")) { message += "DOUBLE "; }
     else if (lexeme.ends_with("$")) { message += "STRING "; }
 
-    if (lexeme.ends_with("%") || lexeme.ends_with("&") || lexeme.ends_with("@") ||
-            lexeme.ends_with("!") || lexeme.ends_with("#") || lexeme.ends_with("$")) {
-        id = lexeme.substr(0, lexeme.length() - 1);
-    }
-
-    printf("%s%s\n", message.c_str(), id.c_str());
+    printf("%s%s\n", message.c_str(), lexeme.c_str());
 }
 
     /* Separators */
@@ -398,7 +412,7 @@ Xor              { printf("KEYWORD Xor\n"); }
     /* Whitespaces */
 
 [\r\t ]+            { }
-[\r\t ]_[\r\t ]+\n+ { printf("LINE CONTINUATION _\n"); }
+[\r\t ]_[\r\t ]*\n+ { printf("LINE CONTINUATION _\n"); }
 \n+                 { printf("END OF LINE %d\n", yylineno - 1); }
 
     /* Other */
