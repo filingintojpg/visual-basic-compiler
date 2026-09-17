@@ -393,5 +393,3 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
-
-lexer/lexer.cpp

@@ -3,17 +3,16 @@
 set -e
 
 BUILD_DIR="/build"
-LEXER_CPP="/app/lexer/lexer.cpp"
+LEXER_CPP="$BUILD_DIR/lexer.cpp"
 OUTPUT="$BUILD_DIR/VisualBasicCompiler"
 
 mkdir -p "$BUILD_DIR"
-rm -f "$LEXER_CPP"
 
 echo "Generating lexer..."
 
 flex --c++ \
     -o "$LEXER_CPP" \
-    /app/lexer/lexer.l
+    /app/lexer.l
 
 echo "Compiling..."
 
@@ -23,6 +22,7 @@ g++ -std=c++20 \
     -I/app \
     -I/usr/include \
     $SOURCES \
+    "$LEXER_CPP" \
     -o "$OUTPUT"
 
 echo "Build successful!"
