@@ -1,6 +1,4 @@
-# Visual Basic Compiler
-
-A compiler for the **Visual Basic .NET** programming language.
+# Visual Basic .NET Compiler
 
 The project includes lexer, parser, semantics and translation to bytecode.
 
