@@ -38,8 +38,10 @@ ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
     std::string toLower(const std::string& str);
     std::string integerDescription(const std::string& lexeme);
     std::string floatingDescription(const std::string& lexeme);
+    std::string identifierDescription(const std::string& lexeme);
     long long toInteger(const std::string& lexeme);
     double toFloating(const std::string& lexeme);
+    std::string toID(const std::string& lexeme);
 %}
 
 %x STRING
@@ -349,22 +351,12 @@ Xor              { lexprint("KEYWORD Xor\n"); }
 
 \[{ID}\] {
     std::string lexeme(yytext);
-    std::string id = lexeme.substr(1, lexeme.length() - 2);
-    lexprint("ESCAPED IDENTIFIER %s\n", id.c_str());
+    lexprint("ESCAPED IDENTIFIER %s (%s)\n", yytext, toID(lexeme).c_str());
 }
 
 {ID}{TYPE_CHAR}? {
-    std::string message("IDENTIFIER ");
     std::string lexeme(yytext);
-
-    if      (lexeme.ends_with("%")) { message += "INTEGER "; }
-    else if (lexeme.ends_with("&")) { message += "LONG "; }
-    else if (lexeme.ends_with("@")) { message += "DECIMAL "; }
-    else if (lexeme.ends_with("!")) { message += "SINGLE "; }
-    else if (lexeme.ends_with("#")) { message += "DOUBLE "; }
-    else if (lexeme.ends_with("$")) { message += "STRING "; }
-
-    lexprint("%s%s\n", message.c_str(), lexeme.c_str());
+    lexprint("%s (%s)\n", identifierDescription(lexeme).c_str(), toID(lexeme).c_str());
 }
 
     /* Separators */
@@ -460,6 +452,19 @@ std::string floatingDescription(const std::string& lexeme) {
     return message + lexeme;
 }
 
+std::string identifierDescription(const std::string& lexeme) {
+    std::string message("IDENTIFIER ");
+
+    if      (lexeme.ends_with("%")) { message += "INTEGER "; }
+    else if (lexeme.ends_with("&")) { message += "LONG "; }
+    else if (lexeme.ends_with("@")) { message += "DECIMAL "; }
+    else if (lexeme.ends_with("!")) { message += "SINGLE "; }
+    else if (lexeme.ends_with("#")) { message += "DOUBLE "; }
+    else if (lexeme.ends_with("$")) { message += "STRING "; }
+
+    return message + lexeme;
+}
+
     /* Converting lexemes to values */
 
 long long toInteger(const std::string& lexeme) {
@@ -500,4 +505,19 @@ double toFloating(const std::string& lexeme) {
     number.erase(std::remove(number.begin(), number.end(), '_'), number.end());
 
     return std::stod(number);
+}
+
+std::string toID(const std::string& lexeme) {
+    std::string id = lexeme;
+
+    if (id.starts_with("[") && id.ends_with("]")) {
+        id = id.substr(1, id.length() - 2);
+    }
+
+    if (id.ends_with("%") || id.ends_with("&") || id.ends_with("@") || 
+        id.ends_with("!") || id.ends_with("#") || id.ends_with("$")) {
+        id.pop_back();
+    }
+
+    return toLower(id);
 }
