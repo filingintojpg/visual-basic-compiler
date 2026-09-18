@@ -34,7 +34,7 @@ ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
     std::string commentValue;
 
     void lexprint(const char *format, ...);
-    void lexerror(const char *format, ...);
+    void lexerror(int line, const char *format, ...);
     std::string toLower(const std::string& str);
     std::string integerDescription(const std::string& lexeme);
     std::string floatingDescription(const std::string& lexeme);
@@ -272,17 +272,17 @@ Xor              { lexprint("KEYWORD Xor\n"); }
     stringValue += "\"";
 }
 <STRING>\n {
-    lexerror("String literal wasn't closed at line %d\n", yylineno - 1);
+    lexerror(yylineno - 1, "String literal wasn't closed\n");
     BEGIN(INITIAL);
 }
 <STRING><<EOF>> {
-    lexerror("String literal wasn't closed at last line\n");
+    lexerror(yylineno, "String literal wasn't closed at last line\n");
 }
 <STRING>\"[Cc] {
     if (stringValue.length() == 1) {
         lexprint("LITERAL CHAR %c\n", stringValue.at(0));
     } else {
-        lexerror("Char literal has more than 1 symbol at line %d\n", yylineno);
+        lexerror(yylineno, "Char literal has more than 1 symbol\n");
     }
     BEGIN(INITIAL);
 }
@@ -296,7 +296,7 @@ Xor              { lexprint("KEYWORD Xor\n"); }
     /* Integer literals */
 
 \_+{NUMBER}\_*{INTEGER_SUFFIX}?|\_*{NUMBER}\_+{INTEGER_SUFFIX}? {
-    lexerror("Invalid underscore character in number literal at line %d: %s\n", yylineno, yytext);
+    lexerror(yylineno, "Invalid underscore character in number literal: %s\n", yytext);
 }
 
 {NUMBER}{INTEGER_SUFFIX}? {
@@ -305,7 +305,7 @@ Xor              { lexprint("KEYWORD Xor\n"); }
 }
 
 &H\_*{HEX_DIGIT}(\_*{HEX_DIGIT}*)*\_+{INTEGER_SUFFIX}? {
-    lexerror("Invalid underscore character in hex number literal at line %d: %s\n", yylineno, yytext);
+    lexerror(yylineno, "Invalid underscore character in hex number literal: %s\n", yytext);
 }
 
 &H\_*{HEX_DIGIT}(\_*{HEX_DIGIT}*)*{INTEGER_SUFFIX}? {
@@ -314,7 +314,7 @@ Xor              { lexprint("KEYWORD Xor\n"); }
 }
 
 &O\_*{OCT_DIGIT}(\_*{OCT_DIGIT}*)*\_+{INTEGER_SUFFIX}? {
-    lexerror("Invalid underscore character in oct number literal at line %d: %s\n", yylineno, yytext);
+    lexerror(yylineno, "Invalid underscore character in oct number literal: %s\n", yytext);
 }
 
 &O\_*{OCT_DIGIT}(\_*{OCT_DIGIT}*)*{INTEGER_SUFFIX}? {
@@ -323,7 +323,7 @@ Xor              { lexprint("KEYWORD Xor\n"); }
 }
 
 &B\_*{BIN_DIGIT}(\_*{BIN_DIGIT}*)*\_+{INTEGER_SUFFIX}? {
-    lexerror("Invalid underscore character in bin number literal at line %d: %s\n", yylineno, yytext);
+    lexerror(yylineno, "Invalid underscore character in bin number literal: %s\n", yytext);
 }
 
 &B\_*{BIN_DIGIT}(\_*{BIN_DIGIT}*)*{INTEGER_SUFFIX}? {
@@ -346,7 +346,7 @@ Xor              { lexprint("KEYWORD Xor\n"); }
     /* Identifiers */
 
 \[{ID}{TYPE_CHAR}\] {
-    lexerror("Invalid type char in escaped identifier at line %d: %s\n", yylineno, yytext);
+    lexerror(yylineno, "Invalid type char in escaped identifier: %s\n", yytext);
 }
 
 \[{ID}\] {
@@ -379,7 +379,7 @@ Xor              { lexprint("KEYWORD Xor\n"); }
 
     /* Other */
 
-.       { lexerror("Unexpected character at line %d: %s\n", yylineno, yytext); }
+.       { lexerror(yylineno, "Unexpected character: %s\n", yytext); }
 <<EOF>> { yyterminate(); }
 
 %%
@@ -397,9 +397,9 @@ void lexprint(const char *format, ...) {
     }
 }
 
-void lexerror(const char *format, ...) {
+void lexerror(int line, const char *format, ...) {
     LEXER_ERROR = true;
-    printf("LEXER ERROR: ");
+    printf("LEXER ERROR at line %d: ", line);
 
     va_list args;
     va_start(args, format);
