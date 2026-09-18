@@ -26,7 +26,7 @@ ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
     #include <algorithm>
 
     bool DEBUG_LEXER = true;
-    bool DEBUG_END_OF_LINE = false;
+    bool DEBUG_LEXER_EOL = false;
 
     bool LEXER_ERROR = false;
 
@@ -35,7 +35,7 @@ ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
 
     void lexprint(const char *format, ...);
     void lexerror(const char *format, ...);
-    std::string toUpper(const std::string& str);
+    std::string toLower(const std::string& str);
     std::string integerDescription(const std::string& lexeme);
     std::string floatingDescription(const std::string& lexeme);
     long long toInteger(const std::string& lexeme);
@@ -383,7 +383,7 @@ Xor              { lexprint("KEYWORD Xor\n"); }
 
 [\r\t ]+            { }
 [\r\t ]_[\r\t ]*\n+ { lexprint("LINE CONTINUATION _\n"); }
-\n+                 { if (DEBUG_END_OF_LINE) lexprint("END OF LINE %d\n", yylineno - 1); }
+\n+                 { if (DEBUG_LEXER_EOL) lexprint("END OF LINE %d\n", yylineno - 1); }
 
     /* Other */
 
@@ -417,33 +417,33 @@ void lexerror(const char *format, ...) {
 
     /* Generating descriptions while debugging */
 
-std::string toUpper(const std::string& str) {
-    std::string upperStr = str;
+std::string toLower(const std::string& str) {
+    std::string lowerStr = str;
 
-    std::transform(upperStr.begin(), upperStr.end(), upperStr.begin(),
-        [](unsigned char c) { return std::toupper(c); }
+    std::transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(),
+        [](unsigned char c) { return std::tolower(c); }
     );
-    return upperStr;
+    return lowerStr;
 }
 
 std::string integerDescription(const std::string& lexeme) {
     std::string message("LITERAL ");
-    std::string upperLexeme = toUpper(lexeme);
+    std::string lowerLexeme = toLower(lexeme);
 
-    if      (upperLexeme.starts_with("&H")) { message += "HEX "; }
-    else if (upperLexeme.starts_with("&O")) { message += "OCT "; }
-    else if (upperLexeme.starts_with("&B")) { message += "BIN "; }
-    else                                         { message += "DEC "; }
+    if      (lowerLexeme.starts_with("&H")) { message += "HEX "; }
+    else if (lowerLexeme.starts_with("&O")) { message += "OCT "; }
+    else if (lowerLexeme.starts_with("&B")) { message += "BIN "; }
+    else                                    { message += "DEC "; }
 
-    if (upperLexeme.ends_with("US") || 
-        upperLexeme.ends_with("UI") || 
-        upperLexeme.ends_with("UL")) {
+    if (lowerLexeme.ends_with("US") || 
+        lowerLexeme.ends_with("UI") || 
+        lowerLexeme.ends_with("UL")) {
         message += "UNSIGNED ";
     }
     
-    if      (upperLexeme.ends_with("S")) { message += "SHORT "; }
-    else if (upperLexeme.ends_with("L")) { message += "LONG "; }
-    else if (upperLexeme.ends_with("I")) { message += "INTEGER "; }
+    if      (lowerLexeme.ends_with("S")) { message += "SHORT "; }
+    else if (lowerLexeme.ends_with("L")) { message += "LONG "; }
+    else if (lowerLexeme.ends_with("I")) { message += "INTEGER "; }
     else                                 { message += "INTEGER "; }
 
     return message + lexeme;
@@ -451,11 +451,11 @@ std::string integerDescription(const std::string& lexeme) {
 
 std::string floatingDescription(const std::string& lexeme) {
     std::string message("LITERAL ");
-    std::string upperLexeme = toUpper(lexeme);
+    std::string lowerLexeme = toLower(lexeme);
 
-    if      (upperLexeme.ends_with("F")) { message += "SINGLE "; }
-    else if (upperLexeme.ends_with("D")) { message += "DECIMAL "; }
-    else if (upperLexeme.ends_with("R")) { message += "DOUBLE "; }
+    if      (lowerLexeme.ends_with("F")) { message += "SINGLE "; }
+    else if (lowerLexeme.ends_with("D")) { message += "DECIMAL "; }
+    else if (lowerLexeme.ends_with("R")) { message += "DOUBLE "; }
 
     return message + lexeme;
 }
@@ -464,23 +464,23 @@ std::string floatingDescription(const std::string& lexeme) {
 
 long long toInteger(const std::string& lexeme) {
     std::string number = lexeme;
-    std::string upperLexeme = toUpper(lexeme);
+    std::string lowerLexeme = toLower(lexeme);
     int base = 10;
 
-    if (upperLexeme.ends_with("US") || 
-        upperLexeme.ends_with("UI") || 
-        upperLexeme.ends_with("UL")) {
+    if (lowerLexeme.ends_with("US") || 
+        lowerLexeme.ends_with("UI") || 
+        lowerLexeme.ends_with("UL")) {
         number = number.substr(0, number.length() - 2);
     }
-    else if (upperLexeme.ends_with("S") || 
-             upperLexeme.ends_with("I") || 
-             upperLexeme.ends_with("L")) {
+    else if (lowerLexeme.ends_with("S") || 
+             lowerLexeme.ends_with("I") || 
+             lowerLexeme.ends_with("L")) {
         number = number.substr(0, number.length() - 1);
     }
 
-    if      (upperLexeme.starts_with("&H")) { base = 16; number = number.substr(2); }
-    else if (upperLexeme.starts_with("&O")) { base = 8;  number = number.substr(2); }
-    else if (upperLexeme.starts_with("&B")) { base = 2;  number = number.substr(2); }
+    if      (lowerLexeme.starts_with("&H")) { base = 16; number = number.substr(2); }
+    else if (lowerLexeme.starts_with("&O")) { base = 8;  number = number.substr(2); }
+    else if (lowerLexeme.starts_with("&B")) { base = 2;  number = number.substr(2); }
 
     number.erase(std::remove(number.begin(), number.end(), '_'), number.end());
 
@@ -489,11 +489,11 @@ long long toInteger(const std::string& lexeme) {
 
 double toFloating(const std::string& lexeme) {
     std::string number = lexeme;
-    std::string upperLexeme = toUpper(lexeme);
+    std::string lowerLexeme = toLower(lexeme);
 
-    if (upperLexeme.ends_with("F") || 
-        upperLexeme.ends_with("D") || 
-        upperLexeme.ends_with("R")) {
+    if (lowerLexeme.ends_with("F") || 
+        lowerLexeme.ends_with("D") || 
+        lowerLexeme.ends_with("R")) {
         number.pop_back();
     }
 
