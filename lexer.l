@@ -53,163 +53,185 @@ ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
 
     /* Keywords */
 
-And              { lexprint(yylineno, "KEYWORD And"); }
-AndAlso          { lexprint(yylineno, "KEYWORD AndAlso"); }
-As               { lexprint(yylineno, "KEYWORD As"); }
-ByRef            { lexprint(yylineno, "KEYWORD ByRef"); }
-ByVal            { lexprint(yylineno, "KEYWORD ByVal"); }
-Call             { lexprint(yylineno, "KEYWORD Call"); }
-Case             { lexprint(yylineno, "KEYWORD Case"); }
-Catch            { lexprint(yylineno, "KEYWORD Catch"); }
-CByte            { lexprint(yylineno, "KEYWORD CByte"); }
-CChar            { lexprint(yylineno, "KEYWORD CChar"); }
-CDate            { lexprint(yylineno, "KEYWORD CDate"); }
-CDbl             { lexprint(yylineno, "KEYWORD CDbl"); }
-CDec             { lexprint(yylineno, "KEYWORD CDec"); }
-Char             { lexprint(yylineno, "KEYWORD Char"); }
-CInt             { lexprint(yylineno, "KEYWORD CInt"); }
-Class            { lexprint(yylineno, "KEYWORD Class"); }
-CLng             { lexprint(yylineno, "KEYWORD CLng"); }
-CObj             { lexprint(yylineno, "KEYWORD CObj"); }
-Const            { lexprint(yylineno, "KEYWORD Const"); }
-Continue         { lexprint(yylineno, "KEYWORD Continue"); }
-CSByte           { lexprint(yylineno, "KEYWORD CSByte"); }
-CShort           { lexprint(yylineno, "KEYWORD CShort"); }
-CSng             { lexprint(yylineno, "KEYWORD CSng"); }
-CStr             { lexprint(yylineno, "KEYWORD CStr"); }
-CType            { lexprint(yylineno, "KEYWORD CType"); }
-CUInt            { lexprint(yylineno, "KEYWORD CUInt"); }
-CULng            { lexprint(yylineno, "KEYWORD CULng"); }
-CUShort          { lexprint(yylineno, "KEYWORD CUShort"); }
-Date             { lexprint(yylineno, "KEYWORD Date"); }
-Decimal          { lexprint(yylineno, "KEYWORD Decimal"); }
-Declare          { lexprint(yylineno, "KEYWORD Declare"); }
-Default          { lexprint(yylineno, "KEYWORD Default"); }
-Delegate         { lexprint(yylineno, "KEYWORD Delegate"); }
-Dim              { lexprint(yylineno, "KEYWORD Dim"); }
-DirectCast       { lexprint(yylineno, "KEYWORD DirectCast"); }
-Do               { lexprint(yylineno, "KEYWORD Do"); }
-Double           { lexprint(yylineno, "KEYWORD Double"); }
-Each             { lexprint(yylineno, "KEYWORD Each"); }
-Else             { lexprint(yylineno, "KEYWORD Else"); }
-ElseIf           { lexprint(yylineno, "KEYWORD ElseIf"); }
-End[ ]+Class     { lexprint(yylineno, "KEYWORD End Class"); }
-End[ ]+Enum      { lexprint(yylineno, "KEYWORD End Enum"); }
-End[ ]+Function  { lexprint(yylineno, "KEYWORD End Function"); }
-End[ ]+Get       { lexprint(yylineno, "KEYWORD End Get"); }
-End[ ]+If        { lexprint(yylineno, "KEYWORD End If"); }
-End[ ]+Interface { lexprint(yylineno, "KEYWORD End Interface"); }
-End[ ]+Module    { lexprint(yylineno, "KEYWORD End Module"); }
-End[ ]+Namespace { lexprint(yylineno, "KEYWORD End Namespace"); }
-End[ ]+Property  { lexprint(yylineno, "KEYWORD End Property"); }
-End[ ]+Select    { lexprint(yylineno, "KEYWORD End Select"); }
-End[ ]+Set       { lexprint(yylineno, "KEYWORD End Set"); }
-End[ ]+Structure { lexprint(yylineno, "KEYWORD End Structure"); }
-End[ ]+Sub       { lexprint(yylineno, "KEYWORD End Sub"); }
-End[ ]+SyncLock  { lexprint(yylineno, "KEYWORD End SyncLock"); }
-End[ ]+Try       { lexprint(yylineno, "KEYWORD End Try"); }
-End[ ]+While     { lexprint(yylineno, "KEYWORD End While"); }
-End              { lexprint(yylineno, "KEYWORD End"); }
-Erase            { lexprint(yylineno, "KEYWORD Erase"); }
-Error            { lexprint(yylineno, "KEYWORD Error"); }
-Event            { lexprint(yylineno, "KEYWORD Event"); }
-Exit             { lexprint(yylineno, "KEYWORD Exit"); }
-False            { lexprint(yylineno, "BOOLEAN False"); }
-Finally          { lexprint(yylineno, "KEYWORD Finally"); }
-For              { lexprint(yylineno, "KEYWORD For"); }
-Friend           { lexprint(yylineno, "KEYWORD Friend"); }
-From             { lexprint(yylineno, "KEYWORD From"); }
-Function         { lexprint(yylineno, "KEYWORD Function"); }
-Get              { lexprint(yylineno, "KEYWORD Get"); }
-GetType          { lexprint(yylineno, "KEYWORD GetType"); }
-Global           { lexprint(yylineno, "KEYWORD Global"); }
-GoSub            { lexprint(yylineno, "KEYWORD GoSub"); }
-GoTo             { lexprint(yylineno, "KEYWORD GoTo"); }
-Handles          { lexprint(yylineno, "KEYWORD Handles"); }
-If               { lexprint(yylineno, "KEYWORD If"); }
-Implements       { lexprint(yylineno, "KEYWORD Implements"); }
-Imports          { lexprint(yylineno, "KEYWORD Imports"); }
-In               { lexprint(yylineno, "KEYWORD In"); }
-Inherits         { lexprint(yylineno, "KEYWORD Inherits"); }
-Integer          { lexprint(yylineno, "KEYWORD Integer"); }
-Interface        { lexprint(yylineno, "KEYWORD Interface"); }
-Is               { lexprint(yylineno, "KEYWORD Is"); }
-IsNot            { lexprint(yylineno, "KEYWORD IsNot"); }
-Let              { lexprint(yylineno, "KEYWORD Let"); }
-Like             { lexprint(yylineno, "KEYWORD Like"); }
-Long             { lexprint(yylineno, "KEYWORD Long"); }
-Loop             { lexprint(yylineno, "KEYWORD Loop"); }
-Me               { lexprint(yylineno, "KEYWORD Me"); }
-Mod              { lexprint(yylineno, "KEYWORD Mod"); }
-Module           { lexprint(yylineno, "KEYWORD Module"); }
-MustInherit      { lexprint(yylineno, "KEYWORD MustInherit"); }
-MustOverride     { lexprint(yylineno, "KEYWORD MustOverride"); }
-MyBase           { lexprint(yylineno, "KEYWORD MyBase"); }
-MyClass          { lexprint(yylineno, "KEYWORD MyClass"); }
-NameOf           { lexprint(yylineno, "KEYWORD NameOf"); }
-Namespace        { lexprint(yylineno, "KEYWORD Namespace"); }
-Narrowing        { lexprint(yylineno, "KEYWORD Narrowing"); }
-New              { lexprint(yylineno, "KEYWORD New"); }
-Next             { lexprint(yylineno, "KEYWORD Next"); }
-Not              { lexprint(yylineno, "KEYWORD Not"); }
-Nothing          { lexprint(yylineno, "NOTHING Nothing"); }
-NotInheritable   { lexprint(yylineno, "KEYWORD NotInheritable"); }
-NotOverridable   { lexprint(yylineno, "KEYWORD NotOverridable"); }
-Object           { lexprint(yylineno, "KEYWORD Object"); }
-Of               { lexprint(yylineno, "KEYWORD Of"); }
-On               { lexprint(yylineno, "KEYWORD On"); }
-Operator         { lexprint(yylineno, "KEYWORD Operator"); }
-Option           { lexprint(yylineno, "KEYWORD Option"); }
-Optional         { lexprint(yylineno, "KEYWORD Optional"); }
-Or               { lexprint(yylineno, "KEYWORD Or"); }
-OrElse           { lexprint(yylineno, "KEYWORD OrElse"); }
-Overloads        { lexprint(yylineno, "KEYWORD Overloads"); }
-Overrides        { lexprint(yylineno, "KEYWORD Overrides"); }
-ParamArray       { lexprint(yylineno, "KEYWORD ParamArray"); }
-Partial          { lexprint(yylineno, "KEYWORD Partial"); }
-Private          { lexprint(yylineno, "KEYWORD Private"); }
-Property         { lexprint(yylineno, "KEYWORD Property"); }
-Protected        { lexprint(yylineno, "KEYWORD Protected"); }
-Public           { lexprint(yylineno, "KEYWORD Public"); }
-RaiseEvent       { lexprint(yylineno, "KEYWORD RaiseEvent"); }
-ReadOnly         { lexprint(yylineno, "KEYWORD ReadOnly"); }
-ReDim            { lexprint(yylineno, "KEYWORD ReDim"); }
-RemoveHandler    { lexprint(yylineno, "KEYWORD RemoveHandler"); }
-Resume           { lexprint(yylineno, "KEYWORD Resume"); }
-Return           { lexprint(yylineno, "KEYWORD Return"); }
-Select           { lexprint(yylineno, "KEYWORD Select"); }
-Set              { lexprint(yylineno, "KEYWORD Set"); }
-Shadows          { lexprint(yylineno, "KEYWORD Shadows"); }
-Shared           { lexprint(yylineno, "KEYWORD Shared"); }
-Short            { lexprint(yylineno, "KEYWORD Short"); }
-Single           { lexprint(yylineno, "KEYWORD Single"); }
-Static           { lexprint(yylineno, "KEYWORD Static"); }
-Step             { lexprint(yylineno, "KEYWORD Step"); }
-Stop             { lexprint(yylineno, "KEYWORD Stop"); }
-String           { lexprint(yylineno, "KEYWORD String"); }
-Structure        { lexprint(yylineno, "KEYWORD Structure"); }
-Sub              { lexprint(yylineno, "KEYWORD Sub"); }
-SyncLock         { lexprint(yylineno, "KEYWORD SyncLock"); }
-Then             { lexprint(yylineno, "KEYWORD Then"); }
-Throw            { lexprint(yylineno, "KEYWORD Throw"); }
-To               { lexprint(yylineno, "KEYWORD To"); }
-True             { lexprint(yylineno, "BOOLEAN True"); }
-Try              { lexprint(yylineno, "KEYWORD Try"); }
-TryCast          { lexprint(yylineno, "KEYWORD TryCast"); }
-TypeOf           { lexprint(yylineno, "KEYWORD TypeOf"); }
-UInteger         { lexprint(yylineno, "KEYWORD UInteger"); }
-ULong            { lexprint(yylineno, "KEYWORD ULong"); }
-UShort           { lexprint(yylineno, "KEYWORD UShort"); }
-Using            { lexprint(yylineno, "KEYWORD Using"); }
-Until            { lexprint(yylineno, "KEYWORD Until"); }
-When             { lexprint(yylineno, "KEYWORD When"); }
-Where            { lexprint(yylineno, "KEYWORD Where"); }
-While            { lexprint(yylineno, "KEYWORD While"); }
-Widening         { lexprint(yylineno, "KEYWORD Widening"); }
-With             { lexprint(yylineno, "KEYWORD With"); }
-WithEvents       { lexprint(yylineno, "KEYWORD WithEvents"); }
-WriteOnly        { lexprint(yylineno, "KEYWORD WriteOnly"); }
-Xor              { lexprint(yylineno, "KEYWORD Xor"); }
+AddHandler         { lexprint(yylineno, "KEYWORD AddHandler"); }
+AddressOf          { lexprint(yylineno, "KEYWORD AddressOf"); }
+Alias              { lexprint(yylineno, "KEYWORD Alias"); }
+And                { lexprint(yylineno, "KEYWORD And"); }
+AndAlso            { lexprint(yylineno, "KEYWORD AndAlso"); }
+As                 { lexprint(yylineno, "KEYWORD As"); }
+Assembly           { lexprint(yylineno, "KEYWORD Assembly"); }
+Boolean            { lexprint(yylineno, "KEYWORD Boolean"); }
+ByRef              { lexprint(yylineno, "KEYWORD ByRef"); }
+ByVal              { lexprint(yylineno, "KEYWORD ByVal"); }
+By                 { lexprint(yylineno, "KEYWORD By"); }
+Byte               { lexprint(yylineno, "KEYWORD Byte"); }
+Call               { lexprint(yylineno, "KEYWORD Call"); }
+Case               { lexprint(yylineno, "KEYWORD Case"); }
+Catch              { lexprint(yylineno, "KEYWORD Catch"); }
+CByte              { lexprint(yylineno, "KEYWORD CByte"); }
+CChar              { lexprint(yylineno, "KEYWORD CChar"); }
+CDate              { lexprint(yylineno, "KEYWORD CDate"); }
+CDbl               { lexprint(yylineno, "KEYWORD CDbl"); }
+CDec               { lexprint(yylineno, "KEYWORD CDec"); }
+Char               { lexprint(yylineno, "KEYWORD Char"); }
+CInt               { lexprint(yylineno, "KEYWORD CInt"); }
+Class              { lexprint(yylineno, "KEYWORD Class"); }
+CLng               { lexprint(yylineno, "KEYWORD CLng"); }
+CObj               { lexprint(yylineno, "KEYWORD CObj"); }
+Const              { lexprint(yylineno, "KEYWORD Const"); }
+Continue           { lexprint(yylineno, "KEYWORD Continue"); }
+CSByte             { lexprint(yylineno, "KEYWORD CSByte"); }
+CShort             { lexprint(yylineno, "KEYWORD CShort"); }
+CSng               { lexprint(yylineno, "KEYWORD CSng"); }
+CStr               { lexprint(yylineno, "KEYWORD CStr"); }
+CType              { lexprint(yylineno, "KEYWORD CType"); }
+CUInt              { lexprint(yylineno, "KEYWORD CUInt"); }
+CULng              { lexprint(yylineno, "KEYWORD CULng"); }
+CUShort            { lexprint(yylineno, "KEYWORD CUShort"); }
+Date               { lexprint(yylineno, "KEYWORD Date"); }
+Decimal            { lexprint(yylineno, "KEYWORD Decimal"); }
+Declare            { lexprint(yylineno, "KEYWORD Declare"); }
+Default            { lexprint(yylineno, "KEYWORD Default"); }
+Delegate           { lexprint(yylineno, "KEYWORD Delegate"); }
+Dim                { lexprint(yylineno, "KEYWORD Dim"); }
+DirectCast         { lexprint(yylineno, "KEYWORD DirectCast"); }
+Do                 { lexprint(yylineno, "KEYWORD Do"); }
+Double             { lexprint(yylineno, "KEYWORD Double"); }
+Each               { lexprint(yylineno, "KEYWORD Each"); }
+Else               { lexprint(yylineno, "KEYWORD Else"); }
+ElseIf             { lexprint(yylineno, "KEYWORD ElseIf"); }
+End[ ]+Class       { lexprint(yylineno, "KEYWORD End Class"); }
+End[ ]+Enum        { lexprint(yylineno, "KEYWORD End Enum"); }
+End[ ]+Function    { lexprint(yylineno, "KEYWORD End Function"); }
+End[ ]+Get         { lexprint(yylineno, "KEYWORD End Get"); }
+End[ ]+If          { lexprint(yylineno, "KEYWORD End If"); }
+End[ ]+Interface   { lexprint(yylineno, "KEYWORD End Interface"); }
+End[ ]+Module      { lexprint(yylineno, "KEYWORD End Module"); }
+End[ ]+Namespace   { lexprint(yylineno, "KEYWORD End Namespace"); }
+End[ ]+Property    { lexprint(yylineno, "KEYWORD End Property"); }
+End[ ]+Select      { lexprint(yylineno, "KEYWORD End Select"); }
+End[ ]+Set         { lexprint(yylineno, "KEYWORD End Set"); }
+End[ ]+Structure   { lexprint(yylineno, "KEYWORD End Structure"); }
+End[ ]+Sub         { lexprint(yylineno, "KEYWORD End Sub"); }
+End[ ]+SyncLock    { lexprint(yylineno, "KEYWORD End SyncLock"); }
+End[ ]+Try         { lexprint(yylineno, "KEYWORD End Try"); }
+End[ ]+While       { lexprint(yylineno, "KEYWORD End While"); }
+End                { lexprint(yylineno, "KEYWORD End"); }
+EndIf              { lexprint(yylineno, "KEYWORD EndIf"); }
+Enum               { lexprint(yylineno, "KEYWORD Enum"); }
+Erase              { lexprint(yylineno, "KEYWORD Erase"); }
+Error              { lexprint(yylineno, "KEYWORD Error"); }
+Event              { lexprint(yylineno, "KEYWORD Event"); }
+Exit               { lexprint(yylineno, "KEYWORD Exit"); }
+False              { lexprint(yylineno, "BOOLEAN False"); }
+Finally            { lexprint(yylineno, "KEYWORD Finally"); }
+For                { lexprint(yylineno, "KEYWORD For"); }
+Friend             { lexprint(yylineno, "KEYWORD Friend"); }
+Function           { lexprint(yylineno, "KEYWORD Function"); }
+Get                { lexprint(yylineno, "KEYWORD Get"); }
+GetType            { lexprint(yylineno, "KEYWORD GetType"); }
+GetXMLNamespace    { lexprint(yylineno, "KEYWORD GetXMLNamespace"); }
+Global             { lexprint(yylineno, "KEYWORD Global"); }
+GoSub              { lexprint(yylineno, "KEYWORD GoSub"); }
+GoTo               { lexprint(yylineno, "KEYWORD GoTo"); }
+Group              { lexprint(yylineno, "KEYWORD Group"); }
+Handles            { lexprint(yylineno, "KEYWORD Handles"); }
+If                 { lexprint(yylineno, "KEYWORD If"); }
+Implements         { lexprint(yylineno, "KEYWORD Implements"); }
+Imports            { lexprint(yylineno, "KEYWORD Imports"); }
+In                 { lexprint(yylineno, "KEYWORD In"); }
+Inherits           { lexprint(yylineno, "KEYWORD Inherits"); }
+Integer            { lexprint(yylineno, "KEYWORD Integer"); }
+Interface          { lexprint(yylineno, "KEYWORD Interface"); }
+Into               { lexprint(yylineno, "KEYWORD Into"); }
+Is                 { lexprint(yylineno, "KEYWORD Is"); }
+IsNot              { lexprint(yylineno, "KEYWORD IsNot"); }
+Iterator           { lexprint(yylineno, "KEYWORD Iterator"); }
+Join               { lexprint(yylineno, "KEYWORD Join"); }
+Lib                { lexprint(yylineno, "KEYWORD Lib"); }
+Like               { lexprint(yylineno, "KEYWORD Like"); }
+Long               { lexprint(yylineno, "KEYWORD Long"); }
+Loop               { lexprint(yylineno, "KEYWORD Loop"); }
+Me                 { lexprint(yylineno, "KEYWORD Me"); }
+Mid                { lexprint(yylineno, "KEYWORD Mid"); }
+Mod                { lexprint(yylineno, "KEYWORD Mod"); }
+Module             { lexprint(yylineno, "KEYWORD Module"); }
+MustInherit        { lexprint(yylineno, "KEYWORD MustInherit"); }
+MustOverride       { lexprint(yylineno, "KEYWORD MustOverride"); }
+MyBase             { lexprint(yylineno, "KEYWORD MyBase"); }
+MyClass            { lexprint(yylineno, "KEYWORD MyClass"); }
+NameOf             { lexprint(yylineno, "KEYWORD NameOf"); }
+Namespace          { lexprint(yylineno, "KEYWORD Namespace"); }
+Narrowing          { lexprint(yylineno, "KEYWORD Narrowing"); }
+New                { lexprint(yylineno, "KEYWORD New"); }
+Next               { lexprint(yylineno, "KEYWORD Next"); }
+Not                { lexprint(yylineno, "KEYWORD Not"); }
+Nothing            { lexprint(yylineno, "NOTHING Nothing"); }
+NotInheritable     { lexprint(yylineno, "KEYWORD NotInheritable"); }
+NotOverridable     { lexprint(yylineno, "KEYWORD NotOverridable"); }
+Object             { lexprint(yylineno, "KEYWORD Object"); }
+Of                 { lexprint(yylineno, "KEYWORD Of"); }
+On                 { lexprint(yylineno, "KEYWORD On"); }
+Operator           { lexprint(yylineno, "KEYWORD Operator"); }
+Option             { lexprint(yylineno, "KEYWORD Option"); }
+Optional           { lexprint(yylineno, "KEYWORD Optional"); }
+Or                 { lexprint(yylineno, "KEYWORD Or"); }
+OrElse             { lexprint(yylineno, "KEYWORD OrElse"); }
+Order              { lexprint(yylineno, "KEYWORD Order"); }
+Out                { lexprint(yylineno, "KEYWORD Out"); }
+Overloads          { lexprint(yylineno, "KEYWORD Overloads"); }
+Overridable        { lexprint(yylineno, "KEYWORD Overridable"); }
+Overrides          { lexprint(yylineno, "KEYWORD Overrides"); }
+ParamArray         { lexprint(yylineno, "KEYWORD ParamArray"); }
+Partial            { lexprint(yylineno, "KEYWORD Partial"); }
+Preserve           { lexprint(yylineno, "KEYWORD Preserve"); }
+Private            { lexprint(yylineno, "KEYWORD Private"); }
+Property           { lexprint(yylineno, "KEYWORD Property"); }
+Protected          { lexprint(yylineno, "KEYWORD Protected"); }
+Public             { lexprint(yylineno, "KEYWORD Public"); }
+RaiseEvent         { lexprint(yylineno, "KEYWORD RaiseEvent"); }
+ReadOnly           { lexprint(yylineno, "KEYWORD ReadOnly"); }
+ReDim              { lexprint(yylineno, "KEYWORD ReDim"); }
+RemoveHandler      { lexprint(yylineno, "KEYWORD RemoveHandler"); }
+Resume             { lexprint(yylineno, "KEYWORD Resume"); }
+Return             { lexprint(yylineno, "KEYWORD Return"); }
+SByte              { lexprint(yylineno, "KEYWORD SByte"); }
+Select             { lexprint(yylineno, "KEYWORD Select"); }
+Set                { lexprint(yylineno, "KEYWORD Set"); }
+Shadows            { lexprint(yylineno, "KEYWORD Shadows"); }
+Shared             { lexprint(yylineno, "KEYWORD Shared"); }
+Short              { lexprint(yylineno, "KEYWORD Short"); }
+Single             { lexprint(yylineno, "KEYWORD Single"); }
+Skip               { lexprint(yylineno, "KEYWORD Skip"); }
+Static             { lexprint(yylineno, "KEYWORD Static"); }
+Step               { lexprint(yylineno, "KEYWORD Step"); }
+Stop               { lexprint(yylineno, "KEYWORD Stop"); }
+String             { lexprint(yylineno, "KEYWORD String"); }
+Structure          { lexprint(yylineno, "KEYWORD Structure"); }
+Sub                { lexprint(yylineno, "KEYWORD Sub"); }
+SyncLock           { lexprint(yylineno, "KEYWORD SyncLock"); }
+Take               { lexprint(yylineno, "KEYWORD Take"); }
+Then               { lexprint(yylineno, "KEYWORD Then"); }
+Throw              { lexprint(yylineno, "KEYWORD Throw"); }
+To                 { lexprint(yylineno, "KEYWORD To"); }
+True               { lexprint(yylineno, "BOOLEAN True"); }
+Try                { lexprint(yylineno, "KEYWORD Try"); }
+TryCast            { lexprint(yylineno, "KEYWORD TryCast"); }
+TypeOf             { lexprint(yylineno, "KEYWORD TypeOf"); }
+UInteger           { lexprint(yylineno, "KEYWORD UInteger"); }
+ULong              { lexprint(yylineno, "KEYWORD ULong"); }
+UShort             { lexprint(yylineno, "KEYWORD UShort"); }
+Using              { lexprint(yylineno, "KEYWORD Using"); }
+Until              { lexprint(yylineno, "KEYWORD Until"); }
+Variant            { lexprint(yylineno, "KEYWORD Variant"); }
+Wend               { lexprint(yylineno, "KEYWORD Wend"); }
+When               { lexprint(yylineno, "KEYWORD When"); }
+While              { lexprint(yylineno, "KEYWORD While"); }
+Widening           { lexprint(yylineno, "KEYWORD Widening"); }
+With               { lexprint(yylineno, "KEYWORD With"); }
+WithEvents         { lexprint(yylineno, "KEYWORD WithEvents"); }
+WriteOnly          { lexprint(yylineno, "KEYWORD WriteOnly"); }
+Xor                { lexprint(yylineno, "KEYWORD Xor"); }
 
     /* Operators */
 
@@ -398,7 +420,6 @@ void lexprint(int line, const char *format, ...) {
         if (DEBUG_LEXER_BY_LINE || (!DEBUG_LEXER_BY_LINE && line != lastLine)) {
             printf("\n Line %d: ", line);
         }
-
         va_list args;
         va_start(args, format);
         vprintf(format, args);
@@ -411,11 +432,14 @@ void lexprint(int line, const char *format, ...) {
 
 void lexerror(int line, const char *format, ...) {
     LEXER_ERROR = true;
+
     printf("\nLEXER ERROR at line %d: ", line);
+
     va_list args;
     va_start(args, format);
     vprintf(format, args);
     va_end(args);
+
     printf("\n");
 }
 
