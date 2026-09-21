@@ -1,14 +1,12 @@
 # Visual Basic .NET Compiler
 
-The project includes lexer, parser, semantics and translation to JVM bytecode.
+The project includes lexer, parser, semantic analysis and translation to JVM bytecode.
 
 ## Run with Docker
 
-Build project:
-`docker compose build`
+Build project: `docker compose build`
 
-Run project:
-`docker compose run --rm vbc <file.vb>`
+Run project: `docker compose run --rm vbc <file.vb>`
 
 ## Useful information
 
