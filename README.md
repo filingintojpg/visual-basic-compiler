@@ -1,22 +1,17 @@
 # Visual Basic .NET Compiler
 
-The project includes lexer, parser, semantics and translation to bytecode.
+The project includes lexer, parser, semantics and translation to JVM bytecode.
 
-## Run application
+## Run with Docker
 
-Build project: `docker compose build`
+Build project:
+`docker compose build`
 
-Run project: `docker compose run --rm vbc <file_path>`
+Run project:
+`docker compose run --rm vbc <file.vb>`
 
-## Documentation
+## Useful information
 
-Official Microsoft Visual Basic Language Reference:
+[Language Reference Manual](https://metanit.com/visualbasic/tutorial/)
 
-* [English](https://learn.microsoft.com/en-us/dotnet/visual-basic/language-reference/)
-* [Русский](https://learn.microsoft.com/ru-ru/dotnet/visual-basic/language-reference/)
-
-## Online Compiler
-
-For comparing the compiler's behavior:
-
-* [CompileBytes — Online Visual Basic .NET Compiler](https://compilebytes.com/tools/vb)
+[Online Visual Basic .NET Compiler](https://compilebytes.com/tools/vb)
