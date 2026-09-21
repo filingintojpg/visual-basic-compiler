@@ -1,0 +1,17 @@
+$"abc"
+$""
+$"abc with ""quotes"" and {{ and }}"
+$"abc with {id_1} and {id_2}"
+$"abc with {id}"
+$"{id} with abc"
+$"{id_1} and {id_2}"
+$"{id_1}{id_2}"
+$"{$"{id}"}"
+$"{$"{$"{id}"}"}"
+$"{$"{id_1}"} and {$"{id2}"}"
+
+$"""
+$"abc
+$"
+$"{"
+$"}"
