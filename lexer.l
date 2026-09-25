@@ -24,6 +24,7 @@ ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
     #include <stdlib.h>
     #include <stdarg.h>
     #include <string>
+    #include <vector>
     #include <algorithm>
 
     bool DEBUG_LEXER = true;
@@ -52,7 +53,7 @@ ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
     std::string commentValue;
     std::string stringValue;
     std::string istringValue;
-    int istringBraceDepth = 0;
+    std::vector<int> istringBraceDepthStack;
 %}
 
     /* Keywords */
@@ -344,7 +345,10 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); }
 <ISTRING>\{ {
     lexprint(yylineno, "ISTRING PART \"%s\"", istringValue.c_str());
     istringValue.clear();
+
     lexprint(yylineno, "SEPARATOR {");
+
+    istringBraceDepthStack.push_back(0);
     yy_push_state(ISTRING_EXPR);
 }
 <ISTRING>\n {
@@ -361,14 +365,19 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); }
 }
 
 <ISTRING_EXPR>\{ {
-    istringBraceDepth++;
+    if (!istringBraceDepthStack.empty()) {
+        istringBraceDepthStack.back()++;
+    }
     lexprint(yylineno, "SEPARATOR {");
 }
 <ISTRING_EXPR>\} {
-    if (istringBraceDepth == 0) {
+    if (istringBraceDepthStack.empty()) {
+        lexerror(yylineno, "Unexpected } in interpolated string expression");
+    } else if (istringBraceDepthStack.back() == 0) {
+        istringBraceDepthStack.pop_back();
         yy_pop_state();
     } else {
-        istringBraceDepth--;
+        istringBraceDepthStack.back()--;
     }
     lexprint(yylineno, "SEPARATOR }");
 }
