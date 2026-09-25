@@ -9,6 +9,13 @@ $"{id_1}{id_2}"
 $"{$"{id}"}"
 $"{$"{$"{id}"}"}"
 $"{$"{id_1}"} and {$"{id2}"}"
+$"Result = {If(value = 1, "one", "other")}"
+$"{foo.Bar.Baz}"
+$"{arr(i + 1)}"
+$"{If(x, $"yes {name}", "no")}"
+$"{{ {value} }}"
+$"{SomeMethod("}")}"
+$"{If(x = 1, "{test}", "{other}")}"
 
 $"""
 $"abc
