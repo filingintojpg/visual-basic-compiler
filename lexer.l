@@ -30,14 +30,6 @@ ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
     bool DEBUG_LEXER_BY_LINE = false;
     bool DEBUG_LEXER_EOL = false;
 
-    bool LEXER_ERROR = false;
-    int lastLine = 0;
-
-    std::string commentValue;
-    std::string stringValue;
-    std::string istringValue;
-    int istringBraceDepth = 0;
-
     void lexprint(int line, const char *format, ...);
     void lexerror(int line, const char *format, ...);
     std::string toLower(const std::string& str);
@@ -55,6 +47,13 @@ ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
 %s ISTRING_EXPR
 
 %%
+
+%{
+    std::string commentValue;
+    std::string stringValue;
+    std::string istringValue;
+    int istringBraceDepth = 0;
+%}
 
     /* Keywords */
 
@@ -472,23 +471,24 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); }
     /* Debugging */
 
 void lexprint(int line, const char *format, ...) {
-    if (DEBUG_LEXER) {
-        if (DEBUG_LEXER_BY_LINE || (!DEBUG_LEXER_BY_LINE && line != lastLine)) {
-            printf("\n Line %d: ", line);
-        }
-        va_list args;
-        va_start(args, format);
-        vprintf(format, args);
-        va_end(args);
+    if (!DEBUG_LEXER) return;
 
-        printf(" ");
+    static int lastLine = 0;
+
+    if (DEBUG_LEXER_BY_LINE || line != lastLine) {
+        printf("\n Line %d: ", line);
         lastLine = line;
     }
+
+    va_list args;
+    va_start(args, format);
+    vprintf(format, args);
+    va_end(args);
+
+    printf(" ");
 }
 
 void lexerror(int line, const char *format, ...) {
-    LEXER_ERROR = true;
-
     printf("\nLEXER ERROR at line %d: ", line);
 
     va_list args;
