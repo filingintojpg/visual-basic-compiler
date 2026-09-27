@@ -5,6 +5,7 @@ RUN apt-get update && \
         cmake \
         make \
         flex \
+        bison \
         libfl-dev \
         g++ \
     && rm -rf /var/lib/apt/lists/*

@@ -27,9 +27,9 @@ ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
     #include <vector>
     #include <algorithm>
 
-    bool DEBUG_LEXER = true;
-    bool DEBUG_LEXER_BY_LINE = false;
-    bool DEBUG_LEXER_EOL = false;
+    bool DEBUG_LEXER;
+    bool DEBUG_LEXER_BY_LINE;
+    bool DEBUG_LEXER_EOL;
 
     void lexprint(int line, const char *format, ...);
     void lexerror(int line, const char *format, ...);

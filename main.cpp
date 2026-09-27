@@ -1,22 +1,42 @@
 ﻿#include <iostream>
-#include <fstream>
-#include <FlexLexer.h>
+#include <cstdio>
+
+extern bool DEBUG_LEXER;
+extern bool DEBUG_LEXER_BY_LINE;
+extern bool DEBUG_LEXER_EOL;
+extern bool DEBUG_PARSER;
+
+extern int yydebug;
+extern int yyparse();
+extern FILE* yyin;
+
+void setDebugOptions() {
+    // Lexer
+    DEBUG_LEXER = true;
+    DEBUG_LEXER_BY_LINE = false;
+    DEBUG_LEXER_EOL = false;
+
+    // Parser
+    DEBUG_PARSER = true;
+    yydebug = 0;
+}
 
 int main(int argc, char* argv[]) {
+    setDebugOptions();
+
     if (argc != 2) {
         std::cerr << "File path required only" << std::endl;
         return 1;
     }
 
-    std::ifstream file(argv[1]);
-    if (!file.is_open()) {
+    yyin = fopen(argv[1], "r");
+    if (!yyin) {
         std::cerr << "Error opening file: " << argv[1] << std::endl;
         return 1;
     }
 
-    yyFlexLexer lexer;
-    lexer.switch_streams(&file, &std::cout);
-    lexer.yylex();
+    yyparse();
+    fclose(yyin);
 
     return 0;
 }

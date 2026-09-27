@@ -5,11 +5,16 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(FLEX REQUIRED)
+find_package(BISON REQUIRED)
 
 FLEX_TARGET(Lexer
     ${CMAKE_CURRENT_SOURCE_DIR}/lexer.l
     ${CMAKE_CURRENT_BINARY_DIR}/lexer.cpp
-    COMPILE_FLAGS "--c++"
+)
+
+BISON_TARGET(Parser
+    ${CMAKE_CURRENT_SOURCE_DIR}/parser.y
+    ${CMAKE_CURRENT_BINARY_DIR}/parser.cpp
 )
 
 file(GLOB_RECURSE COMPILER_SOURCES CONFIGURE_DEPENDS
@@ -19,9 +24,11 @@ file(GLOB_RECURSE COMPILER_SOURCES CONFIGURE_DEPENDS
 add_executable(VisualBasicCompiler
     main.cpp
     ${FLEX_Lexer_OUTPUTS}
+    ${BISON_Parser_OUTPUTS}
     ${COMPILER_SOURCES}
 )
 
 target_include_directories(VisualBasicCompiler PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
 )
