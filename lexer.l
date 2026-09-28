@@ -26,6 +26,7 @@ ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
     #include <string>
     #include <vector>
     #include <algorithm>
+    #include "parser.hpp"
 
     bool DEBUG_LEXER;
     bool DEBUG_LEXER_BY_LINE;
