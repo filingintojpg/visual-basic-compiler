@@ -249,5 +249,5 @@ void parsprint(const char *format, ...) {
 }
 
 void yyerror(const char* s) {
-    fprintf(stderr, "\nPARSER ERROR at line %d: %s\n%s\n", yylineno, yytext, s);
+    fprintf(stderr, "\nPARSER ERROR at line %d: %s - %s\n", yylineno, yytext, s);
 }
