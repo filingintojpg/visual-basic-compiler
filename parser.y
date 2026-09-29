@@ -120,7 +120,6 @@
 %token NAME_OF
 %token NAMESPACE
 %token NARROWING
-%token NEW
 %token NEXT
 %token NOTHING
 %token NOT_INHERITABLE
@@ -211,6 +210,7 @@
 %token RSHIFT_ASSIGN
 %token ENDL
 
+%precedence NEW
 %left  XOR
 %left  OR OR_ELSE
 %left  AND AND_ALSO
