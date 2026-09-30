@@ -610,10 +610,15 @@ var_declarator: variable_name                              { parsprint("variable
               | variable_name AS type_name                 { parsprint("variable_name AS type_name -> var_declarator"); }
               | variable_name '=' endl_e expr              { parsprint("variable_name = expr -> var_declarator"); }
               | variable_name AS type_name '=' endl_e expr { parsprint("variable_name AS type_name = expr -> var_declarator"); }
+              | variable_name AS new_expr                  { parsprint("variable_name AS new_expr -> var_declarator"); }
               ;
 
-var_declaration: DIM var_declarator endlc_list   { parsprint("DIM var_declarator endlc_list -> var_declaration"); }
-               | CONST var_declarator endlc_list { parsprint("CONST var_declarator endlc_list -> var_declaration"); }
+var_declarator_list: var_declarator                                { parsprint("var_declarator -> var_declarator_list"); }
+                   | var_declarator_list ',' endl_e var_declarator { parsprint("var_declarator_list , var_declarator -> var_declarator_list"); }
+                   ;
+
+var_declaration: DIM var_declarator_list endlc_list   { parsprint("DIM var_declarator_list endlc_list -> var_declaration"); }
+               | CONST var_declarator_list endlc_list { parsprint("CONST var_declarator_list endlc_list -> var_declaration"); }
                ;
 
 type_name: ID                                                          { parsprint("ID -> type_name"); }
@@ -727,11 +732,11 @@ structure_member: function_declaration { parsprint("function_declaration -> stru
                 ;
 
 
-field_declaration: member_modifiers_e DIM var_declarator endlc_list          { parsprint("member_modifiers_e DIM var_declarator -> field_declaration"); }
-                 | member_modifiers_e DIM SHARED var_declarator endlc_list   { parsprint("member_modifiers_e DIM SHARED var_declarator -> field_declaration"); }
-                 | member_modifiers_e CONST var_declarator endlc_list        { parsprint("member_modifiers_e CONST var_declarator -> field_declaration"); }
-                 | member_modifiers_e CONST SHARED var_declarator endlc_list { parsprint("member_modifiers_e CONST SHARED var_declarator -> field_declaration"); }
-                 | member_modifiers var_declarator endlc_list                { parsprint("member_modifiers var_declarator -> field_declaration"); }
+field_declaration: member_modifiers_e DIM var_declarator_list endlc_list          { parsprint("member_modifiers_e DIM var_declarator_list -> field_declaration"); }
+                 | member_modifiers_e DIM SHARED var_declarator_list endlc_list   { parsprint("member_modifiers_e DIM SHARED var_declarator_list -> field_declaration"); }
+                 | member_modifiers_e CONST var_declarator_list endlc_list        { parsprint("member_modifiers_e CONST var_declarator_list -> field_declaration"); }
+                 | member_modifiers_e CONST SHARED var_declarator_list endlc_list { parsprint("member_modifiers_e CONST SHARED var_declarator_list -> field_declaration"); }
+                 | member_modifiers var_declarator_list endlc_list                { parsprint("member_modifiers var_declarator_list -> field_declaration"); }
                  ;
 
 %%
