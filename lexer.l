@@ -74,6 +74,7 @@ Byte               { lexprint(yylineno, "KEYWORD Byte"); return BYTE; }
 Call               { lexprint(yylineno, "KEYWORD Call"); return CALL; }
 Case               { lexprint(yylineno, "KEYWORD Case"); return CASE; }
 Catch              { lexprint(yylineno, "KEYWORD Catch"); return CATCH; }
+CBool              { lexprint(yylineno, "KEYWORD CBool"); return CBool; }
 CByte              { lexprint(yylineno, "KEYWORD CByte"); return CBYTE; }
 CChar              { lexprint(yylineno, "KEYWORD CChar"); return CCHAR; }
 CDate              { lexprint(yylineno, "KEYWORD CDate"); return CDATE; }
