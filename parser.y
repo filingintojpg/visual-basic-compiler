@@ -483,6 +483,8 @@ simple_stmt: CALL expr                                { parsprint("CALL expr -> 
            | EXIT FOR                                 { parsprint("EXIT FOR -> simple_stmt"); }
            | EXIT WHILE                               { parsprint("EXIT WHILE -> simple_stmt"); }
            | EXIT SELECT                              { parsprint("EXIT SELECT -> simple_stmt"); }
+           | EXIT SUB                                 { parsprint("EXIT SUB -> simple_stmt"); }
+           | EXIT FUNCTION                            { parsprint("EXIT FUNCTION -> simple_stmt"); }
            ;
 
 stmt: simple_stmt endlc_list                { parsprint("simple_stmt endlc_list -> stmt"); }
