@@ -107,22 +107,22 @@ Double             { lexprint(yylineno, "KEYWORD Double"); return DOUBLE; }
 Each               { lexprint(yylineno, "KEYWORD Each"); return EACH; }
 Else               { lexprint(yylineno, "KEYWORD Else"); return ELSE; }
 ElseIf             { lexprint(yylineno, "KEYWORD ElseIf"); return ELSEIF; }
-End[ ]+Class       { lexprint(yylineno, "KEYWORD End Class"); return END_CLASS; }
-End[ ]+Enum        { lexprint(yylineno, "KEYWORD End Enum"); return END_ENUM; }
-End[ ]+Function    { lexprint(yylineno, "KEYWORD End Function"); return END_FUNCTION; }
-End[ ]+Get         { lexprint(yylineno, "KEYWORD End Get"); return END_GET; }
-End[ ]+If          { lexprint(yylineno, "KEYWORD End If"); return END_IF; }
-End[ ]+Interface   { lexprint(yylineno, "KEYWORD End Interface"); return END_INTERFACE; }
-End[ ]+Module      { lexprint(yylineno, "KEYWORD End Module"); return END_MODULE; }
-End[ ]+Namespace   { lexprint(yylineno, "KEYWORD End Namespace"); return END_NAMESPACE; }
-End[ ]+Property    { lexprint(yylineno, "KEYWORD End Property"); return END_PROPERTY; }
-End[ ]+Select      { lexprint(yylineno, "KEYWORD End Select"); return END_SELECT; }
-End[ ]+Set         { lexprint(yylineno, "KEYWORD End Set"); return END_SET; }
-End[ ]+Structure   { lexprint(yylineno, "KEYWORD End Structure"); return END_STRUCTURE; }
-End[ ]+Sub         { lexprint(yylineno, "KEYWORD End Sub"); return END_SUB; }
-End[ ]+SyncLock    { lexprint(yylineno, "KEYWORD End SyncLock"); return END_SYNC_LOCK; }
-End[ ]+Try         { lexprint(yylineno, "KEYWORD End Try"); return END_TRY; }
-End[ ]+While       { lexprint(yylineno, "KEYWORD End While"); return END_WHILE; }
+End[ \t]+Class     { lexprint(yylineno, "KEYWORD End Class"); return END_CLASS; }
+End[ \t]+Enum      { lexprint(yylineno, "KEYWORD End Enum"); return END_ENUM; }
+End[ \t]+Function  { lexprint(yylineno, "KEYWORD End Function"); return END_FUNCTION; }
+End[ \t]+Get       { lexprint(yylineno, "KEYWORD End Get"); return END_GET; }
+End[ \t]+If        { lexprint(yylineno, "KEYWORD End If"); return END_IF; }
+End[ \t]+Interface { lexprint(yylineno, "KEYWORD End Interface"); return END_INTERFACE; }
+End[ \t]+Module    { lexprint(yylineno, "KEYWORD End Module"); return END_MODULE; }
+End[ \t]+Namespace { lexprint(yylineno, "KEYWORD End Namespace"); return END_NAMESPACE; }
+End[ \t]+Property  { lexprint(yylineno, "KEYWORD End Property"); return END_PROPERTY; }
+End[ \t]+Select    { lexprint(yylineno, "KEYWORD End Select"); return END_SELECT; }
+End[ \t]+Set       { lexprint(yylineno, "KEYWORD End Set"); return END_SET; }
+End[ \t]+Structure { lexprint(yylineno, "KEYWORD End Structure"); return END_STRUCTURE; }
+End[ \t]+Sub       { lexprint(yylineno, "KEYWORD End Sub"); return END_SUB; }
+End[ \t]+SyncLock  { lexprint(yylineno, "KEYWORD End SyncLock"); return END_SYNC_LOCK; }
+End[ \t]+Try       { lexprint(yylineno, "KEYWORD End Try"); return END_TRY; }
+End[ \t]+While     { lexprint(yylineno, "KEYWORD End While"); return END_WHILE; }
 End                { lexprint(yylineno, "KEYWORD End"); return END; }
 Enum               { lexprint(yylineno, "KEYWORD Enum"); return ENUM; }
 Erase              { lexprint(yylineno, "KEYWORD Erase"); return ERASE; }
