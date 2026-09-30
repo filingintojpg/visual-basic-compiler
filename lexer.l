@@ -44,10 +44,10 @@ ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
 %}
 
 %x COMMENT
-%x STRING_LITERAL
-%x ISTRING
-%s ISTRING_EXPR
-%s ISTRING_BRACE
+%x STR
+%x ISTR
+%s ISTR_EXPR
+%s ISTR_BRACE
 
 %%
 
@@ -74,7 +74,7 @@ Byte               { lexprint(yylineno, "KEYWORD Byte"); return BYTE; }
 Call               { lexprint(yylineno, "KEYWORD Call"); return CALL; }
 Case               { lexprint(yylineno, "KEYWORD Case"); return CASE; }
 Catch              { lexprint(yylineno, "KEYWORD Catch"); return CATCH; }
-CBool              { lexprint(yylineno, "KEYWORD CBool"); return CBool; }
+CBool              { lexprint(yylineno, "KEYWORD CBool"); return CBOOL; }
 CByte              { lexprint(yylineno, "KEYWORD CByte"); return CBYTE; }
 CChar              { lexprint(yylineno, "KEYWORD CChar"); return CCHAR; }
 CDate              { lexprint(yylineno, "KEYWORD CDate"); return CDATE; }
@@ -297,24 +297,24 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
     /* String literals */
 
 \" {
-    yy_push_state(STRING_LITERAL);
+    yy_push_state(STR);
     stringValue.clear();
 }
-<STRING_LITERAL>[^\n"]+ {
+<STR>[^\n"]+ {
     stringValue += yytext;
 }
-<STRING_LITERAL>\"\" {
+<STR>\"\" {
     stringValue += "\"";
 }
-<STRING_LITERAL>\n {
+<STR>\n {
     lexerror(yylineno - 1, "String literal wasn't closed");
     yy_pop_state();
 }
-<STRING_LITERAL><<EOF>> {
+<STR><<EOF>> {
     lexerror(yylineno, "String literal wasn't closed at last line");
     yyterminate();
 }
-<STRING_LITERAL>\"[Cc] {
+<STR>\"[Cc] {
     yy_pop_state();
     
     if (stringValue.length() == 1) {
@@ -324,7 +324,7 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
         lexerror(yylineno, "Char literal has more than 1 symbol");
     }
 }
-<STRING_LITERAL>\" {
+<STR>\" {
     lexprint(yylineno, "LITERAL STRING \"%s\"", stringValue.c_str());
     yy_pop_state();
     return STR_VAL;
@@ -333,46 +333,46 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
     /* Interpolated string literals */
 
 \$\" {
-    yy_push_state(ISTRING);
+    yy_push_state(ISTR);
     istringValue.clear();
     lexprint(yylineno, "ISTRING START");
     return ISTR_START;
 }
-<ISTRING>[^\n"{}]+ {
+<ISTR>[^\n"{}]+ {
     istringValue += yytext;
 }
-<ISTRING>\{\{ {
+<ISTR>\{\{ {
     istringValue += "{";
 }
-<ISTRING>\}\} {
+<ISTR>\}\} {
     istringValue += "}";
 }
-<ISTRING>\"\" {
+<ISTR>\"\" {
     istringValue += "\"";
 }
-<ISTRING>\{ {
+<ISTR>\{ {
     if (!istringValue.empty()) {
         lexprint(yylineno, "ISTRING PART \"%s\"", istringValue.c_str());
         istringValue.clear();
         yyless(0);
         return ISTR_PART;
     }
-    yy_push_state(ISTRING_EXPR);
+    yy_push_state(ISTR_EXPR);
     return ISTR_EXPR_START;
 }
-<ISTRING>\} {
+<ISTR>\} {
     lexerror(yylineno, "Single '}' in interpolated string");
 }
-<ISTRING>\n {
+<ISTR>\n {
     lexerror(yylineno - 1, "Interpolated string literal wasn't closed");
     yy_pop_state();
     return ISTR_END;
 }
-<ISTRING><<EOF>> {
+<ISTR><<EOF>> {
     lexerror(yylineno, "Interpolated string literal wasn't closed at last line");
     yyterminate();
 }
-<ISTRING>\" {
+<ISTR>\" {
     if (!istringValue.empty()) {
         lexprint(yylineno, "ISTRING PART \"%s\"", istringValue.c_str());
         istringValue.clear();
@@ -384,17 +384,17 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
     return ISTR_END;
 }
 
-<ISTRING_EXPR,ISTRING_BRACE>\{ {
+<ISTR_EXPR,ISTR_BRACE>\{ {
     lexprint(yylineno, "SEPARATOR {");
-    yy_push_state(ISTRING_BRACE);
+    yy_push_state(ISTR_BRACE);
     return '{';
 }
-<ISTRING_BRACE>\} {
+<ISTR_BRACE>\} {
     lexprint(yylineno, "SEPARATOR }");
     yy_pop_state();
     return '}';
 }
-<ISTRING_EXPR>\} {
+<ISTR_EXPR>\} {
     lexprint(yylineno, "SEPARATOR }");
     yy_pop_state();
     return ISTR_EXPR_END;
