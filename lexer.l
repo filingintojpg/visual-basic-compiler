@@ -44,7 +44,7 @@ ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
 %}
 
 %x COMMENT
-%x STRING
+%x STRING_LITERAL
 %x ISTRING
 %s ISTRING_EXPR
 %s ISTRING_BRACE
@@ -296,24 +296,24 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
     /* String literals */
 
 \" {
-    yy_push_state(STRING);
+    yy_push_state(STRING_LITERAL);
     stringValue.clear();
 }
-<STRING>[^\n"]+ {
+<STRING_LITERAL>[^\n"]+ {
     stringValue += yytext;
 }
-<STRING>\"\" {
+<STRING_LITERAL>\"\" {
     stringValue += "\"";
 }
-<STRING>\n {
+<STRING_LITERAL>\n {
     lexerror(yylineno - 1, "String literal wasn't closed");
     yy_pop_state();
 }
-<STRING><<EOF>> {
+<STRING_LITERAL><<EOF>> {
     lexerror(yylineno, "String literal wasn't closed at last line");
     yyterminate();
 }
-<STRING>\"[Cc] {
+<STRING_LITERAL>\"[Cc] {
     yy_pop_state();
     
     if (stringValue.length() == 1) {
@@ -323,7 +323,7 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
         lexerror(yylineno, "Char literal has more than 1 symbol");
     }
 }
-<STRING>\" {
+<STRING_LITERAL>\" {
     lexprint(yylineno, "LITERAL STRING \"%s\"", stringValue.c_str());
     yy_pop_state();
     return STR_VAL;
