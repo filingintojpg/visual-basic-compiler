@@ -7,7 +7,7 @@ Class Main
         Dim c2 = "a"C
         Dim c3 = """"c
         Dim c4 = " "c
-        Dim c5 = "я"c
+        Dim c5 = "z"c
         Dim c6 As Char = "'"c
         Dim c7 As Char = "="c
         

@@ -25,24 +25,6 @@ Class Animal
     Public Function Self() As Animal
         Return Me
     End Function
-    
-    ' свойства
-    Public Property Age As Integer
-        Get
-            Return age
-        End Get
-        Set(value As Integer)
-            age = value
-        End Set
-    End Property
-    
-    Public ReadOnly Property Description As String
-        Get
-            Return Name & ", " & CStr(age)
-        End Get
-    End Property
-    
-    Public Property Nick As String = "none"
 End Class
 
 Class Dog
