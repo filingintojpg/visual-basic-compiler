@@ -370,10 +370,13 @@ expr: postfix_expr              { parsprint("postfix_expr -> expr"); }
     | expr ISNOT endl_e expr    { parsprint("expr ISNOT expr -> expr"); }
     ;
 
-postfix_expr: primary_expr                                 { parsprint("primary_expr -> postfix_expr"); }
-            | postfix_expr '(' endl_e expr_list endl_e ')' { parsprint("expr ( expr_list ) -> expr"); }
-            | postfix_expr '(' endl_e ')'                  { parsprint("expr () -> expr"); }
-            | postfix_expr '.' endl_e member_access_member { parsprint("expr . member_access_member -> expr"); }
+postfix_expr: primary_expr  { parsprint("primary_expr -> postfix_expr"); }
+            | suffixed_expr { parsprint("suffixed_expr -> postfix_expr"); }
+            ;
+
+suffixed_expr: postfix_expr '(' endl_e expr_list endl_e ')' { parsprint("postfix_expr ( expr_list ) -> suffixed_expr"); }
+             | postfix_expr '(' endl_e ')'                  { parsprint("postfix_expr () -> suffixed_expr"); }
+             | postfix_expr '.' endl_e member_access_member { parsprint("postfix_expr . member_access_member -> suffixed_expr"); }
             ;
 
 primary_expr: INT_VAL                                                                                                           { parsprint("INT_VAL -> expr"); }
@@ -455,31 +458,31 @@ expr_list: expr                      { parsprint("expr -> expr_list"); }
          | expr_list ',' endl_e expr { parsprint("expr_list , expr -> expr_list"); }
          ;
 
-simple_stmt: CALL expr                                    { parsprint("CALL expr -> simple_stmt"); }
-           | postfix_expr '(' endl_e expr_list endl_e ')' { parsprint("expr ( expr_list ) -> simple_stmt"); }
-           | postfix_expr '(' endl_e ')'                  { parsprint("expr () -> simple_stmt"); }
-           | REDIM redim_clause_list                      { parsprint("REDIM redim_clause_list -> simple_stmt"); }
-           | REDIM PRESERVE redim_clause_list             { parsprint("REDIM PRESERVE redim_clause_list -> simple_stmt"); }
-           | ERASE expr_list                              { parsprint("ERASE expr_list -> simple_stmt"); }
-           | postfix_expr '=' endl_e expr                 { parsprint("expr = expr -> simple_stmt"); }
-           | postfix_expr ADD_ASSIGN endl_e expr          { parsprint("expr += expr -> simple_stmt"); }
-           | postfix_expr SUB_ASSIGN endl_e expr          { parsprint("expr -= expr -> simple_stmt"); }
-           | postfix_expr MUL_ASSIGN endl_e expr          { parsprint("expr *= expr -> simple_stmt"); }
-           | postfix_expr DIV_ASSIGN endl_e expr          { parsprint("expr /= expr -> simple_stmt"); }
-           | postfix_expr FLOORDIV_ASSIGN endl_e expr     { parsprint("expr \\= expr -> simple_stmt"); }
-           | postfix_expr EXP_ASSIGN endl_e expr          { parsprint("expr ^= expr -> simple_stmt"); }
-           | postfix_expr STRCAT_ASSIGN endl_e expr       { parsprint("expr &= expr -> simple_stmt"); }
-           | postfix_expr LSHIFT_ASSIGN endl_e expr       { parsprint("expr <<= expr -> simple_stmt"); }
-           | postfix_expr RSHIFT_ASSIGN endl_e expr       { parsprint("expr >>= expr -> simple_stmt"); }
-           | RETURN                                       { parsprint("RETURN -> simple_stmt"); }
-           | RETURN expr                                  { parsprint("RETURN expr -> simple_stmt"); }
-           | CONTINUE DO                                  { parsprint("CONTINUE DO -> simple_stmt"); }
-           | CONTINUE FOR                                 { parsprint("CONTINUE FOR -> simple_stmt"); }
-           | CONTINUE WHILE                               { parsprint("CONTINUE WHILE -> simple_stmt"); }
-           | EXIT DO                                      { parsprint("EXIT DO -> simple_stmt"); }
-           | EXIT FOR                                     { parsprint("EXIT FOR -> simple_stmt"); }
-           | EXIT WHILE                                   { parsprint("EXIT WHILE -> simple_stmt"); }
-           | EXIT SELECT                                  { parsprint("EXIT SELECT -> simple_stmt"); }
+simple_stmt: CALL expr                                { parsprint("CALL expr -> simple_stmt"); }
+           | ID                                       { parsprint("ID -> simple_stmt"); }
+           | suffixed_expr                            { parsprint("suffixed_expr -> simple_stmt"); }
+           | REDIM redim_clause_list                  { parsprint("REDIM redim_clause_list -> simple_stmt"); }
+           | REDIM PRESERVE redim_clause_list         { parsprint("REDIM PRESERVE redim_clause_list -> simple_stmt"); }
+           | ERASE expr_list                          { parsprint("ERASE expr_list -> simple_stmt"); }
+           | postfix_expr '=' endl_e expr             { parsprint("expr = expr -> simple_stmt"); }
+           | postfix_expr ADD_ASSIGN endl_e expr      { parsprint("expr += expr -> simple_stmt"); }
+           | postfix_expr SUB_ASSIGN endl_e expr      { parsprint("expr -= expr -> simple_stmt"); }
+           | postfix_expr MUL_ASSIGN endl_e expr      { parsprint("expr *= expr -> simple_stmt"); }
+           | postfix_expr DIV_ASSIGN endl_e expr      { parsprint("expr /= expr -> simple_stmt"); }
+           | postfix_expr FLOORDIV_ASSIGN endl_e expr { parsprint("expr \\= expr -> simple_stmt"); }
+           | postfix_expr EXP_ASSIGN endl_e expr      { parsprint("expr ^= expr -> simple_stmt"); }
+           | postfix_expr STRCAT_ASSIGN endl_e expr   { parsprint("expr &= expr -> simple_stmt"); }
+           | postfix_expr LSHIFT_ASSIGN endl_e expr   { parsprint("expr <<= expr -> simple_stmt"); }
+           | postfix_expr RSHIFT_ASSIGN endl_e expr   { parsprint("expr >>= expr -> simple_stmt"); }
+           | RETURN                                   { parsprint("RETURN -> simple_stmt"); }
+           | RETURN expr                              { parsprint("RETURN expr -> simple_stmt"); }
+           | CONTINUE DO                              { parsprint("CONTINUE DO -> simple_stmt"); }
+           | CONTINUE FOR                             { parsprint("CONTINUE FOR -> simple_stmt"); }
+           | CONTINUE WHILE                           { parsprint("CONTINUE WHILE -> simple_stmt"); }
+           | EXIT DO                                  { parsprint("EXIT DO -> simple_stmt"); }
+           | EXIT FOR                                 { parsprint("EXIT FOR -> simple_stmt"); }
+           | EXIT WHILE                               { parsprint("EXIT WHILE -> simple_stmt"); }
+           | EXIT SELECT                              { parsprint("EXIT SELECT -> simple_stmt"); }
            ;
 
 stmt: simple_stmt endlc_list                { parsprint("simple_stmt endlc_list -> stmt"); }
