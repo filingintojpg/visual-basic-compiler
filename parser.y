@@ -377,7 +377,7 @@ postfix_expr: primary_expr  { parsprint("primary_expr -> postfix_expr"); }
 suffixed_expr: postfix_expr '(' endl_e expr_list endl_e ')' { parsprint("postfix_expr ( expr_list ) -> suffixed_expr"); }
              | postfix_expr '(' endl_e ')'                  { parsprint("postfix_expr () -> suffixed_expr"); }
              | postfix_expr '.' endl_e member_access_member { parsprint("postfix_expr . member_access_member -> suffixed_expr"); }
-            ;
+             ;
 
 primary_expr: INT_VAL                                                                                                           { parsprint("INT_VAL -> expr"); }
             | STR_VAL                                                                                                           { parsprint("STR_VAL -> expr"); }
@@ -666,17 +666,33 @@ sub_signature: SUB ID '(' endl_e function_parameters endl_e ')' { parsprint("SUB
              | SUB ID                                           { parsprint("SUB ID -> sub_signature"); }
              ;
 
-function_declaration: procedure_modifiers_e function_signature endl_list block END_FUNCTION endlc_list { parsprint("procedure_modifiers_e function_signature block END_FUNCTION -> function_declaration"); }
-                    | procedure_modifiers_e function_signature endl_list END_FUNCTION endlc_list { parsprint("procedure_modifiers_e function_signature END_FUNCTION -> function_declaration"); }
+function_declaration: member_modifiers_e function_signature endl_list block END_FUNCTION endlc_list { parsprint("member_modifiers_e function_signature block END_FUNCTION -> function_declaration"); }
+                    | member_modifiers_e function_signature endl_list END_FUNCTION endlc_list { parsprint("member_modifiers_e function_signature END_FUNCTION -> function_declaration"); }
                     ;
 
-sub_declaration: procedure_modifiers_e sub_signature endl_list block END_SUB endlc_list { parsprint("procedure_modifiers_e sub_signature block END_SUB -> sub_declaration"); }
-               | procedure_modifiers_e sub_signature endl_list END_SUB endlc_list       { parsprint("procedure_modifiers_e sub_signature END_SUB -> sub_declaration"); }
+sub_declaration: member_modifiers_e sub_signature endl_list block END_SUB endlc_list { parsprint("member_modifiers_e sub_signature block END_SUB -> sub_declaration"); }
+               | member_modifiers_e sub_signature endl_list END_SUB endlc_list       { parsprint("member_modifiers_e sub_signature END_SUB -> sub_declaration"); }
                ;
 
-procedure_modifiers_e: SHARED      { parsprint("SHARED -> procedure_modifiers_e"); }
-                     | /* empty */ { parsprint("empty -> procedure_modifiers_e"); }
-                     ;
+
+access_modifier: PUBLIC    { parsprint("PUBLIC -> access_modifier"); }
+               | PRIVATE   { parsprint("PRIVATE -> access_modifier"); }
+               | PROTECTED { parsprint("PROTECTED -> access_modifier"); }
+               ;
+
+class_modifiers_e: /* empty */     { parsprint("empty -> class_modifiers_e"); }
+                 | access_modifier { parsprint("access_modifier -> class_modifiers_e"); }
+                 ;
+
+member_modifiers: access_modifier        { parsprint("access_modifier -> member_modifiers"); }
+                | SHARED                 { parsprint("SHARED -> member_modifiers"); }
+                | access_modifier SHARED { parsprint("access_modifier SHARED -> member_modifiers"); }
+                | SHARED access_modifier { parsprint("SHARED access_modifier -> member_modifiers"); }
+                ;
+
+member_modifiers_e: /* empty */      { parsprint("empty -> member_modifiers_e"); }
+                  | member_modifiers { parsprint("member_modifiers -> member_modifiers_e"); }
+                  ;
 
 function_parameters: function_parameter                                { parsprint("function_parameter -> function_parameters"); }
                    | function_parameters ',' endl_e function_parameter { parsprint("function_parameters , function_parameter -> function_parameters"); }
@@ -686,10 +702,10 @@ function_parameter: variable_name AS type_name { parsprint("variable_name AS typ
                   | variable_name              { parsprint("variable_name -> function_parameter"); }
                   ;
 
-class_declaration: CLASS ID endlc_list INHERITS ID endlc_list structure_body_e END_CLASS { parsprint("CLASS ID INHERITS ID structure_body_e END_CLASS -> class_declaration"); }
-                 | CLASS ID endlc_list structure_body_e END_CLASS                        { parsprint("CLASS ID structure_body_e END_CLASS -> class_declaration"); }
-                 | CLASS ID generic_param_list endlc_list INHERITS ID endlc_list structure_body_e END_CLASS { parsprint("CLASS ID generic_param_list INHERITS ID structure_body_e END_CLASS -> class_declaration"); }
-                 | CLASS ID generic_param_list endlc_list structure_body_e END_CLASS { parsprint("CLASS ID generic_param_list structure_body_e END_CLASS -> class_declaration"); }
+class_declaration: class_modifiers_e CLASS ID endlc_list INHERITS ID endlc_list structure_body_e END_CLASS                    { parsprint("class_modifiers_e CLASS ID INHERITS ID structure_body_e END_CLASS -> class_declaration"); }
+                 | class_modifiers_e CLASS ID endlc_list structure_body_e END_CLASS                                           { parsprint("class_modifiers_e CLASS ID structure_body_e END_CLASS -> class_declaration"); }
+                 | class_modifiers_e CLASS ID generic_param_list endlc_list INHERITS ID endlc_list structure_body_e END_CLASS { parsprint("class_modifiers_e CLASS ID generic_param_list INHERITS ID structure_body_e END_CLASS -> class_declaration"); }
+                 | class_modifiers_e CLASS ID generic_param_list endlc_list structure_body_e END_CLASS                        { parsprint("class_modifiers_e CLASS ID generic_param_list structure_body_e END_CLASS -> class_declaration"); }
                  ;
 
 generic_param_list: '(' endl_e OF endl_e id_list endl_e ')' { parsprint("( OF id_list ) -> generic_param_list"); }
@@ -708,12 +724,12 @@ structure_member: function_declaration { parsprint("function_declaration -> stru
                 | field_declaration    { parsprint("field_declaration -> structure_member"); }
                 ;
 
-field_declaration: SHARED DIM var_declarator endlc_list   { parsprint("SHARED DIM var_declarator -> field_declaration"); }
-                 | DIM SHARED var_declarator endlc_list   { parsprint("DIM SHARED var_declarator -> field_declaration"); }
-                 | DIM var_declarator endlc_list          { parsprint("DIM var_declarator -> field_declaration"); }
-                 | SHARED CONST var_declarator endlc_list { parsprint("SHARED CONST var_declarator -> field_declaration"); }
-                 | CONST SHARED var_declarator endlc_list { parsprint("CONST SHARED var_declarator -> field_declaration"); }
-                 | CONST var_declarator endlc_list        { parsprint("CONST var_declarator -> field_declaration"); }
+
+field_declaration: member_modifiers_e DIM var_declarator endlc_list          { parsprint("member_modifiers_e DIM var_declarator -> field_declaration"); }
+                 | member_modifiers_e DIM SHARED var_declarator endlc_list   { parsprint("member_modifiers_e DIM SHARED var_declarator -> field_declaration"); }
+                 | member_modifiers_e CONST var_declarator endlc_list        { parsprint("member_modifiers_e CONST var_declarator -> field_declaration"); }
+                 | member_modifiers_e CONST SHARED var_declarator endlc_list { parsprint("member_modifiers_e CONST SHARED var_declarator -> field_declaration"); }
+                 | member_modifiers var_declarator endlc_list                { parsprint("member_modifiers var_declarator -> field_declaration"); }
                  ;
 
 %%
