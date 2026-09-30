@@ -569,17 +569,21 @@ while_stmt: WHILE expr endlc_list block END_WHILE endlc_list { parsprint("WHILE 
           | WHILE expr endlc_list END_WHILE endlc_list       { parsprint("WHILE expr END_WHILE -> while_stmt"); }
           ;
 
-for_stmt: FOR for_loop_variable '=' endl_e expr TO expr endlc_list block NEXT endlc_list           { parsprint("FOR var = expr TO expr block NEXT -> for_stmt"); }
-        | FOR for_loop_variable '=' endl_e expr TO expr endlc_list NEXT endlc_list                 { parsprint("FOR var = expr TO expr NEXT -> for_stmt"); }
-        | FOR for_loop_variable '=' endl_e expr TO expr STEP expr endlc_list block NEXT endlc_list { parsprint("FOR var = expr TO expr STEP expr block NEXT -> for_stmt"); }
-        | FOR for_loop_variable '=' endl_e expr TO expr STEP expr endlc_list NEXT endlc_list       { parsprint("FOR var = expr TO expr STEP expr NEXT -> for_stmt"); }
+for_stmt: FOR for_loop_variable '=' endl_e expr TO expr endlc_list block next_end           { parsprint("FOR var = expr TO expr block NEXT -> for_stmt"); }
+        | FOR for_loop_variable '=' endl_e expr TO expr endlc_list next_end                 { parsprint("FOR var = expr TO expr NEXT -> for_stmt"); }
+        | FOR for_loop_variable '=' endl_e expr TO expr STEP expr endlc_list block next_end { parsprint("FOR var = expr TO expr STEP expr block NEXT -> for_stmt"); }
+        | FOR for_loop_variable '=' endl_e expr TO expr STEP expr endlc_list next_end       { parsprint("FOR var = expr TO expr STEP expr NEXT -> for_stmt"); }
+        ;
+
+next_end: NEXT endlc_list    { parsprint("NEXT endlc_list -> next_end"); }
+        | NEXT ID endlc_list { parsprint("NEXT ID endlc_list -> next_end"); }
         ;
 
 for_loop_variable: ID              { parsprint("ID -> for_loop_variable"); }
                  | ID AS type_name { parsprint("ID AS type_name -> for_loop_variable"); }
                  ;
 
-foreach_stmt: FOR EACH for_loop_variable IN endl_e expr endlc_list block_e NEXT endlc_list { parsprint("FOR EACH var IN expr block_e NEXT -> foreach_stmt"); }
+foreach_stmt: FOR EACH for_loop_variable IN endl_e expr endlc_list block_e next_end { parsprint("FOR EACH var IN expr block_e NEXT -> foreach_stmt"); }
             ;
 
 do_while_stmt: DO endlc_list block_e LOOP WHILE expr endlc_list { parsprint("DO block_e LOOP WHILE expr -> do_while_stmt"); }
