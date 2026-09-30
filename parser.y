@@ -410,23 +410,26 @@ primary_expr: INT_VAL                                                           
             | IF '(' endl_e expr ',' endl_e expr endl_e ')'                                                                     { parsprint("IF ( expr , expr ) -> expr"); }
             | MYBASE '.' endl_e member_access_member                                                                            { parsprint("MYBASE . member_access_member -> expr"); }
             | MYCLASS '.' endl_e member_access_member                                                                           { parsprint("MYCLASS . member_access_member -> expr"); }
-            | NEW ID %prec NEW                                                                                                  { parsprint("NEW ID -> expr"); }
-            | NEW ID '(' endl_e ')' %prec NEW                                                                                   { parsprint("NEW ID () -> expr"); }
-            | NEW ID '(' endl_e expr_list endl_e ')' %prec NEW                                                                  { parsprint("NEW ID ( expr_list ) -> expr"); }
-            | NEW ID '(' endl_e ')' collection_initializer %prec NEW                                                            { parsprint("NEW ID () collection_initializer -> expr"); }
-            | NEW ID '(' endl_e expr_list endl_e ')' collection_initializer %prec NEW                                           { parsprint("NEW ID ( expr_list ) collection_initializer -> expr"); }
-            | NEW ID '(' endl_e OF endl_e type_list endl_e ')' %prec NEW                                                        { parsprint("NEW ID ( OF type_list ) -> expr"); }
-            | NEW ID '(' endl_e OF endl_e type_list endl_e ')' '(' endl_e ')' %prec NEW                                         { parsprint("NEW ID ( OF type_list ) () -> expr"); }
-            | NEW ID '(' endl_e OF endl_e type_list endl_e ')' '(' endl_e expr_list endl_e ')' %prec NEW                        { parsprint("NEW ID ( OF type_list ) ( expr_list ) -> expr"); }
-            | NEW ID '(' endl_e OF endl_e type_list endl_e ')' '(' endl_e ')' collection_initializer %prec NEW                  { parsprint("NEW ID ( OF type_list ) () collection_initializer -> expr"); }
-            | NEW ID '(' endl_e OF endl_e type_list endl_e ')' '(' endl_e expr_list endl_e ')' collection_initializer %prec NEW { parsprint("NEW ID ( OF type_list ) ( expr_list ) collection_initializer -> expr"); }
-            | NEW primitive_type %prec NEW                                                                                      { parsprint("NEW primitive_type -> expr"); }
-            | NEW primitive_type '(' endl_e ')' %prec NEW                                                                       { parsprint("NEW primitive_type () -> expr"); }
-            | NEW primitive_type '(' endl_e expr_list endl_e ')' %prec NEW                                                      { parsprint("NEW primitive_type ( expr_list ) -> expr"); }
-            | NEW primitive_type '(' endl_e ')' collection_initializer %prec NEW                                                { parsprint("NEW primitive_type () collection_initializer -> expr"); }
-            | NEW primitive_type '(' endl_e expr_list endl_e ')' collection_initializer %prec NEW                               { parsprint("NEW primitive_type ( expr_list ) collection_initializer -> expr"); }
+            | new_expr                                                                                                          { parsprint("new_expr -> expr"); }
             | collection_initializer                                                                                            { parsprint("collection_initializer -> expr"); }
             ;
+
+new_expr: NEW ID %prec NEW                                                                                                  { parsprint("NEW ID -> new_expr"); }
+        | NEW ID '(' endl_e ')' %prec NEW                                                                                   { parsprint("NEW ID () -> new_expr"); }
+        | NEW ID '(' endl_e expr_list endl_e ')' %prec NEW                                                                  { parsprint("NEW ID ( expr_list ) -> new_expr"); }
+        | NEW ID '(' endl_e ')' collection_initializer %prec NEW                                                            { parsprint("NEW ID () collection_initializer -> new_expr"); }
+        | NEW ID '(' endl_e expr_list endl_e ')' collection_initializer %prec NEW                                           { parsprint("NEW ID ( expr_list ) collection_initializer -> new_expr"); }
+        | NEW ID '(' endl_e OF endl_e type_list endl_e ')' %prec NEW                                                        { parsprint("NEW ID ( OF type_list ) -> new_expr"); }
+        | NEW ID '(' endl_e OF endl_e type_list endl_e ')' '(' endl_e ')' %prec NEW                                         { parsprint("NEW ID ( OF type_list ) () -> new_expr"); }
+        | NEW ID '(' endl_e OF endl_e type_list endl_e ')' '(' endl_e expr_list endl_e ')' %prec NEW                        { parsprint("NEW ID ( OF type_list ) ( expr_list ) -> new_expr"); }
+        | NEW ID '(' endl_e OF endl_e type_list endl_e ')' '(' endl_e ')' collection_initializer %prec NEW                  { parsprint("NEW ID ( OF type_list ) () collection_initializer -> new_expr"); }
+        | NEW ID '(' endl_e OF endl_e type_list endl_e ')' '(' endl_e expr_list endl_e ')' collection_initializer %prec NEW { parsprint("NEW ID ( OF type_list ) ( expr_list ) collection_initializer -> new_expr"); }
+        | NEW primitive_type %prec NEW                                                                                      { parsprint("NEW primitive_type -> new_expr"); }
+        | NEW primitive_type '(' endl_e ')' %prec NEW                                                                       { parsprint("NEW primitive_type () -> new_expr"); }
+        | NEW primitive_type '(' endl_e expr_list endl_e ')' %prec NEW                                                      { parsprint("NEW primitive_type ( expr_list ) -> new_expr"); }
+        | NEW primitive_type '(' endl_e ')' collection_initializer %prec NEW                                                { parsprint("NEW primitive_type () collection_initializer -> new_expr"); }
+        | NEW primitive_type '(' endl_e expr_list endl_e ')' collection_initializer %prec NEW                               { parsprint("NEW primitive_type ( expr_list ) collection_initializer -> new_expr"); }
+        ;
 
 cast_target: CBOOL   { parsprint("CBOOL -> cast_target"); }
            | CBYTE   { parsprint("CBYTE -> cast_target"); }
