@@ -5,10 +5,19 @@
 ' - локальные константы Const
 ' - поля класса: Dim и с инициализатором
 ' - присваивание и использование переменных в выражениях
+' - несколько переменных в одном Dim/Const: общий тип, разные типы, с инициализаторами, массивы
+' - Dim ... As New: со скобками, без скобок, с аргументами, generic-тип, примитивный тип
+' - то же для полей класса
 Class Point
     Dim horizontal As Integer
     Dim vertical As Integer = 5
     Const dimensions = 2
+    Dim left, right As Integer
+    Public first, second As Integer
+    Private Shared shared1, shared2 As Integer
+    Private Const low = 1, high = 2
+    Public origin As New Point()
+    Dim copy1 As New Point, copy2 As New Point()
 End Class
 
 Class Main
@@ -49,5 +58,28 @@ Class Main
         Dim computed As Integer = (limit + 1) * 2
         Dim fromCall As Integer = Foo(1)
         Dim message = "n = " & intValue
+
+        Dim a, b As Integer
+        Dim c, d, e
+        Dim f As Integer, g As String
+        Dim h = 1, i = 2
+        Dim j As Integer = 1, k As String = "k"
+        Dim m(3), n As Integer
+        Dim o,
+            p As Integer
+        Const c1 = 1, c2 = 2
+        Const c3 As Integer = 3, c4 As String = "four"
+
+        Dim person As New Point()
+        Dim noParens As New Point
+        Dim withArgs As New Point(1, "a")
+        Dim generic As New List(Of Integer)()
+        Dim genericNoParens As New List(Of Integer)
+        Dim genericPair As New Dictionary(Of String, Integer)()
+        Dim primitive As New Integer()
+        Dim text As New String("a"c, 3)
+        Dim first As New Point(), second As New Point(1, 2)
+        Dim x, y As New Point()
+        Dim z As New Point() : Dim w As New Point()
     End Sub
 End Class
