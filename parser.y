@@ -228,8 +228,11 @@
 %nonassoc '(' ')' '{' '}'
 
 %%
-program: program_member         { parsprint("program_member -> program"); }
-       | program program_member { parsprint("program program_member -> program"); }
+program: endlc_list_e program_members { parsprint("endlc_list_e program_members -> program"); }
+       ;
+
+program_members: program_member                 { parsprint("program_member -> program_members"); }
+               | program_members program_member { parsprint("program_members program_member -> program_members"); }
        ;
 
 program_member: class_declaration endlc_list_e { parsprint("class_declaration endlc_list_e -> program_member"); }
