@@ -646,10 +646,10 @@ function_parameter: variable_name AS type_name                  { parsprint("var
                   | variable_name                               { parsprint("variable_name -> function_parameter"); }
                   ;
 
-class_declaration: CLASS ID stmt_endl INHERITS ID endl_list structure_body_e END CLASS                      { parsprint("CLASS ID INHERITS ID structure_body_e END CLASS -> class_declaration"); }
-                 | CLASS ID endl_list structure_body_e END CLASS                                            { parsprint("CLASS ID structure_body_e END CLASS -> class_declaration"); }
-                 | CLASS ID generic_param_list stmt_endl INHERITS ID endl_list structure_body_e END CLASS   { parsprint("CLASS ID generic_param_list INHERITS ID structure_body_e END CLASS -> class_declaration"); }
-                 | CLASS ID generic_param_list endl_list structure_body_e END CLASS                         { parsprint("CLASS ID generic_param_list structure_body_e END CLASS -> class_declaration"); }
+class_declaration: CLASS ID stmt_endl INHERITS ID endl_list structure_body_e END_CLASS                      { parsprint("CLASS ID INHERITS ID structure_body_e END_CLASS -> class_declaration"); }
+                 | CLASS ID endl_list structure_body_e END_CLASS                                            { parsprint("CLASS ID structure_body_e END_CLASS -> class_declaration"); }
+                 | CLASS ID generic_param_list stmt_endl INHERITS ID endl_list structure_body_e END_CLASS   { parsprint("CLASS ID generic_param_list INHERITS ID structure_body_e END_CLASS -> class_declaration"); }
+                 | CLASS ID generic_param_list endl_list structure_body_e END_CLASS                         { parsprint("CLASS ID generic_param_list structure_body_e END_CLASS -> class_declaration"); }
                  ;
 
 generic_param_list: '(' endl_e OF endl_e id_list endl_e ')' { parsprint("( OF id_list ) -> generic_param_list"); }
