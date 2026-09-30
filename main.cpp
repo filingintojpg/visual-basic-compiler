@@ -12,7 +12,7 @@ extern FILE* yyin;
 
 void setDebugOptions() {
     // Lexer
-    DEBUG_LEXER = true;
+    DEBUG_LEXER = false;
     DEBUG_LEXER_BY_LINE = false;
     DEBUG_LEXER_EOL = false;
 
