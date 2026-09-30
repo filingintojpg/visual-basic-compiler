@@ -335,31 +335,7 @@ kw: ME                               { parsprint("ME -> kw"); }
   | CTYPE                            { parsprint("CTYPE -> kw"); }
   ;
 
-expr: INT_VAL                                    { parsprint("INT_VAL -> expr"); }
-    | STR_VAL                                    { parsprint("STR_VAL -> expr"); }
-    | ID                                         { parsprint("ID -> expr"); }
-    | FLOAT_VAL                                  { parsprint("FLOAT_VAL -> expr"); }
-    | BOOL_VAL                                   { parsprint("BOOL_VAL -> expr"); }
-    | CHAR_VAL                                   { parsprint("CHAR_VAL -> expr"); }
-    | NOTHING_VAL                                { parsprint("NOTHING_VAL -> expr"); }
-    | ME                                         { parsprint("ME -> expr"); }
-    | BYTE                                       { parsprint("BYTE -> expr"); }
-    | SBYTE                                      { parsprint("SBYTE -> expr"); }
-    | USHORT                                     { parsprint("USHORT -> expr"); }
-    | SHORT                                      { parsprint("SHORT -> expr"); }
-    | UINTEGER                                   { parsprint("UINTEGER -> expr"); }
-    | INTEGER                                    { parsprint("INTEGER -> expr"); }
-    | ULONG                                      { parsprint("ULONG -> expr"); }
-    | LONG                                       { parsprint("LONG -> expr"); }
-    | BOOLEAN                                    { parsprint("BOOLEAN -> expr"); }
-    | DATE                                       { parsprint("DATE -> expr"); }
-    | CHAR                                       { parsprint("CHAR -> expr"); }
-    | STRING                                     { parsprint("STRING -> expr"); }
-    | DECIMAL                                    { parsprint("DECIMAL -> expr"); }
-    | SINGLE                                     { parsprint("SINGLE -> expr"); }
-    | DOUBLE                                     { parsprint("DOUBLE -> expr"); }
-    | OBJECT                                     { parsprint("OBJECT -> expr"); }
-    | '(' endl_e expr endl_e ')'                 { parsprint("( expr ) -> expr"); }
+expr: postfix_expr                              { parsprint("postfix_expr -> expr"); }
     | expr '+' endl_e expr                       { parsprint("expr + expr -> expr"); }
     | expr '-' endl_e expr                       { parsprint("expr - expr -> expr"); }
     | expr '*' endl_e expr                       { parsprint("expr * expr -> expr"); }
@@ -386,13 +362,43 @@ expr: INT_VAL                                    { parsprint("INT_VAL -> expr");
     | NOT expr                                   { parsprint("NOT expr -> expr"); }
     | expr IS endl_e expr                        { parsprint("expr IS expr -> expr"); }
     | expr ISNOT endl_e expr                     { parsprint("expr ISNOT expr -> expr"); }
-    | expr '(' endl_e expr_list endl_e ')'       { parsprint("expr ( expr_list ) -> expr"); }
-    | expr '(' endl_e ')'                        { parsprint("expr () -> expr"); }
+    ;
+
+postfix_expr: primary_expr                          { parsprint("primary_expr -> postfix_expr"); }
+    | postfix_expr '(' endl_e expr_list endl_e ')'  { parsprint("expr ( expr_list ) -> expr"); }
+    | postfix_expr '(' endl_e ')'                   { parsprint("expr () -> expr"); }
+    | postfix_expr '.' member_access_member         { parsprint("expr . member_access_member -> expr"); }
+    ;
+
+primary_expr: INT_VAL                            { parsprint("INT_VAL -> expr"); }
+    | STR_VAL                                    { parsprint("STR_VAL -> expr"); }
+    | ID                                         { parsprint("ID -> expr"); }
+    | FLOAT_VAL                                  { parsprint("FLOAT_VAL -> expr"); }
+    | BOOL_VAL                                   { parsprint("BOOL_VAL -> expr"); }
+    | CHAR_VAL                                   { parsprint("CHAR_VAL -> expr"); }
+    | NOTHING_VAL                                { parsprint("NOTHING_VAL -> expr"); }
+    | ME                                         { parsprint("ME -> expr"); }
+    | BYTE                                       { parsprint("BYTE -> expr"); }
+    | SBYTE                                      { parsprint("SBYTE -> expr"); }
+    | USHORT                                     { parsprint("USHORT -> expr"); }
+    | SHORT                                      { parsprint("SHORT -> expr"); }
+    | UINTEGER                                   { parsprint("UINTEGER -> expr"); }
+    | INTEGER                                    { parsprint("INTEGER -> expr"); }
+    | ULONG                                      { parsprint("ULONG -> expr"); }
+    | LONG                                       { parsprint("LONG -> expr"); }
+    | BOOLEAN                                    { parsprint("BOOLEAN -> expr"); }
+    | DATE                                       { parsprint("DATE -> expr"); }
+    | CHAR                                       { parsprint("CHAR -> expr"); }
+    | STRING                                     { parsprint("STRING -> expr"); }
+    | DECIMAL                                    { parsprint("DECIMAL -> expr"); }
+    | SINGLE                                     { parsprint("SINGLE -> expr"); }
+    | DOUBLE                                     { parsprint("DOUBLE -> expr"); }
+    | OBJECT                                     { parsprint("OBJECT -> expr"); }
+    | '(' endl_e expr endl_e ')'                 { parsprint("( expr ) -> expr"); }
     | cast_target '(' endl_e expr endl_e ')'     { parsprint("cast_target ( expr ) -> expr"); }
     | CTYPE '(' endl_e expr ',' endl_e type_name endl_e ')'                                                             { parsprint("CTYPE ( expr , type_name ) -> expr"); }
     | IF '(' endl_e expr ',' endl_e expr ',' endl_e expr endl_e ')'                                                     { parsprint("IF ( expr , expr , expr ) -> expr"); }
     | IF '(' endl_e expr ',' endl_e expr endl_e ')'                                                                     { parsprint("IF ( expr , expr ) -> expr"); }
-    | expr '.' member_access_member                                                                                     { parsprint("expr . member_access_member -> expr"); }
     | MYBASE '.' member_access_member                                                                                   { parsprint("MYBASE . member_access_member -> expr"); }
     | MYCLASS '.' member_access_member                                                                                  { parsprint("MYCLASS . member_access_member -> expr"); }
     | NEW ID  %prec NEW                                                                                                 { parsprint("NEW ID -> expr"); }
@@ -444,8 +450,8 @@ expr_list: expr                                         { parsprint("expr -> exp
          ;
 
 stmt: CALL expr endl_list                             { parsprint("CALL expr endl_list -> stmt"); }
-    | expr '(' endl_e expr_list endl_e ')' endl_list  { parsprint("expr ( expr_list ) endl_list -> stmt"); }
-    | expr '(' endl_e ')' endl_list                   { parsprint("expr () endl_list -> stmt"); }
+    | postfix_expr '(' endl_e expr_list endl_e ')' endl_list  { parsprint("expr ( expr_list ) endl_list -> stmt"); }
+    | postfix_expr '(' endl_e ')' endl_list                   { parsprint("expr () endl_list -> stmt"); }
     | REDIM redim_clause_list endl_list               { parsprint("REDIM redim_clause_list endl_list -> stmt"); }
     | REDIM PRESERVE redim_clause_list endl_list      { parsprint("REDIM PRESERVE redim_clause_list endl_list -> stmt"); }
     | ERASE expr_list endl_list                       { parsprint("ERASE expr_list endl_list -> stmt"); }
@@ -458,16 +464,16 @@ stmt: CALL expr endl_list                             { parsprint("CALL expr end
     | do_until_stmt                                   { parsprint("do_until_stmt -> stmt"); }
     | while_stmt                                      { parsprint("while_stmt -> stmt"); }
     | var_declaration                                 { parsprint("var_declaration -> stmt"); }
-    | expr '=' endl_e expr endl_list                  { parsprint("expr = expr endl_list -> stmt"); }
-    | expr ADD_ASSIGN endl_e expr endl_list           { parsprint("expr += expr endl_list -> stmt"); }
-    | expr SUB_ASSIGN endl_e expr endl_list           { parsprint("expr -= expr endl_list -> stmt"); }
-    | expr MUL_ASSIGN endl_e expr endl_list           { parsprint("expr *= expr endl_list -> stmt"); }
-    | expr DIV_ASSIGN endl_e expr endl_list           { parsprint("expr /= expr endl_list -> stmt"); }
-    | expr FLOORDIV_ASSIGN endl_e expr endl_list      { parsprint("expr \\= expr endl_list -> stmt"); }
-    | expr EXP_ASSIGN endl_e expr endl_list           { parsprint("expr ^= expr endl_list -> stmt"); }
-    | expr STRCAT_ASSIGN endl_e expr endl_list        { parsprint("expr &= expr endl_list -> stmt"); }
-    | expr LSHIFT_ASSIGN endl_e expr endl_list        { parsprint("expr <<= expr endl_list -> stmt"); }
-    | expr RSHIFT_ASSIGN endl_e expr endl_list        { parsprint("expr >>= expr endl_list -> stmt"); }
+    | postfix_expr '=' endl_e expr endl_list                  { parsprint("expr = expr endl_list -> stmt"); }
+    | postfix_expr ADD_ASSIGN endl_e expr endl_list           { parsprint("expr += expr endl_list -> stmt"); }
+    | postfix_expr SUB_ASSIGN endl_e expr endl_list           { parsprint("expr -= expr endl_list -> stmt"); }
+    | postfix_expr MUL_ASSIGN endl_e expr endl_list           { parsprint("expr *= expr endl_list -> stmt"); }
+    | postfix_expr DIV_ASSIGN endl_e expr endl_list           { parsprint("expr /= expr endl_list -> stmt"); }
+    | postfix_expr FLOORDIV_ASSIGN endl_e expr endl_list      { parsprint("expr \\= expr endl_list -> stmt"); }
+    | postfix_expr EXP_ASSIGN endl_e expr endl_list           { parsprint("expr ^= expr endl_list -> stmt"); }
+    | postfix_expr STRCAT_ASSIGN endl_e expr endl_list        { parsprint("expr &= expr endl_list -> stmt"); }
+    | postfix_expr LSHIFT_ASSIGN endl_e expr endl_list        { parsprint("expr <<= expr endl_list -> stmt"); }
+    | postfix_expr RSHIFT_ASSIGN endl_e expr endl_list        { parsprint("expr >>= expr endl_list -> stmt"); }
     | RETURN endl_list                                { parsprint("RETURN endl_list -> stmt"); }
     | RETURN expr endl_list                           { parsprint("RETURN expr endl_list -> stmt"); }
     | CONTINUE DO endl_list                           { parsprint("CONTINUE DO endl_list -> stmt"); }
@@ -479,7 +485,7 @@ stmt: CALL expr endl_list                             { parsprint("CALL expr end
     | EXIT SELECT endl_list                           { parsprint("EXIT SELECT endl_list -> stmt"); }
     ;
 
-redim_clause: expr '(' endl_e expr_list endl_e ')'                  { parsprint("expr ( expr_list ) -> redim_clause"); }
+redim_clause: postfix_expr '(' endl_e expr_list endl_e ')'                  { parsprint("expr ( expr_list ) -> redim_clause"); }
             ;
 
 redim_clause_list: redim_clause                                     { parsprint("redim_clause -> redim_clause_list"); }
