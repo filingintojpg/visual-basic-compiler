@@ -1,4 +1,9 @@
-' Select Case: значения, списки, диапазоны (Case 1 To 10), сравнения (Case Is > 5), Case Else
+' Тестируется:
+' - Select Case и Select (без слова Case), Case Else
+' - Case: одно значение, список значений, диапазон To, Is с операцией сравнения, без Is
+' - строки, символы и выражения в Case и в выбираемом значении
+' - пустые ветки и пустой Select
+' - вложенные Select, If и циклы внутри ветки
 Class Main
     Shared Sub Main()
         Select Case x
@@ -13,20 +18,36 @@ Class Main
             Case Else
                 Print("other")
         End Select
-        
-        ' все виды сравнений
+
+        Select x
+            Case 1
+                Print(1)
+        End Select
+
         Select Case x
             Case Is < 0
-                Print("neg")
+                Print("negative")
             Case Is <= 5
                 Print("small")
             Case Is >= 100
                 Print("huge")
             Case Is <> 50
                 Print("not fifty")
+            Case Is = 7
+                Print("seven")
         End Select
-        
-        ' комбинации в одном Case
+
+        Select Case x
+            Case < 0
+                Print(1)
+            Case >= 100
+                Print(2)
+            Case <> 50
+                Print(3)
+            Case = 7
+                Print(4)
+        End Select
+
         Select Case x
             Case 1 To 5, 10, Is > 100
                 Print("mix")
@@ -35,9 +56,8 @@ Class Main
             Case -5 To -1
                 Print("negative range")
         End Select
-        
-        ' строки, символы, выражения
-        Select Case s
+
+        Select Case text
             Case "a"
                 Print(1)
             Case "b", "c"
@@ -46,41 +66,60 @@ Class Main
                 Print(3)
             Case Else
         End Select
-        
-        Select Case c
+
+        Select Case letter
             Case "x"c
                 Print(1)
             Case "a"c To "f"c
                 Print(2)
         End Select
-        
+
         Select Case x Mod 3
             Case 0
-                Print("div by 3")
+                Print("divisible")
             Case 1 To 2
                 Print("rest")
         End Select
-        
+
         Select Case a + b * 2
             Case c + 1
                 Print(1)
             Case c + 2 To c * 2
                 Print(2)
         End Select
-        
-        ' только Else, пустые ветки, вложенность, Exit Select
+
+        Select Case Foo(x)
+            Case obj.Value
+                Print(1)
+        End Select
+
+        Select Case True
+            Case a > b
+                Print(1)
+            Case a < b
+                Print(2)
+        End Select
+
         Select Case x
             Case Else
                 Print("only else")
         End Select
-        
+
         Select Case x
             Case 1
             Case 2
                 Print(2)
             Case Else
         End Select
-        
+
+        Select Case x
+        End Select
+
+        Select Case x
+            Case 1 : Print(1)
+            Case 2 : Print(2) : Print(3)
+        End Select
+
         Select Case x
             Case 1
                 Select Case y
@@ -91,16 +130,12 @@ Class Main
                 End Select
             Case 2
                 If y > 0 Then
-                    Exit Select
+                    Print(2)
                 End If
-                Print(2)
-        End Select
-        
-        Select Case True
-            Case a > b
-                Print(1)
-            Case a < b
-                Print(2)
+            Case 3
+                For i = 1 To 3
+                    Print(i)
+                Next
         End Select
     End Sub
 End Class
