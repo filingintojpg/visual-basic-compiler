@@ -233,7 +233,7 @@ program: endlc_list_e program_members { parsprint("endlc_list_e program_members 
 
 program_members: program_member                 { parsprint("program_member -> program_members"); }
                | program_members program_member { parsprint("program_members program_member -> program_members"); }
-       ;
+               ;
 
 program_member: class_declaration endlc_list_e { parsprint("class_declaration endlc_list_e -> program_member"); }
               ;
@@ -525,11 +525,27 @@ select_stmt: SELECT expr endlc_list case_stmts END_SELECT endlc_list      { pars
            | SELECT CASE expr endlc_list case_stmts END_SELECT endlc_list { parsprint("SELECT CASE expr case_stmts END_SELECT -> select_stmt"); }
            ;
 
-case_condition_branch: CASE expr endlc_list block         { parsprint("CASE expr block -> case_condition_branch"); }
-                     | CASE expr endlc_list               { parsprint("CASE expr -> case_condition_branch"); }
-                     | CASE expr TO expr endlc_list block { parsprint("CASE expr TO expr block -> case_condition_branch"); }
-                     | CASE expr TO expr endlc_list       { parsprint("CASE expr TO expr -> case_condition_branch"); }
+case_condition_branch: CASE case_clauses endlc_list block { parsprint("CASE case_clauses block -> case_condition_branch"); }
+                     | CASE case_clauses endlc_list       { parsprint("CASE case_clauses -> case_condition_branch"); }
                      ;
+
+case_clauses: case_clause                         { parsprint("case_clause -> case_clauses"); }
+            | case_clauses ',' endl_e case_clause { parsprint("case_clauses , case_clause -> case_clauses"); }
+            ;
+
+case_clause: expr                                        { parsprint("expr -> case_clause"); }
+           | expr TO expr                                { parsprint("expr TO expr -> case_clause"); }
+           | case_comparison_op endl_e expr              { parsprint("case_comparison_op expr -> case_clause"); }
+           | IS endl_e case_comparison_op endl_e expr    { parsprint("IS case_comparison_op expr -> case_clause"); }
+           ;
+
+case_comparison_op: '='  { parsprint("= -> case_comparison_op"); }
+                  | NEQ  { parsprint("<> -> case_comparison_op"); }
+                  | '<'  { parsprint("< -> case_comparison_op"); }
+                  | '>'  { parsprint("> -> case_comparison_op"); }
+                  | LEQ  { parsprint("<= -> case_comparison_op"); }
+                  | GEQ  { parsprint(">= -> case_comparison_op"); }
+                  ;
 
 case_condition_branches: case_condition_branch                         { parsprint("case_condition_branch -> case_condition_branches"); }
                        | case_condition_branches case_condition_branch { parsprint("case_condition_branches case_condition_branch -> case_condition_branches"); }
