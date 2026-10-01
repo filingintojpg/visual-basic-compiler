@@ -211,8 +211,7 @@
 %token ENDL
 
 %precedence NEW
-%left  XOR
-%left  OR OR_ELSE
+%left  OR OR_ELSE XOR
 %left  AND AND_ALSO
 %right NOT
 %left  '=' NEQ LEQ GEQ '<' '>' IS ISNOT LIKE
