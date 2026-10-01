@@ -573,8 +573,12 @@ case_stmts: case_condition_branches                { parsprint("case_condition_b
           | /* empty */                            { parsprint("empty -> case_stmts"); }
           ;
 
-while_stmt: WHILE expr endlc_list block END_WHILE endlc_list { parsprint("WHILE expr block END_WHILE -> while_stmt"); }
-          | WHILE expr endlc_list END_WHILE endlc_list       { parsprint("WHILE expr END_WHILE -> while_stmt"); }
+while_stmt: WHILE expr endlc_list block while_end endlc_list { parsprint("WHILE expr block while_end -> while_stmt"); }
+          | WHILE expr endlc_list while_end endlc_list       { parsprint("WHILE expr while_end -> while_stmt"); }
+          ;
+
+while_end: END_WHILE { parsprint("END_WHILE -> while_end"); }
+         | WEND      { parsprint("WEND -> while_end"); }
           ;
 
 for_stmt: FOR for_loop_variable '=' endl_e expr TO expr endlc_list block next_end           { parsprint("FOR var = expr TO expr block NEXT -> for_stmt"); }
