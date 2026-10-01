@@ -472,16 +472,16 @@ simple_stmt: CALL expr                                { parsprint("CALL expr -> 
            | REDIM redim_clause_list                  { parsprint("REDIM redim_clause_list -> simple_stmt"); }
            | REDIM PRESERVE redim_clause_list         { parsprint("REDIM PRESERVE redim_clause_list -> simple_stmt"); }
            | ERASE expr_list                          { parsprint("ERASE expr_list -> simple_stmt"); }
-           | lvalue '=' endl_e expr             { parsprint("expr = expr -> simple_stmt"); }
-           | lvalue ADD_ASSIGN endl_e expr      { parsprint("expr += expr -> simple_stmt"); }
-           | lvalue SUB_ASSIGN endl_e expr      { parsprint("expr -= expr -> simple_stmt"); }
-           | lvalue MUL_ASSIGN endl_e expr      { parsprint("expr *= expr -> simple_stmt"); }
-           | lvalue DIV_ASSIGN endl_e expr      { parsprint("expr /= expr -> simple_stmt"); }
-           | lvalue FLOORDIV_ASSIGN endl_e expr { parsprint("expr \\= expr -> simple_stmt"); }
-           | lvalue EXP_ASSIGN endl_e expr      { parsprint("expr ^= expr -> simple_stmt"); }
-           | lvalue STRCAT_ASSIGN endl_e expr   { parsprint("expr &= expr -> simple_stmt"); }
-           | lvalue LSHIFT_ASSIGN endl_e expr   { parsprint("expr <<= expr -> simple_stmt"); }
-           | lvalue RSHIFT_ASSIGN endl_e expr   { parsprint("expr >>= expr -> simple_stmt"); }
+           | lvalue '=' endl_e expr                   { parsprint("expr = expr -> simple_stmt"); }
+           | lvalue ADD_ASSIGN endl_e expr            { parsprint("expr += expr -> simple_stmt"); }
+           | lvalue SUB_ASSIGN endl_e expr            { parsprint("expr -= expr -> simple_stmt"); }
+           | lvalue MUL_ASSIGN endl_e expr            { parsprint("expr *= expr -> simple_stmt"); }
+           | lvalue DIV_ASSIGN endl_e expr            { parsprint("expr /= expr -> simple_stmt"); }
+           | lvalue FLOORDIV_ASSIGN endl_e expr       { parsprint("expr \\= expr -> simple_stmt"); }
+           | lvalue EXP_ASSIGN endl_e expr            { parsprint("expr ^= expr -> simple_stmt"); }
+           | lvalue STRCAT_ASSIGN endl_e expr         { parsprint("expr &= expr -> simple_stmt"); }
+           | lvalue LSHIFT_ASSIGN endl_e expr         { parsprint("expr <<= expr -> simple_stmt"); }
+           | lvalue RSHIFT_ASSIGN endl_e expr         { parsprint("expr >>= expr -> simple_stmt"); }
            | RETURN                                   { parsprint("RETURN -> simple_stmt"); }
            | RETURN expr                              { parsprint("RETURN expr -> simple_stmt"); }
            | CONTINUE DO                              { parsprint("CONTINUE DO -> simple_stmt"); }
@@ -625,7 +625,7 @@ array_modifier: '(' endl_e expr endl_e ')' { parsprint("( expr ) -> array_modifi
               ;
 
 var_names: variable_name ',' endl_e variable_name { parsprint("variable_name , variable_name -> var_names"); }
-         | var_names ',' endl_e variable_name      { parsprint("var_names , variable_name -> var_names"); }
+         | var_names ',' endl_e variable_name     { parsprint("var_names , variable_name -> var_names"); }
          ;
 
 var_declarator: variable_name AS type_name                 { parsprint("variable_name AS type_name -> var_declarator"); }
