@@ -612,15 +612,22 @@ array_modifier: '(' endl_e expr endl_e ')' { parsprint("( expr ) -> array_modifi
               | '(' ')'                    { parsprint("() -> array_modifier"); }
               ;
 
-var_declarator: variable_name                              { parsprint("variable_name -> var_declarator"); }
-              | variable_name AS type_name                 { parsprint("variable_name AS type_name -> var_declarator"); }
+var_names: variable_name ',' endl_e variable_name { parsprint("variable_name , variable_name -> var_names"); }
+         | var_names ',' endl_e variable_name      { parsprint("var_names , variable_name -> var_names"); }
+         ;
+
+var_declarator: variable_name AS type_name                 { parsprint("variable_name AS type_name -> var_declarator"); }
+              | var_names AS type_name                     { parsprint("var_names AS type_name -> var_declarator"); }
               | variable_name '=' endl_e expr              { parsprint("variable_name = expr -> var_declarator"); }
               | variable_name AS type_name '=' endl_e expr { parsprint("variable_name AS type_name = expr -> var_declarator"); }
               | variable_name AS new_expr                  { parsprint("variable_name AS new_expr -> var_declarator"); }
+              | var_names AS new_expr                      { parsprint("var_names AS new_expr -> var_declarator"); }
               ;
 
 var_declarator_list: var_declarator                                { parsprint("var_declarator -> var_declarator_list"); }
-                   | var_declarator_list ',' endl_e var_declarator { parsprint("var_declarator_list , var_declarator -> var_declarator_list"); }
+                   | variable_name                                 { parsprint("variable_name -> var_declarator_list"); }
+                   | var_names                                     { parsprint("var_names -> var_declarator_list"); }
+                   | var_declarator ',' endl_e var_declarator_list { parsprint("var_declarator , var_declarator_list -> var_declarator_list"); }
                    ;
 
 var_declaration: DIM var_declarator_list endlc_list   { parsprint("DIM var_declarator_list endlc_list -> var_declaration"); }
