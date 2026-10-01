@@ -460,22 +460,28 @@ expr_list: expr                      { parsprint("expr -> expr_list"); }
          | expr_list ',' endl_e expr { parsprint("expr_list , expr -> expr_list"); }
          ;
 
+lvalue: ID                                       { parsprint("ID -> lvalue"); }
+      | suffixed_expr                            { parsprint("suffixed_expr -> lvalue"); }
+      | MYBASE '.' endl_e member_access_member   { parsprint("MYBASE . member_access_member -> lvalue"); }
+      | MYCLASS '.' endl_e member_access_member  { parsprint("MYCLASS . member_access_member -> lvalue"); }
+      ;
+
 simple_stmt: CALL expr                                { parsprint("CALL expr -> simple_stmt"); }
            | ID                                       { parsprint("ID -> simple_stmt"); }
            | suffixed_expr                            { parsprint("suffixed_expr -> simple_stmt"); }
            | REDIM redim_clause_list                  { parsprint("REDIM redim_clause_list -> simple_stmt"); }
            | REDIM PRESERVE redim_clause_list         { parsprint("REDIM PRESERVE redim_clause_list -> simple_stmt"); }
            | ERASE expr_list                          { parsprint("ERASE expr_list -> simple_stmt"); }
-           | postfix_expr '=' endl_e expr             { parsprint("expr = expr -> simple_stmt"); }
-           | postfix_expr ADD_ASSIGN endl_e expr      { parsprint("expr += expr -> simple_stmt"); }
-           | postfix_expr SUB_ASSIGN endl_e expr      { parsprint("expr -= expr -> simple_stmt"); }
-           | postfix_expr MUL_ASSIGN endl_e expr      { parsprint("expr *= expr -> simple_stmt"); }
-           | postfix_expr DIV_ASSIGN endl_e expr      { parsprint("expr /= expr -> simple_stmt"); }
-           | postfix_expr FLOORDIV_ASSIGN endl_e expr { parsprint("expr \\= expr -> simple_stmt"); }
-           | postfix_expr EXP_ASSIGN endl_e expr      { parsprint("expr ^= expr -> simple_stmt"); }
-           | postfix_expr STRCAT_ASSIGN endl_e expr   { parsprint("expr &= expr -> simple_stmt"); }
-           | postfix_expr LSHIFT_ASSIGN endl_e expr   { parsprint("expr <<= expr -> simple_stmt"); }
-           | postfix_expr RSHIFT_ASSIGN endl_e expr   { parsprint("expr >>= expr -> simple_stmt"); }
+           | lvalue '=' endl_e expr             { parsprint("expr = expr -> simple_stmt"); }
+           | lvalue ADD_ASSIGN endl_e expr      { parsprint("expr += expr -> simple_stmt"); }
+           | lvalue SUB_ASSIGN endl_e expr      { parsprint("expr -= expr -> simple_stmt"); }
+           | lvalue MUL_ASSIGN endl_e expr      { parsprint("expr *= expr -> simple_stmt"); }
+           | lvalue DIV_ASSIGN endl_e expr      { parsprint("expr /= expr -> simple_stmt"); }
+           | lvalue FLOORDIV_ASSIGN endl_e expr { parsprint("expr \\= expr -> simple_stmt"); }
+           | lvalue EXP_ASSIGN endl_e expr      { parsprint("expr ^= expr -> simple_stmt"); }
+           | lvalue STRCAT_ASSIGN endl_e expr   { parsprint("expr &= expr -> simple_stmt"); }
+           | lvalue LSHIFT_ASSIGN endl_e expr   { parsprint("expr <<= expr -> simple_stmt"); }
+           | lvalue RSHIFT_ASSIGN endl_e expr   { parsprint("expr >>= expr -> simple_stmt"); }
            | RETURN                                   { parsprint("RETURN -> simple_stmt"); }
            | RETURN expr                              { parsprint("RETURN expr -> simple_stmt"); }
            | CONTINUE DO                              { parsprint("CONTINUE DO -> simple_stmt"); }
