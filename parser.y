@@ -687,9 +687,13 @@ function_signature: FUNCTION ID '(' endl_e function_parameters endl_e ')' AS typ
                   | FUNCTION ID                                                        { parsprint("FUNCTION ID -> function_signature"); }
                   ;
 
-sub_signature: SUB ID '(' endl_e function_parameters endl_e ')' { parsprint("SUB ID ( params ) -> sub_signature"); }
-             | SUB ID '(' endl_e ')'                            { parsprint("SUB ID () -> sub_signature"); }
-             | SUB ID                                           { parsprint("SUB ID -> sub_signature"); }
+sub_name: ID  { parsprint("ID -> sub_name"); }
+        | NEW { parsprint("NEW -> sub_name"); }
+        ;
+
+sub_signature: SUB sub_name '(' endl_e function_parameters endl_e ')' { parsprint("SUB sub_name ( params ) -> sub_signature"); }
+             | SUB sub_name '(' endl_e ')'                            { parsprint("SUB sub_name () -> sub_signature"); }
+             | SUB sub_name                                           { parsprint("SUB sub_name -> sub_signature"); }
              ;
 
 function_declaration: member_modifiers_e function_signature endl_list block END_FUNCTION endlc_list { parsprint("member_modifiers_e function_signature block END_FUNCTION -> function_declaration"); }
