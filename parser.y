@@ -724,8 +724,12 @@ function_parameters: function_parameter                                { parspri
                    | function_parameters ',' endl_e function_parameter { parsprint("function_parameters , function_parameter -> function_parameters"); }
                    ;
 
-function_parameter: variable_name AS type_name { parsprint("variable_name AS type_name -> function_parameter"); }
-                  | variable_name              { parsprint("variable_name -> function_parameter"); }
+param_name: ID         { parsprint("ID -> param_name"); }
+          | ID '(' ')' { parsprint("ID () -> param_name"); }
+          ;
+
+function_parameter: param_name AS type_name { parsprint("param_name AS type_name -> function_parameter"); }
+                  | param_name              { parsprint("param_name -> function_parameter"); }
                   ;
 
 class_declaration: class_modifiers_e CLASS ID endlc_list INHERITS ID endlc_list structure_body_e END_CLASS                    { parsprint("class_modifiers_e CLASS ID INHERITS ID structure_body_e END_CLASS -> class_declaration"); }
