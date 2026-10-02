@@ -193,12 +193,6 @@
 %token BOOL_VAL
 %token NOTHING_VAL
 
-%token ISTR_START
-%token ISTR_PART
-%token ISTR_END
-%token ISTR_EXPR_START
-%token ISTR_EXPR_END
-
 %token ADD_ASSIGN
 %token SUB_ASSIGN
 %token MUL_ASSIGN
