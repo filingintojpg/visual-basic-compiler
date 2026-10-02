@@ -17,15 +17,6 @@ CLASS Main
             total += i
         NEXT
 
-        Dim count% = 1
-        Dim big& = 2
-        Dim money@ = 3
-        Dim ratio! = 1.5
-        Dim exact# = 2.5
-        Dim text$ = "text"
-        count% = count% + 1
-        text$ = text$ & "!"
-
         Dim [End] = 1
         Dim [Class] = 2
         Dim [If] = [End] + [Class]

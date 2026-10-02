@@ -15,7 +15,6 @@ EXPONENT    [Ee][+-]?{NUMBER}
 INTEGER_SUFFIX          (S|US|I|UI|L|UL)
 FLOATING_POINT_SUFFIX   ([Ff]|[Dd]|[Rr])
 
-TYPE_CHAR   [%&@!#$]
 ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
 
 %{
@@ -385,20 +384,9 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
 
     /* Identifiers */
 
-\[{ID}{TYPE_CHAR}\] {
-    lexerror(yylineno, "Invalid type char in escaped identifier: %s", yytext);
-    return ID;
-}
-
 \[{ID}\] {
     std::string lexeme(yytext);
-    lexprint(yylineno, "ESCAPED IDENTIFIER %s (%s)", yytext, toID(lexeme).c_str());
-    return ID;
-}
-
-{ID}{TYPE_CHAR}? {
-    std::string lexeme(yytext);
-    lexprint(yylineno, "%s (%s)", identifierDescription(lexeme).c_str(), toID(lexeme).c_str());
+    lexprint(yylineno, "IDENTIFIER %s (%s)", yytext, toID(lexeme).c_str());
     return ID;
 }
 
@@ -509,19 +497,6 @@ std::string floatingDescription(const std::string& lexeme) {
     return message + lexeme;
 }
 
-std::string identifierDescription(const std::string& lexeme) {
-    std::string message("IDENTIFIER ");
-
-    if      (lexeme.ends_with("%")) { message += "INTEGER "; }
-    else if (lexeme.ends_with("&")) { message += "LONG "; }
-    else if (lexeme.ends_with("@")) { message += "DECIMAL "; }
-    else if (lexeme.ends_with("!")) { message += "SINGLE "; }
-    else if (lexeme.ends_with("#")) { message += "DOUBLE "; }
-    else if (lexeme.ends_with("$")) { message += "STRING "; }
-
-    return message + lexeme;
-}
-
     /* Converting lexemes to values */
 
 long long toInteger(const std::string& lexeme) {
@@ -569,11 +544,6 @@ std::string toID(const std::string& lexeme) {
 
     if (id.starts_with("[") && id.ends_with("]")) {
         id = id.substr(1, id.length() - 2);
-    }
-
-    if (id.ends_with("%") || id.ends_with("&") || id.ends_with("@") || 
-        id.ends_with("!") || id.ends_with("#") || id.ends_with("$")) {
-        id.pop_back();
     }
 
     return toLower(id);

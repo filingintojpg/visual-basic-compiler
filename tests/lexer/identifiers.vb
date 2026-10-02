@@ -5,14 +5,17 @@ identifier_
 _identifier
 IDENTIFIER
 identifier123
-identifier%
-identifier&
-identifier@
-identifier!
-identifier#
-identifier$
-If%
+[identifier]
+[i]
+[__]
+[identifier_]
+[_identifier]
+[IDENTIFIER]
+[identifier123]
+[If]
 
 _
 123
 If
+[_]
+[123]
