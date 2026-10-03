@@ -64,22 +64,6 @@
 %token ELSE
 %token ELSEIF
 %token END
-%token END_CLASS
-%token END_ENUM
-%token END_FUNCTION
-%token END_GET
-%token END_IF
-%token END_INTERFACE
-%token END_MODULE
-%token END_NAMESPACE
-%token END_PROPERTY
-%token END_SELECT
-%token END_SET
-%token END_STRUCTURE
-%token END_SUB
-%token END_SYNC_LOCK
-%token END_TRY
-%token END_WHILE
 %token ENUM
 %token ERASE
 %token ERROR
@@ -514,12 +498,12 @@ redim_clause_list: redim_clause                              { parsprint("redim_
 
 if_stmt: IF expr THEN inline_stmts endl_list                                                 { parsprint("IF expr THEN inline_stmts -> if_stmt"); }
        | IF expr THEN inline_stmts ELSE inline_stmts endl_list                               { parsprint("IF expr THEN inline_stmts ELSE inline_stmts -> if_stmt"); }
-       | IF expr THEN endlc_list block else_if_stmts ELSE endlc_list block END_IF endlc_list { parsprint("IF expr THEN block else_if_stmts ELSE block END_IF -> if_stmt"); }
-       | IF expr THEN endlc_list else_if_stmts ELSE endlc_list block END_IF endlc_list       { parsprint("IF expr THEN else_if_stmts ELSE block END_IF -> if_stmt"); }
-       | IF expr THEN endlc_list block else_if_stmts ELSE endlc_list END_IF endlc_list       { parsprint("IF expr THEN block else_if_stmts ELSE END_IF -> if_stmt"); }
-       | IF expr THEN endlc_list else_if_stmts ELSE endlc_list END_IF endlc_list             { parsprint("IF expr THEN else_if_stmts ELSE END_IF -> if_stmt"); }
-       | IF expr THEN endlc_list block else_if_stmts END_IF endlc_list                       { parsprint("IF expr THEN block else_if_stmts END_IF -> if_stmt"); }
-       | IF expr THEN endlc_list else_if_stmts END_IF endlc_list                             { parsprint("IF expr THEN else_if_stmts END_IF -> if_stmt"); }
+       | IF expr THEN endlc_list block else_if_stmts ELSE endlc_list block END IF endlc_list { parsprint("IF expr THEN block else_if_stmts ELSE block END IF -> if_stmt"); }
+       | IF expr THEN endlc_list else_if_stmts ELSE endlc_list block END IF endlc_list       { parsprint("IF expr THEN else_if_stmts ELSE block END IF -> if_stmt"); }
+       | IF expr THEN endlc_list block else_if_stmts ELSE endlc_list END IF endlc_list       { parsprint("IF expr THEN block else_if_stmts ELSE END IF -> if_stmt"); }
+       | IF expr THEN endlc_list else_if_stmts ELSE endlc_list END IF endlc_list             { parsprint("IF expr THEN else_if_stmts ELSE END IF -> if_stmt"); }
+       | IF expr THEN endlc_list block else_if_stmts END IF endlc_list                       { parsprint("IF expr THEN block else_if_stmts END IF -> if_stmt"); }
+       | IF expr THEN endlc_list else_if_stmts END IF endlc_list                             { parsprint("IF expr THEN else_if_stmts END IF -> if_stmt"); }
        ;
 
 else_if_stmts: /* empty */                                     { parsprint("empty -> else_if_stmts"); }
@@ -527,8 +511,8 @@ else_if_stmts: /* empty */                                     { parsprint("empt
              | else_if_stmts ELSEIF expr THEN endlc_list       { parsprint("else_if_stmts ELSEIF expr THEN -> else_if_stmts"); }
              ;
 
-select_stmt: SELECT expr endlc_list case_stmts END_SELECT endlc_list      { parsprint("SELECT expr case_stmts END_SELECT -> select_stmt"); }
-           | SELECT CASE expr endlc_list case_stmts END_SELECT endlc_list { parsprint("SELECT CASE expr case_stmts END_SELECT -> select_stmt"); }
+select_stmt: SELECT expr endlc_list case_stmts END SELECT endlc_list      { parsprint("SELECT expr case_stmts END SELECT -> select_stmt"); }
+           | SELECT CASE expr endlc_list case_stmts END SELECT endlc_list { parsprint("SELECT CASE expr case_stmts END SELECT -> select_stmt"); }
            ;
 
 case_condition_branch: CASE case_clauses endlc_list block { parsprint("CASE case_clauses block -> case_condition_branch"); }
@@ -570,7 +554,7 @@ while_stmt: WHILE expr endlc_list block while_end endlc_list { parsprint("WHILE 
           | WHILE expr endlc_list while_end endlc_list       { parsprint("WHILE expr while_end -> while_stmt"); }
           ;
 
-while_end: END_WHILE { parsprint("END_WHILE -> while_end"); }
+while_end: END WHILE { parsprint("END WHILE -> while_end"); }
          | WEND      { parsprint("WEND -> while_end"); }
          ;
 
@@ -696,12 +680,12 @@ sub_signature: SUB sub_name '(' endl_e function_parameters endl_e ')' { parsprin
              | SUB sub_name                                           { parsprint("SUB sub_name -> sub_signature"); }
              ;
 
-function_declaration: member_modifiers_e function_signature endl_list block END_FUNCTION endlc_list { parsprint("member_modifiers_e function_signature block END_FUNCTION -> function_declaration"); }
-                    | member_modifiers_e function_signature endl_list END_FUNCTION endlc_list { parsprint("member_modifiers_e function_signature END_FUNCTION -> function_declaration"); }
+function_declaration: member_modifiers_e function_signature endl_list block END FUNCTION endlc_list { parsprint("member_modifiers_e function_signature block END FUNCTION -> function_declaration"); }
+                    | member_modifiers_e function_signature endl_list END FUNCTION endlc_list { parsprint("member_modifiers_e function_signature END FUNCTION -> function_declaration"); }
                     ;
 
-sub_declaration: member_modifiers_e sub_signature endl_list block END_SUB endlc_list { parsprint("member_modifiers_e sub_signature block END_SUB -> sub_declaration"); }
-               | member_modifiers_e sub_signature endl_list END_SUB endlc_list       { parsprint("member_modifiers_e sub_signature END_SUB -> sub_declaration"); }
+sub_declaration: member_modifiers_e sub_signature endl_list block END SUB endlc_list { parsprint("member_modifiers_e sub_signature block END SUB -> sub_declaration"); }
+               | member_modifiers_e sub_signature endl_list END SUB endlc_list       { parsprint("member_modifiers_e sub_signature END SUB -> sub_declaration"); }
                ;
 
 
@@ -736,10 +720,10 @@ function_parameter: param_name AS type_name { parsprint("param_name AS type_name
                   | param_name              { parsprint("param_name -> function_parameter"); }
                   ;
 
-class_declaration: class_modifiers_e CLASS ID endlc_list INHERITS ID endlc_list structure_body_e END_CLASS                    { parsprint("class_modifiers_e CLASS ID INHERITS ID structure_body_e END_CLASS -> class_declaration"); }
-                 | class_modifiers_e CLASS ID endlc_list structure_body_e END_CLASS                                           { parsprint("class_modifiers_e CLASS ID structure_body_e END_CLASS -> class_declaration"); }
-                 | class_modifiers_e CLASS ID generic_param_list endlc_list INHERITS ID endlc_list structure_body_e END_CLASS { parsprint("class_modifiers_e CLASS ID generic_param_list INHERITS ID structure_body_e END_CLASS -> class_declaration"); }
-                 | class_modifiers_e CLASS ID generic_param_list endlc_list structure_body_e END_CLASS                        { parsprint("class_modifiers_e CLASS ID generic_param_list structure_body_e END_CLASS -> class_declaration"); }
+class_declaration: class_modifiers_e CLASS ID endlc_list INHERITS ID endlc_list structure_body_e END CLASS                    { parsprint("class_modifiers_e CLASS ID INHERITS ID structure_body_e END CLASS -> class_declaration"); }
+                 | class_modifiers_e CLASS ID endlc_list structure_body_e END CLASS                                           { parsprint("class_modifiers_e CLASS ID structure_body_e END CLASS -> class_declaration"); }
+                 | class_modifiers_e CLASS ID generic_param_list endlc_list INHERITS ID endlc_list structure_body_e END CLASS { parsprint("class_modifiers_e CLASS ID generic_param_list INHERITS ID structure_body_e END CLASS -> class_declaration"); }
+                 | class_modifiers_e CLASS ID generic_param_list endlc_list structure_body_e END CLASS                        { parsprint("class_modifiers_e CLASS ID generic_param_list structure_body_e END CLASS -> class_declaration"); }
                  ;
 
 generic_param_list: '(' endl_e OF endl_e id_list endl_e ')' { parsprint("( OF id_list ) -> generic_param_list"); }
