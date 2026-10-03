@@ -107,7 +107,7 @@ Erase              { lexprint(yylineno, "KEYWORD Erase"); return ERASE; }
 Error              { lexprint(yylineno, "KEYWORD Error"); return ERROR; }
 Event              { lexprint(yylineno, "KEYWORD Event"); return EVENT; }
 Exit               { lexprint(yylineno, "KEYWORD Exit"); return EXIT; }
-False              { lexprint(yylineno, "BOOLEAN False"); return BOOL_VAL; }
+False              { lexprint(yylineno, "BOOLEAN False"); return BOOL_LIT; }
 Finally            { lexprint(yylineno, "KEYWORD Finally"); return FINALLY; }
 For                { lexprint(yylineno, "KEYWORD For"); return FOR; }
 Friend             { lexprint(yylineno, "KEYWORD Friend"); return FRIEND; }
@@ -150,7 +150,7 @@ Narrowing          { lexprint(yylineno, "KEYWORD Narrowing"); return NARROWING; 
 New                { lexprint(yylineno, "KEYWORD New"); return NEW; }
 Next               { lexprint(yylineno, "KEYWORD Next"); return NEXT; }
 Not                { lexprint(yylineno, "KEYWORD Not"); return NOT; }
-Nothing            { lexprint(yylineno, "NOTHING Nothing"); return NOTHING_VAL; }
+Nothing            { lexprint(yylineno, "NOTHING Nothing"); return NOTHING_LIT; }
 NotInheritable     { lexprint(yylineno, "KEYWORD NotInheritable"); return NOT_INHERITABLE; }
 NotOverridable     { lexprint(yylineno, "KEYWORD NotOverridable"); return NOT_OVERRIDABLE; }
 Object             { lexprint(yylineno, "KEYWORD Object"); return OBJECT; }
@@ -198,7 +198,7 @@ Take               { lexprint(yylineno, "KEYWORD Take"); return TAKE; }
 Then               { lexprint(yylineno, "KEYWORD Then"); return THEN; }
 Throw              { lexprint(yylineno, "KEYWORD Throw"); return THROW; }
 To                 { lexprint(yylineno, "KEYWORD To"); return TO; }
-True               { lexprint(yylineno, "BOOLEAN True"); return BOOL_VAL; }
+True               { lexprint(yylineno, "BOOLEAN True"); return BOOL_LIT; }
 Try                { lexprint(yylineno, "KEYWORD Try"); return TRY; }
 TryCast            { lexprint(yylineno, "KEYWORD TryCast"); return TRY_CAST; }
 TypeOf             { lexprint(yylineno, "KEYWORD TypeOf"); return TYPE_OF; }
@@ -297,7 +297,7 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
     
     if (stringValue.length() == 1) {
         lexprint(yylineno, "LITERAL CHAR %c", stringValue.at(0));
-        return CHAR_VAL;
+        return CHAR_LIT;
     } else {
         lexerror(yylineno, "Char literal has more than 1 symbol");
     }
@@ -305,7 +305,7 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
 <STR>\" {
     lexprint(yylineno, "LITERAL STRING \"%s\"", stringValue.c_str());
     BEGIN(INITIAL);
-    return STR_VAL;
+    return STR_LIT;
 }
 
     /* Number literals */
@@ -319,7 +319,7 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
 {NUMBER}{INTEGER_SUFFIX}? {
     std::string lexeme(yytext);
     lexprint(yylineno, "%s (%lld)", integerDescription(lexeme).c_str(), toInteger(lexeme));
-    return INT_VAL;
+    return INT_LIT;
 }
 
 &H\_*{HEX_DIGIT}(\_*{HEX_DIGIT}*)*\_+{INTEGER_SUFFIX}? {
@@ -329,7 +329,7 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
 &H\_*{HEX_DIGIT}(\_*{HEX_DIGIT}*)*{INTEGER_SUFFIX}? {
     std::string lexeme(yytext);
     lexprint(yylineno, "%s (%lld)", integerDescription(lexeme).c_str(), toInteger(lexeme));
-    return INT_VAL;
+    return INT_LIT;
 }
 
 &O\_*{OCT_DIGIT}(\_*{OCT_DIGIT}*)*\_+{INTEGER_SUFFIX}? {
@@ -339,7 +339,7 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
 &O\_*{OCT_DIGIT}(\_*{OCT_DIGIT}*)*{INTEGER_SUFFIX}? {
     std::string lexeme(yytext);
     lexprint(yylineno, "%s (%lld)", integerDescription(lexeme).c_str(), toInteger(lexeme));
-    return INT_VAL;
+    return INT_LIT;
 }
 
 &B\_*{BIN_DIGIT}(\_*{BIN_DIGIT}*)*\_+{INTEGER_SUFFIX}? {
@@ -349,7 +349,7 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
 &B\_*{BIN_DIGIT}(\_*{BIN_DIGIT}*)*{INTEGER_SUFFIX}? {
     std::string lexeme(yytext);
     lexprint(yylineno, "%s (%lld)", integerDescription(lexeme).c_str(), toInteger(lexeme));
-    return INT_VAL;
+    return INT_LIT;
 }
 
     /* Floating-point literals */
@@ -357,13 +357,13 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
 {NUMBER}(\.{NUMBER})?{EXPONENT}|{NUMBER}?\.{NUMBER}{EXPONENT}? {
     std::string lexeme(yytext);
     lexprint(yylineno, "%s (%g)", floatingDescription(lexeme).c_str(), toFloating(lexeme));
-    return FLOAT_VAL;
+    return FLOAT_LIT;
 }
 
 ({NUMBER}(\.{NUMBER})?{EXPONENT}?|{NUMBER}?\.{NUMBER}{EXPONENT}?){FLOATING_POINT_SUFFIX} {
     std::string lexeme(yytext);
     lexprint(yylineno, "%s (%g)", floatingDescription(lexeme).c_str(), toFloating(lexeme));
-    return FLOAT_VAL;
+    return FLOAT_LIT;
 }
 
     /* Identifiers */

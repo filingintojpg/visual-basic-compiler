@@ -170,11 +170,11 @@
 
 %token ID
 
-%token INT_VAL
-%token FLOAT_VAL
-%token STR_VAL
-%token CHAR_VAL
-%token BOOL_VAL
+%token INT_LIT
+%token FLOAT_LIT
+%token STR_LIT
+%token CHAR_LIT
+%token BOOL_LIT
 %token NOTHING
 
 %token ADD_ASSIGN
@@ -356,12 +356,12 @@ suffixed_expr: postfix_expr '(' endl_e expr_list endl_e ')' { parsprint("postfix
              | postfix_expr '.' endl_e member_access_member { parsprint("postfix_expr . member_access_member -> suffixed_expr"); }
              ;
 
-primary_expr: INT_VAL                                                                                                           { parsprint("INT_VAL -> expr"); }
-            | STR_VAL                                                                                                           { parsprint("STR_VAL -> expr"); }
+primary_expr: INT_LIT                                                                                                           { parsprint("INT_LIT -> expr"); }
+            | STR_LIT                                                                                                           { parsprint("STR_LIT -> expr"); }
             | ID                                                                                                                { parsprint("ID -> expr"); }
-            | FLOAT_VAL                                                                                                         { parsprint("FLOAT_VAL -> expr"); }
-            | BOOL_VAL                                                                                                          { parsprint("BOOL_VAL -> expr"); }
-            | CHAR_VAL                                                                                                          { parsprint("CHAR_VAL -> expr"); }
+            | FLOAT_LIT                                                                                                         { parsprint("FLOAT_LIT -> expr"); }
+            | BOOL_LIT                                                                                                          { parsprint("BOOL_LIT -> expr"); }
+            | CHAR_LIT                                                                                                          { parsprint("CHAR_LIT -> expr"); }
             | NOTHING                                                                                                           { parsprint("NOTHING -> expr"); }
             | ME                                                                                                                { parsprint("ME -> expr"); }
             | BYTE                                                                                                              { parsprint("BYTE -> expr"); }
