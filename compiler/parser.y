@@ -33,6 +33,7 @@
 %token CBOOL
 %token CBYTE
 %token CCHAR
+%token CDATE
 %token CDBL
 %token CDEC
 %token CHAR
@@ -50,6 +51,7 @@
 %token CUINT
 %token CULNG
 %token CUSHORT
+%token DATE
 %token DECIMAL
 %token DECLARE
 %token DEFAULT
