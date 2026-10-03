@@ -175,7 +175,7 @@
 %token STR_VAL
 %token CHAR_VAL
 %token BOOL_VAL
-%token NOTHING_VAL
+%token NOTHING
 
 %token ADD_ASSIGN
 %token SUB_ASSIGN
@@ -362,7 +362,7 @@ primary_expr: INT_VAL                                                           
             | FLOAT_VAL                                                                                                         { parsprint("FLOAT_VAL -> expr"); }
             | BOOL_VAL                                                                                                          { parsprint("BOOL_VAL -> expr"); }
             | CHAR_VAL                                                                                                          { parsprint("CHAR_VAL -> expr"); }
-            | NOTHING_VAL                                                                                                       { parsprint("NOTHING_VAL -> expr"); }
+            | NOTHING                                                                                                           { parsprint("NOTHING -> expr"); }
             | ME                                                                                                                { parsprint("ME -> expr"); }
             | BYTE                                                                                                              { parsprint("BYTE -> expr"); }
             | SBYTE                                                                                                             { parsprint("SBYTE -> expr"); }
