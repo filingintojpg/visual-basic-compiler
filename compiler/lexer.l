@@ -107,7 +107,7 @@ Erase              { lexprint(yylineno, "KEYWORD Erase"); return ERASE; }
 Error              { lexprint(yylineno, "KEYWORD Error"); return ERROR; }
 Event              { lexprint(yylineno, "KEYWORD Event"); return EVENT; }
 Exit               { lexprint(yylineno, "KEYWORD Exit"); return EXIT; }
-False              { lexprint(yylineno, "BOOLEAN False"); return BOOL_LIT; }
+False              { lexprint(yylineno, "BOOLEAN False"); yylval.boolLiteral = false; return BOOL_LIT; }
 Finally            { lexprint(yylineno, "KEYWORD Finally"); return FINALLY; }
 For                { lexprint(yylineno, "KEYWORD For"); return FOR; }
 Friend             { lexprint(yylineno, "KEYWORD Friend"); return FRIEND; }
@@ -150,7 +150,7 @@ Narrowing          { lexprint(yylineno, "KEYWORD Narrowing"); return NARROWING; 
 New                { lexprint(yylineno, "KEYWORD New"); return NEW; }
 Next               { lexprint(yylineno, "KEYWORD Next"); return NEXT; }
 Not                { lexprint(yylineno, "KEYWORD Not"); return NOT; }
-Nothing            { lexprint(yylineno, "NOTHING Nothing"); return NOTHING_LIT; }
+Nothing            { lexprint(yylineno, "NOTHING Nothing"); return NOTHING; }
 NotInheritable     { lexprint(yylineno, "KEYWORD NotInheritable"); return NOT_INHERITABLE; }
 NotOverridable     { lexprint(yylineno, "KEYWORD NotOverridable"); return NOT_OVERRIDABLE; }
 Object             { lexprint(yylineno, "KEYWORD Object"); return OBJECT; }
@@ -198,7 +198,7 @@ Take               { lexprint(yylineno, "KEYWORD Take"); return TAKE; }
 Then               { lexprint(yylineno, "KEYWORD Then"); return THEN; }
 Throw              { lexprint(yylineno, "KEYWORD Throw"); return THROW; }
 To                 { lexprint(yylineno, "KEYWORD To"); return TO; }
-True               { lexprint(yylineno, "BOOLEAN True"); return BOOL_LIT; }
+True               { lexprint(yylineno, "BOOLEAN True"); yylval.boolLiteral = true; return BOOL_LIT; }
 Try                { lexprint(yylineno, "KEYWORD Try"); return TRY; }
 TryCast            { lexprint(yylineno, "KEYWORD TryCast"); return TRY_CAST; }
 TypeOf             { lexprint(yylineno, "KEYWORD TypeOf"); return TYPE_OF; }
@@ -297,6 +297,7 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
     
     if (stringValue.length() == 1) {
         lexprint(yylineno, "LITERAL CHAR %c", stringValue.at(0));
+        yylval.charLiteral = stringValue.at(0);
         return CHAR_LIT;
     } else {
         lexerror(yylineno, "Char literal has more than 1 symbol");
@@ -305,6 +306,7 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
 <STR>\" {
     lexprint(yylineno, "LITERAL STRING \"%s\"", stringValue.c_str());
     BEGIN(INITIAL);
+    yylval.stringLiteral = new std::string(stringValue);
     return STR_LIT;
 }
 
@@ -319,6 +321,7 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
 {NUMBER}{INTEGER_SUFFIX}? {
     std::string lexeme(yytext);
     lexprint(yylineno, "%s (%lld)", integerDescription(lexeme).c_str(), toInteger(lexeme));
+    yylval.intLiteral = new IntLiteral(toInteger(lexeme), typeOfInteger(lexeme), isUnsignedInteger(lexeme));
     return INT_LIT;
 }
 
@@ -329,6 +332,7 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
 &H\_*{HEX_DIGIT}(\_*{HEX_DIGIT}*)*{INTEGER_SUFFIX}? {
     std::string lexeme(yytext);
     lexprint(yylineno, "%s (%lld)", integerDescription(lexeme).c_str(), toInteger(lexeme));
+    yylval.intLiteral = new IntLiteral(toInteger(lexeme), typeOfInteger(lexeme), isUnsignedInteger(lexeme));
     return INT_LIT;
 }
 
@@ -339,6 +343,7 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
 &O\_*{OCT_DIGIT}(\_*{OCT_DIGIT}*)*{INTEGER_SUFFIX}? {
     std::string lexeme(yytext);
     lexprint(yylineno, "%s (%lld)", integerDescription(lexeme).c_str(), toInteger(lexeme));
+    yylval.intLiteral = new IntLiteral(toInteger(lexeme), typeOfInteger(lexeme), isUnsignedInteger(lexeme));
     return INT_LIT;
 }
 
@@ -349,6 +354,7 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
 &B\_*{BIN_DIGIT}(\_*{BIN_DIGIT}*)*{INTEGER_SUFFIX}? {
     std::string lexeme(yytext);
     lexprint(yylineno, "%s (%lld)", integerDescription(lexeme).c_str(), toInteger(lexeme));
+    yylval.intLiteral = new IntLiteral(toInteger(lexeme), typeOfInteger(lexeme), isUnsignedInteger(lexeme));
     return INT_LIT;
 }
 
@@ -357,12 +363,14 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
 {NUMBER}(\.{NUMBER})?{EXPONENT}|{NUMBER}?\.{NUMBER}{EXPONENT}? {
     std::string lexeme(yytext);
     lexprint(yylineno, "%s (%g)", floatingDescription(lexeme).c_str(), toFloating(lexeme));
+    yylval.floatLiteral = new FloatLiteral(toFloat(lexeme), typeOfFloat(lexeme));
     return FLOAT_LIT;
 }
 
 ({NUMBER}(\.{NUMBER})?{EXPONENT}?|{NUMBER}?\.{NUMBER}{EXPONENT}?){FLOATING_POINT_SUFFIX} {
     std::string lexeme(yytext);
     lexprint(yylineno, "%s (%g)", floatingDescription(lexeme).c_str(), toFloating(lexeme));
+    yylval.floatLiteral = new FloatLiteral(toFloat(lexeme), typeOfFloat(lexeme));
     return FLOAT_LIT;
 }
 
@@ -371,6 +379,7 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
 \[{ID}\] {
     std::string lexeme(yytext);
     lexprint(yylineno, "IDENTIFIER %s (%s)", yytext, toID(lexeme).c_str());
+    yylval.id = new std::string(lexeme);
     return ID;
 }
 
@@ -531,4 +540,29 @@ std::string toID(const std::string& lexeme) {
     }
 
     return toLower(id);
+}
+
+    /* Lexemes info getters */
+
+bool isUnsignedInteger(const std::string& lexeme) {
+    std::string lowerLexeme = toLower(lexeme);
+    return lowerLexeme.ends_with("us") || 
+            lowerLexeme.ends_with("ui") || 
+            lowerLexeme.ends_with("ul");
+}
+
+IntType typeOfInteger(const std::string& lexeme) {
+    std::string lowerLexeme = toLower(lexeme);
+    if      (lowerLexeme.ends_with("s")) { return IntType::SHORT; }
+    else if (lowerLexeme.ends_with("l")) { return IntType::LONG; }
+    else if (lowerLexeme.ends_with("i")) { return IntType::INTEGER; }
+    else                                 { return IntType::NONE; }
+}
+
+FloatType typeOfFloat(const std::string& lexeme) {
+    std::string lowerLexeme = toLower(lexeme);
+    if      (lowerLexeme.ends_with("f")) { return FloatType::SINGLE; }
+    else if (lowerLexeme.ends_with("d")) { return FloatType::DECIMAL; }
+    else if (lowerLexeme.ends_with("r")) { return FloatType::DOUBLE; }
+    else                                 { return FloatType::NONE; }
 }

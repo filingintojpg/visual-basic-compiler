@@ -204,6 +204,37 @@
 %left  '.'
 %nonassoc '(' ')' '{' '}'
 
+%code requires {
+    enum class IntType { LONG, INTEGER, SHORT, NONE };
+    enum class FloatType { DECIMAL, SINGLE, DOUBLE, NONE };
+
+    struct IntLiteral {
+        long long int   value;
+        IntType         type;
+        bool            isUnsigned = false;
+
+        IntLiteral() : value(0), type(IntType::INTEGER) {}
+        IntLiteral(long long int value, IntType type, bool isUnsigned) : value(value), type(type), isUnsigned(isUnsigned) {}
+    };
+
+    struct FloatLiteral {
+        double value;
+        FloatType type;
+
+        FloatLiteral() : value(0.0), type(FloatType::DOUBLE_MOD) {}
+        FloatLiteral(double value, FloatType type) : value(value), type(type) {}
+    };
+}
+
+%union {
+    IntLiteral*     intLiteral;
+    FloatLiteral*   floatLiteral;
+    std::string*    stringLiteral;
+    char            charLiteral;
+    bool            boolLiteral;
+    std::string*    id;
+}
+
 %%
 program: endlc_list_e program_members { parsprint("endlc_list_e program_members -> program"); }
        ;
