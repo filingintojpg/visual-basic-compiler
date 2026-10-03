@@ -4,7 +4,6 @@
 extern bool DEBUG_LEXER;
 extern bool DEBUG_LEXER_BY_LINE;
 extern bool DEBUG_LEXER_EOL;
-extern bool DEBUG_PARSER;
 
 extern int yydebug;
 extern int yyparse();
@@ -17,7 +16,6 @@ void setDebugOptions() {
     DEBUG_LEXER_EOL = false;
 
     // Parser
-    DEBUG_PARSER = true;
     yydebug = 0;
 }
 
