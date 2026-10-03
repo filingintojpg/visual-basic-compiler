@@ -106,6 +106,7 @@
 %token NAMESPACE
 %token NARROWING
 %token NEXT
+%token NOTHING
 %token NOT_INHERITABLE
 %token NOT_OVERRIDABLE
 %token OBJECT
@@ -168,14 +169,12 @@
 %token WITH_EVENTS
 %token WRITE_ONLY
 
-%token ID
-
-%token INT_LIT
-%token FLOAT_LIT
-%token STR_LIT
-%token CHAR_LIT
-%token BOOL_LIT
-%token NOTHING
+%token <id>            ID
+%token <intLiteral>    INT_LIT
+%token <floatLiteral>  FLOAT_LIT
+%token <stringLiteral> STR_LIT
+%token <charLiteral>   CHAR_LIT
+%token <boolLiteral>   BOOL_LIT
 
 %token ADD_ASSIGN
 %token SUB_ASSIGN
