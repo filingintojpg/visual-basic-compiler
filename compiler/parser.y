@@ -105,7 +105,6 @@
 %token NAMESPACE
 %token NARROWING
 %token NEXT
-%token NOTHING
 %token NOT_INHERITABLE
 %token NOT_OVERRIDABLE
 %token OBJECT
