@@ -221,7 +221,7 @@
         double value;
         FloatType type;
 
-        FloatLiteral() : value(0.0), type(FloatType::DOUBLE_MOD) {}
+        FloatLiteral() : value(0.0), type(FloatType::DOUBLE) {}
         FloatLiteral(double value, FloatType type) : value(value), type(type) {}
     };
 }
