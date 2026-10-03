@@ -267,7 +267,6 @@ kw: ME
   | MYBASE
   | MYCLASS
   | NEW
-  | REDIM
   | THEN
   | END
   | ELSE
@@ -324,7 +323,6 @@ kw: ME
   | STRUCT
   | INHERITS
   | READONLY
-  | ERASE
   | CBOOL
   | CBYTE
   | CSBYTE
@@ -376,7 +374,7 @@ postfix_expr: primary_expr
             | suffixed_expr
             ;
 
-suffixed_expr: postfix_expr '(' endl_e expr_list endl_e ')'
+suffixed_expr: postfix_expr '(' endl_e arg_list endl_e ')'
              | postfix_expr '(' endl_e ')'
              | postfix_expr '.' endl_e member_access_member
              ;
@@ -412,24 +410,23 @@ primary_expr: INT_LIT
             | MYBASE '.' endl_e member_access_member
             | MYCLASS '.' endl_e member_access_member
             | new_expr
-            | collection_initializer
             ;
 
 new_expr: NEW ID %prec NEW
         | NEW ID '(' endl_e ')' %prec NEW
-        | NEW ID '(' endl_e expr_list endl_e ')' %prec NEW
+        | NEW ID '(' endl_e arg_list endl_e ')' %prec NEW
         | NEW ID '(' endl_e ')' collection_initializer %prec NEW
-        | NEW ID '(' endl_e expr_list endl_e ')' collection_initializer %prec NEW
+        | NEW ID '(' endl_e arg_list endl_e ')' collection_initializer %prec NEW
         | NEW ID '(' endl_e OF endl_e type_list endl_e ')' %prec NEW
         | NEW ID '(' endl_e OF endl_e type_list endl_e ')' '(' endl_e ')' %prec NEW
-        | NEW ID '(' endl_e OF endl_e type_list endl_e ')' '(' endl_e expr_list endl_e ')' %prec NEW
+        | NEW ID '(' endl_e OF endl_e type_list endl_e ')' '(' endl_e arg_list endl_e ')' %prec NEW
         | NEW ID '(' endl_e OF endl_e type_list endl_e ')' '(' endl_e ')' collection_initializer %prec NEW
-        | NEW ID '(' endl_e OF endl_e type_list endl_e ')' '(' endl_e expr_list endl_e ')' collection_initializer %prec NEW
+        | NEW ID '(' endl_e OF endl_e type_list endl_e ')' '(' endl_e arg_list endl_e ')' collection_initializer %prec NEW
         | NEW primitive_type %prec NEW
         | NEW primitive_type '(' endl_e ')' %prec NEW
-        | NEW primitive_type '(' endl_e expr_list endl_e ')' %prec NEW
+        | NEW primitive_type '(' endl_e expr endl_e ')' %prec NEW
         | NEW primitive_type '(' endl_e ')' collection_initializer %prec NEW
-        | NEW primitive_type '(' endl_e expr_list endl_e ')' collection_initializer %prec NEW
+        | NEW primitive_type '(' endl_e expr endl_e ')' collection_initializer %prec NEW
         ;
 
 cast_target: CBOOL
@@ -461,6 +458,14 @@ expr_list: expr
          | expr_list ',' endl_e expr
          ;
 
+init_expr: expr
+         | collection_initializer
+         ;
+
+arg_list: init_expr
+        | arg_list ',' endl_e init_expr
+        ;
+
 lvalue: ID
       | suffixed_expr
       | MYBASE '.' endl_e member_access_member
@@ -470,10 +475,7 @@ lvalue: ID
 simple_stmt: CALL expr
            | ID
            | suffixed_expr
-           | REDIM redim_clause_list
-           | REDIM PRESERVE redim_clause_list
-           | ERASE expr_list
-           | lvalue '=' endl_e expr
+           | lvalue '=' endl_e init_expr
            | lvalue ADD_ASSIGN endl_e expr
            | lvalue SUB_ASSIGN endl_e expr
            | lvalue MUL_ASSIGN endl_e expr
@@ -484,7 +486,7 @@ simple_stmt: CALL expr
            | lvalue LSHIFT_ASSIGN endl_e expr
            | lvalue RSHIFT_ASSIGN endl_e expr
            | RETURN
-           | RETURN expr
+           | RETURN init_expr
            | CONTINUE DO
            | CONTINUE FOR
            | CONTINUE WHILE
@@ -511,13 +513,6 @@ inline_stmts: simple_stmt
             | inline_stmts ':' simple_stmt
             | inline_stmts ':'
             ;
-
-redim_clause: postfix_expr '(' endl_e expr_list endl_e ')'
-            ;
-
-redim_clause_list: redim_clause
-                 | redim_clause_list ',' endl_e redim_clause
-                 ;
 
 if_stmt: IF expr THEN inline_stmts endl_list
        | IF expr THEN inline_stmts ELSE inline_stmts endl_list
@@ -586,16 +581,9 @@ for_head: FOR for_loop_variable '=' endl_e expr TO expr endlc_list
         | FOR EACH for_loop_variable IN endl_e expr endlc_list
         ;
 
-for_stmt: for_chain endlc_list
-        | for_head NEXT endlc_list
+for_stmt: for_head NEXT endlc_list
         | for_head block NEXT endlc_list
         ;
-
-for_chain: for_head NEXT ID
-         | for_head block NEXT ID
-         | for_head for_chain ',' endl_e ID
-         | for_head block for_chain ',' endl_e ID
-         ;
 
 for_loop_variable: ID
                  | ID AS type_name
@@ -631,8 +619,8 @@ var_names: variable_name ',' endl_e variable_name
 
 var_declarator: variable_name AS type_name
               | var_names AS type_name
-              | variable_name '=' endl_e expr
-              | variable_name AS type_name '=' endl_e expr
+              | variable_name '=' endl_e init_expr
+              | variable_name AS type_name '=' endl_e init_expr
               | variable_name AS new_expr
               | var_names AS new_expr
               ;
@@ -693,13 +681,9 @@ function_signature: FUNCTION ID '(' endl_e function_parameters endl_e ')' AS typ
                   | FUNCTION ID
                   ;
 
-sub_name: ID
-        | NEW
-        ;
-
-sub_signature: SUB sub_name '(' endl_e function_parameters endl_e ')'
-             | SUB sub_name '(' endl_e ')'
-             | SUB sub_name
+sub_signature: SUB ID '(' endl_e function_parameters endl_e ')'
+             | SUB ID '(' endl_e ')'
+             | SUB ID
              ;
 
 function_declaration: member_modifiers_e function_signature endl_list block END FUNCTION endlc_list
