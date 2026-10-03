@@ -39,6 +39,9 @@ ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
     long long toInteger(const std::string& lexeme);
     double toFloat(const std::string& lexeme);
     std::string toID(const std::string& lexeme);
+    bool isUnsignedInteger(const std::string& lexeme);
+    IntType typeOfInteger(const std::string& lexeme);
+    FloatType typeOfFloat(const std::string& lexeme);
 %}
 
 %x COMMENT
