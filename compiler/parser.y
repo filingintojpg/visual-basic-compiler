@@ -33,7 +33,6 @@
 %token CBOOL
 %token CBYTE
 %token CCHAR
-%token CDATE
 %token CDBL
 %token CDEC
 %token CHAR
@@ -51,7 +50,6 @@
 %token CUINT
 %token CULNG
 %token CUSHORT
-%token DATE
 %token DECIMAL
 %token DECLARE
 %token DEFAULT
@@ -302,7 +300,6 @@ kw: ME
   | ULONG
   | LONG
   | BOOLEAN
-  | DATE
   | CHAR
   | STRING
   | DECIMAL
@@ -337,7 +334,6 @@ kw: ME
   | CUINT
   | CLNG
   | CULNG
-  | CDATE
   | CCHAR
   | CSTR
   | CDEC
@@ -402,7 +398,6 @@ primary_expr: INT_LIT
             | ULONG
             | LONG
             | BOOLEAN
-            | DATE
             | CHAR
             | STRING
             | DECIMAL
@@ -446,7 +441,6 @@ cast_target: CBOOL
            | CUINT
            | CLNG
            | CULNG
-           | CDATE
            | CCHAR
            | CSTR
            | CDEC
@@ -675,7 +669,6 @@ primitive_type: BYTE
               | ULONG
               | LONG
               | BOOLEAN
-              | DATE
               | CHAR
               | STRING
               | DECIMAL
