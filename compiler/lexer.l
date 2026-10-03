@@ -13,7 +13,7 @@ NUMBER      {DIGIT}(\_*{DIGIT})*
 EXPONENT    [Ee][+-]?{NUMBER}
 
 INTEGER_SUFFIX          (S|US|I|UI|L|UL)
-FLOATING_POINT_SUFFIX   ([Ff]|[Dd]|[Rr])
+FLOAT_SUFFIX   ([Ff]|[Dd]|[Rr])
 
 ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
 
@@ -34,10 +34,10 @@ ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
     void lexerror(int line, const char *format, ...);
     std::string toLower(const std::string& str);
     std::string integerDescription(const std::string& lexeme);
-    std::string floatingDescription(const std::string& lexeme);
+    std::string floatDescription(const std::string& lexeme);
     std::string identifierDescription(const std::string& lexeme);
     long long toInteger(const std::string& lexeme);
-    double toFloating(const std::string& lexeme);
+    double toFloat(const std::string& lexeme);
     std::string toID(const std::string& lexeme);
 %}
 
@@ -358,18 +358,18 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
     return INT_LIT;
 }
 
-    /* Floating-point literals */
+    /* Float literals */
 
 {NUMBER}(\.{NUMBER})?{EXPONENT}|{NUMBER}?\.{NUMBER}{EXPONENT}? {
     std::string lexeme(yytext);
-    lexprint(yylineno, "%s (%g)", floatingDescription(lexeme).c_str(), toFloating(lexeme));
+    lexprint(yylineno, "%s (%g)", floatDescription(lexeme).c_str(), toFloat(lexeme));
     yylval.floatLiteral = new FloatLiteral(toFloat(lexeme), typeOfFloat(lexeme));
     return FLOAT_LIT;
 }
 
-({NUMBER}(\.{NUMBER})?{EXPONENT}?|{NUMBER}?\.{NUMBER}{EXPONENT}?){FLOATING_POINT_SUFFIX} {
+({NUMBER}(\.{NUMBER})?{EXPONENT}?|{NUMBER}?\.{NUMBER}{EXPONENT}?){FLOAT_SUFFIX} {
     std::string lexeme(yytext);
-    lexprint(yylineno, "%s (%g)", floatingDescription(lexeme).c_str(), toFloating(lexeme));
+    lexprint(yylineno, "%s (%g)", floatDescription(lexeme).c_str(), toFloat(lexeme));
     yylval.floatLiteral = new FloatLiteral(toFloat(lexeme), typeOfFloat(lexeme));
     return FLOAT_LIT;
 }
@@ -479,7 +479,7 @@ std::string integerDescription(const std::string& lexeme) {
     return message + lexeme;
 }
 
-std::string floatingDescription(const std::string& lexeme) {
+std::string floatDescription(const std::string& lexeme) {
     std::string message("LITERAL ");
     std::string lowerLexeme = toLower(lexeme);
 
@@ -517,7 +517,7 @@ long long toInteger(const std::string& lexeme) {
     return std::stoll(number, nullptr, base);
 }
 
-double toFloating(const std::string& lexeme) {
+double toFloat(const std::string& lexeme) {
     std::string number = lexeme;
     std::string lowerLexeme = toLower(lexeme);
 
