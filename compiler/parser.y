@@ -587,7 +587,7 @@ for_stmt: for_header block_e NEXT endlc_list
         ;
 
 for_header: FOR for_loop_variable '=' endl_e expr TO expr step_e endlc_list
-          | FOR EACH for_loop_variable IN endl_e expr endlc_list
+          | FOR EACH for_loop_variable IN endl_e expr_or_initializer endlc_list
           ;
 
 step_e: /* empty */
