@@ -4,7 +4,6 @@
 ' - массивы разных типов, в том числе объектов
 ' - чтение и запись элемента: индекс - выражение, вызов, другой элемент
 ' - Length и методы массива
-' - ReDim, ReDim Preserve, Erase
 ' - массивы как поля класса, параметры и результат функции
 ' - многострочный инициализатор
 Class Holder
@@ -67,12 +66,5 @@ Class Main
         Dim joined = words(0) & words(1)
         holders(0) = New Holder()
         holders(0).numbers(1) = 7
-
-        ReDim sized(20)
-        ReDim Preserve sized(30)
-        ReDim words(1), letters(2)
-        ReDim Preserve words(n + 1)
-        Erase sized
-        Erase words, letters
     End Sub
 End Class

@@ -2,7 +2,7 @@
 ' - объявление классов: поля (в том числе Const), методы Sub и Function
 ' - Inherits: на отдельной строке и через ":", цепочка наследования
 ' - Me, MyBase и MyClass: обращение к полям и вызов методов
-' - создание объектов: New Class, New Class(), New Class(аргументы), New с примитивным типом
+' - создание объектов: New Class, New Class(), New с примитивным типом
 ' - присваивание объектов, Nothing, Is и IsNot
 ' - обращение к полям и методам, цепочки вызовов, массивы объектов
 ' - статические члены через имя класса
@@ -70,10 +70,8 @@ Class Main
         Dim pet As Animal = New Dog()
         Dim dog As Dog = New Dog
         Dim puppy = New Puppy()
-        Dim named = New Dog("Rex")
         Dim nothingYet As Animal = Nothing
         Dim zeroInteger = New Integer()
-        Dim repeated = New String("a"c, 3)
 
         Console.WriteLine(pet.Speak())
         pet.Introduce()

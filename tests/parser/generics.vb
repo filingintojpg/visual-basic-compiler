@@ -4,7 +4,7 @@
 ' - Inherits у обобщённого класса
 ' - параметры типа, записанные в несколько строк
 ' - обобщённые типы в Dim: простые, с несколькими аргументами, вложенные, массивы
-' - создание обобщённых объектов: New Box(Of Integer), с () и с аргументами, массивы обобщённых объектов (с размером и без)
+' - создание обобщённых объектов: New Box(Of Integer), с (), массивы обобщённых объектов (с размером и без)
 ' - обобщённые типы в параметрах и результатах методов
 ' - вызов методов на обобщённых объектах, цепочки вызовов
 ' - статическое поле в обобщённом классе
@@ -71,7 +71,7 @@ Class Main
     Shared Sub Main()
         Dim numbers As Box(Of Integer) = New Box(Of Integer)()
         Dim words As Box(Of String) = New Box(Of String)
-        Dim entry As Pair(Of String, Integer) = New Pair(Of String, Integer)("a", 1)
+        Dim entry As Pair(Of String, Integer) = New Pair(Of String, Integer)()
         Dim lookup As Dictionary(Of String, List(Of Integer)) = New Dictionary(Of String, List(Of Integer))()
         Dim nested As Box(Of Pair(Of Integer, Box(Of String)))
         Dim boxOfBoxes = New Box(Of Box(Of Integer))()

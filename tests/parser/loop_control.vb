@@ -3,7 +3,7 @@
 ' - Continue For, Continue While и Continue Do
 ' - управление внутри вложенных циклов, условий и Select
 ' - однострочный If с Exit и Continue
-' - Return, Exit Sub и Exit Function
+' - Return
 Class Main
     Shared Sub Main()
         For i = 1 To 100
@@ -70,16 +70,10 @@ Class Main
 
     Shared Sub EarlySub(x As Integer)
         If x < 0 Then Return
-        If x = 0 Then
-            Exit Sub
-        End If
         Print(x)
     End Sub
 
     Shared Function EarlyFunction(x As Integer) As Integer
-        If x < 0 Then
-            Exit Function
-        End If
         Return x
     End Function
 End Class

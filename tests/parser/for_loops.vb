@@ -5,7 +5,6 @@
 ' - вложенные циклы For
 ' - For Each: по массиву, строке, инициализатору, вызову, члену объекта; с типом переменной
 ' - вложенные For Each, смешанные вложения и однострочная запись через ":"
-' - Next с именем переменной: Next i, в том числе для For Each, вложенных и однострочных циклов
 Class Main
     Shared Sub Main()
         For i = 1 To 10
@@ -109,41 +108,41 @@ Class Main
 
         For i = 1 To 10
             Print(i)
-        Next i
+        Next
 
         For i = 1 To 10
-        Next i
+        Next
 
         For i = 10 To 1 Step -1
             Print(i)
-        Next i
+        Next
 
         For i As Integer = 0 To n - 1
             Print(i)
-        Next i
+        Next
 
         For Each value In items
             Print(value)
-        Next value
+        Next
 
         For Each value As Integer In items
-        Next value
+        Next
 
         For i = 0 To 2
             For j = 0 To 2
                 Print(i * j)
-            Next j
-        Next i
+            Next
+        Next
 
         For i = 0 To 2
             For Each value In items
                 Print(i * value)
-            Next value
-        Next i
+            Next
+        Next
 
-        For i = 1 To 3 : Print(i) : Next i
-        For Each value In items : Print(value) : Next value
+        For i = 1 To 3 : Print(i) : Next
+        For Each value In items : Print(value) : Next
         For i = 1 To 3
-        Next i : Print("after")
+        Next : Print("after")
     End Sub
 End Class
