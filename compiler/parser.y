@@ -188,20 +188,20 @@
 %token ENDL
 
 %precedence NEW
-%left  OR OR_ELSE XOR
-%left  AND AND_ALSO
-%right NOT
-%left  '=' NEQ LEQ GEQ '<' '>' IS ISNOT
-%left  LSHIFT RSHIFT
-%left  '&'
-%left  '+' '-'
-%left  MOD
-%left  '\\'
-%left  '/' '*'
-%right UNMINUS UNPLUS
-%left  '^'
-%left  '.'
-%nonassoc '(' ')' '{' '}'
+%left OR OR_ELSE XOR
+%left AND AND_ALSO
+%precedence NOT
+%left '=' NEQ LEQ GEQ '<' '>' IS ISNOT
+%left LSHIFT RSHIFT
+%left '&'
+%left '+' '-'
+%left MOD
+%left '\\'
+%left '/' '*'
+%precedence UNMINUS UNPLUS
+%left '^'
+%left '.'
+%precedence '(' ')' '{' '}'
 
 %code requires {
     enum class IntType { LONG, INTEGER, SHORT, NONE };
