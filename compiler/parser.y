@@ -282,12 +282,13 @@ expr_list: expr
 simple_stmt: call_stmt
            | assignment_stmt
            | return_stmt
-           | loop_jump_stmt
+           | jump_stmt
            ;
 
-call_stmt: CALL expr
-         | ID
+call_stmt: ID
          | access_expr
+         | base_member_access
+         | CALL expr
          ;
 
 assignment_stmt: lvalue '=' endl_e expr_or_initializer
@@ -299,29 +300,17 @@ lvalue: ID
       | base_member_access
       ;
 
-compound_assign_op: ADD_ASSIGN
-                  | SUB_ASSIGN
-                  | MUL_ASSIGN
-                  | DIV_ASSIGN
-                  | FLOORDIV_ASSIGN
-                  | EXP_ASSIGN
-                  | STRCAT_ASSIGN
-                  | LSHIFT_ASSIGN
-                  | RSHIFT_ASSIGN
+compound_assign_op: ADD_ASSIGN | SUB_ASSIGN | MUL_ASSIGN | DIV_ASSIGN | FLOORDIV_ASSIGN
+                  | EXP_ASSIGN | STRCAT_ASSIGN | LSHIFT_ASSIGN | RSHIFT_ASSIGN
                   ;
 
 return_stmt: RETURN
            | RETURN expr_or_initializer
            ;
 
-loop_jump_stmt: CONTINUE loop_kind
-              | EXIT loop_kind
-              | EXIT SELECT
-              ;
-
-loop_kind: DO
-         | FOR
-         | WHILE
+jump_stmt: CONTINUE DO | CONTINUE FOR | CONTINUE WHILE
+         | EXIT DO | EXIT FOR | EXIT WHILE
+         | EXIT SELECT
          ;
 
 /* ======================================================================
