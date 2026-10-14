@@ -249,7 +249,6 @@ program_members: program_member
 program_member: class_declaration endlc_list_e
               ;
 
-
 /* ======================================================================
  *  Line breaks and statement separators
  * ====================================================================== */
@@ -291,7 +290,6 @@ kw: IF | THEN | ELSE | ELSEIF | END | SELECT | CASE | TO
   | access_modifier | SHARED | READONLY
   | primitive_type | cast_operator | CTYPE
   ;
-
 
 /* ======================================================================
  *  Expressions
@@ -417,7 +415,6 @@ arg_list: expr_or_initializer
         | arg_list ',' endl_e expr_or_initializer
         ;
 
-
 /* ======================================================================
  *  Simple statements
  * ====================================================================== */
@@ -467,7 +464,6 @@ loop_kind: DO
          | WHILE
          ;
 
-
 /* ======================================================================
  *  Statements and blocks
  * ====================================================================== */
@@ -494,7 +490,6 @@ inline_stmts: simple_stmt
             | inline_stmts ':'
             ;
 
-
 /* ======================================================================
  *  If
  * ====================================================================== */
@@ -520,7 +515,6 @@ else_if_clause: ELSEIF expr THEN endlc_list block_e
 else_clause_e: /* empty */
              | ELSE endlc_list block_e
              ;
-
 
 /* ======================================================================
  *  Select Case
@@ -567,7 +561,6 @@ case_comparison_op: '='
                   | GEQ
                   ;
 
-
 /* ======================================================================
  *  Loops
  * ====================================================================== */
@@ -602,7 +595,6 @@ do_stmt: DO endlc_list block_e LOOP endlc_list
 loop_condition: WHILE
               | UNTIL
               ;
-
 
 /* ======================================================================
  *  Variable declarations
@@ -642,7 +634,6 @@ variable_name: ID
 var_names: variable_name ',' endl_e variable_name
          | var_names ',' endl_e variable_name
          ;
-
 
 /* ======================================================================
  *  Types
@@ -688,7 +679,6 @@ primitive_type: BYTE
               | DOUBLE
               | OBJECT
               ;
-
 
 /* ======================================================================
  *  Classes and their members
@@ -752,7 +742,6 @@ field_declaration: member_modifiers_e var_decl_kw shared_e var_declarator_list e
 shared_e: /* empty */
         | SHARED
         ;
-
 
 /* ======================================================================
  *  Methods
