@@ -187,10 +187,10 @@
 %token RSHIFT_ASSIGN
 %token ENDL
 
-%precedence NEW
+%left NEW
 %left OR OR_ELSE XOR
 %left AND AND_ALSO
-%precedence NOT
+%right NOT
 %left '=' NEQ LEQ GEQ '<' '>' IS ISNOT
 %left LSHIFT RSHIFT
 %left '&'
@@ -198,10 +198,10 @@
 %left MOD
 %left '\\'
 %left '/' '*'
-%precedence UNMINUS UNPLUS
+%right UNMINUS UNPLUS
 %left '^'
 %left '.'
-%precedence '(' ')' '{' '}'
+%nonassoc '(' ')' '{' '}'
 
 %code requires {
     enum class IntType { LONG, INTEGER, SHORT, NONE };
