@@ -274,12 +274,8 @@ endlc_list_e: /* empty */
             ;
 
 /* ======================================================================
- *  Keywords allowed as a member name after '.'
+ *  Keywords
  * ====================================================================== */
-
-member_access_member: ID
-                    | kw
-                    ;
 
 kw: IF | THEN | ELSE | ELSEIF | END | SELECT | CASE | TO
   | FOR | EACH | WHILE | NEXT | IN | UNTIL | LOOP | DO | STEP
@@ -329,7 +325,8 @@ postfix_expr: primary_expr
             ;
 
 access_expr: postfix_expr call_args
-           | postfix_expr '.' endl_e member_access_member
+           | postfix_expr '.' endl_e ID
+           | postfix_expr '.' endl_e kw
            ;
 
 call_args: '(' endl_e ')'
@@ -360,7 +357,8 @@ conditional_expr: IF '(' endl_e expr ',' endl_e expr ',' endl_e expr endl_e ')'
                 | IF '(' endl_e expr ',' endl_e expr endl_e ')'
                 ;
 
-base_member_access: base_kw '.' endl_e member_access_member
+base_member_access: base_kw '.' endl_e ID
+                  | base_kw '.' endl_e kw
                   ;
 
 base_kw: MYBASE
