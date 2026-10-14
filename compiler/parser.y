@@ -92,6 +92,7 @@
 %token ITERATOR
 %token JOIN
 %token LIB
+%token LIKE
 %token LONG
 %token LOOP
 %token ME
@@ -190,7 +191,7 @@
 %left  OR OR_ELSE XOR
 %left  AND AND_ALSO
 %right NOT
-%left  '=' NEQ LEQ GEQ '<' '>' IS ISNOT LIKE
+%left  '=' NEQ LEQ GEQ '<' '>' IS ISNOT
 %left  LSHIFT RSHIFT
 %left  '&'
 %left  '+' '-'
