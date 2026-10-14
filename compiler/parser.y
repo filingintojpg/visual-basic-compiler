@@ -274,10 +274,6 @@ endlc_list_e: /* empty */
             | endlc_list
             ;
 
-empty_parens: '(' endl_e ')'
-            ;
-
-
 /* ======================================================================
  *  Keywords allowed as a member name after '.'
  * ====================================================================== */
@@ -338,7 +334,7 @@ access_expr: postfix_expr call_args
            | postfix_expr '.' endl_e member_access_member
            ;
 
-call_args: empty_parens
+call_args: '(' endl_e ')'
          | '(' endl_e arg_list endl_e ')'
          ;
 
@@ -401,7 +397,7 @@ new_expr: NEW ID                                                     %prec NEW
         | NEW primitive_type array_modifier collection_initializer   %prec NEW
         ;
 
-array_modifier: empty_parens
+array_modifier: '(' endl_e ')'
               | '(' endl_e expr endl_e ')'
               ;
 
@@ -664,9 +660,9 @@ simple_type_name: ID
 generic_type: ID type_arguments
             ;
 
-array_type: ID empty_parens
-          | generic_type empty_parens
-          | primitive_type empty_parens
+array_type: ID '(' endl_e ')'
+          | generic_type '(' endl_e ')'
+          | primitive_type '(' endl_e ')'
           ;
 
 type_arguments: '(' endl_e OF endl_e type_list endl_e ')'
@@ -782,7 +778,7 @@ parameter_clause_e: /* empty */
                   | parameter_clause
                   ;
 
-parameter_clause: empty_parens
+parameter_clause: '(' endl_e ')'
                 | '(' endl_e parameter_list endl_e ')'
                 ;
 
@@ -795,7 +791,7 @@ parameter: param_name AS type_name
          ;
 
 param_name: ID
-          | ID empty_parens
+          | ID '(' endl_e ')'
           ;
 
 %%
