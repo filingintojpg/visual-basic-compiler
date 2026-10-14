@@ -213,10 +213,6 @@ access_expr: postfix_expr call_args
            | postfix_expr '.' endl_e kw
            ;
 
-call_args: '(' endl_e ')'
-         | '(' endl_e arg_list endl_e ')'
-         ;
-
 primary_expr: literal
             | ID
             | ME
@@ -224,46 +220,24 @@ primary_expr: literal
             | '(' endl_e expr endl_e ')'
             | cast_operator '(' endl_e expr endl_e ')'
             | CTYPE '(' endl_e expr ',' endl_e type_name endl_e ')'
-            | conditional_expr
+            | IF '(' endl_e expr ',' endl_e expr endl_e ')'
+            | IF '(' endl_e expr ',' endl_e expr ',' endl_e expr endl_e ')'
             | base_member_access
             | new_expr
             ;
 
-literal: INT_LIT
-       | FLOAT_LIT
-       | STR_LIT
-       | CHAR_LIT
-       | BOOL_LIT
-       | NOTHING
+literal: INT_LIT | FLOAT_LIT | STR_LIT | CHAR_LIT | BOOL_LIT | NOTHING
        ;
 
-conditional_expr: IF '(' endl_e expr ',' endl_e expr ',' endl_e expr endl_e ')'
-                | IF '(' endl_e expr ',' endl_e expr endl_e ')'
-                ;
-
-base_member_access: base_kw '.' endl_e ID
-                  | base_kw '.' endl_e kw
+base_member_access: MYBASE '.' endl_e ID
+                  | MYBASE '.' endl_e kw
+                  | MYCLASS '.' endl_e ID
+                  | MYCLASS '.' endl_e kw
                   ;
 
-base_kw: MYBASE
-       | MYCLASS
-       ;
-
-cast_operator: CBOOL
-             | CBYTE
-             | CSBYTE
-             | CUSHORT
-             | CSHORT
-             | CINT
-             | CUINT
-             | CLNG
-             | CULNG
-             | CCHAR
-             | CSTR
-             | CDEC
-             | CSNG
-             | CDBL
-             | COBJ
+cast_operator: CBOOL | CBYTE | CSBYTE | CUSHORT | CSHORT
+             | CINT | CUINT | CLNG | CULNG | CCHAR
+             | CSTR | CDEC | CSNG | CDBL | COBJ
              ;
 
 new_expr: NEW ID                                                     %prec NEW
@@ -281,6 +255,18 @@ array_modifier: '(' endl_e ')'
               | '(' endl_e expr endl_e ')'
               ;
 
+call_args: '(' endl_e ')'
+         | '(' endl_e arg_list endl_e ')'
+         ;
+
+arg_list: expr_or_initializer
+        | arg_list ',' endl_e expr_or_initializer
+        ;
+
+expr_or_initializer: expr
+                   | collection_initializer
+                   ;
+
 collection_initializer: '{' endl_e expr_list endl_e '}'
                       | '{' endl_e '}'
                       ;
@@ -288,14 +274,6 @@ collection_initializer: '{' endl_e expr_list endl_e '}'
 expr_list: expr
          | expr_list ',' endl_e expr
          ;
-
-expr_or_initializer: expr
-                   | collection_initializer
-                   ;
-
-arg_list: expr_or_initializer
-        | arg_list ',' endl_e expr_or_initializer
-        ;
 
 /* ======================================================================
  *  Simple statements
