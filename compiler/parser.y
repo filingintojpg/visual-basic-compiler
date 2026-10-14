@@ -17,175 +17,58 @@
 
 %start program
 
-%token ADD_HANDLER
-%token ADDRESS_OF
-%token ALIAS
-%token AS
-%token ASSEMBLY
-%token BOOLEAN
-%token BY
-%token BYREF
-%token BYTE
-%token BYVAL
-%token CALL
-%token CASE
-%token CATCH
-%token CBOOL
-%token CBYTE
-%token CCHAR
-%token CDATE
-%token CDBL
-%token CDEC
-%token CHAR
-%token CINT
-%token CLASS
-%token CLNG
-%token COBJ
-%token CONST
-%token CONTINUE
-%token CSBYTE
-%token CSHORT
-%token CSNG
-%token CSTR
-%token CTYPE
-%token CUINT
-%token CULNG
-%token CUSHORT
-%token DATE
-%token DECIMAL
-%token DECLARE
-%token DEFAULT
-%token DELEGATE
-%token DIM
-%token DIRECT_CAST
-%token DO
-%token DOUBLE
-%token EACH
-%token ELSE
-%token ELSEIF
-%token END
-%token ENUM
-%token ERASE
-%token ERROR
-%token EVENT
-%token EXIT
-%token FINALLY
-%token FOR
-%token FRIEND
-%token FUNCTION
-%token GET
-%token GET_TYPE
-%token GET_XML_NAMESPACE
-%token GLOBAL
-%token GO_SUB
-%token GOTO
-%token GROUP
-%token HANDLES
-%token IF
-%token IMPLEMENTS
-%token IMPORTS
-%token IN
-%token INHERITS
-%token INTEGER
-%token INTERFACE
-%token INTO
-%token ITERATOR
-%token JOIN
-%token LIB
-%token LIKE
-%token LONG
-%token LOOP
-%token ME
-%token MID
-%token MODULE
-%token MUST_INHERIT
-%token MUST_OVERRIDE
-%token MYBASE
-%token MYCLASS
-%token NAME_OF
-%token NAMESPACE
-%token NARROWING
-%token NEXT
-%token NOTHING
-%token NOT_INHERITABLE
-%token NOT_OVERRIDABLE
-%token OBJECT
-%token OF
-%token ON
-%token OPERATOR
-%token OPTION
-%token OPTIONAL
-%token ORDER
-%token OUT
-%token OVERLOADS
-%token OVERRIDABLE
-%token OVERRIDES
-%token PARAMARRAY
-%token PARTIAL
-%token PRESERVE
-%token PRIVATE
-%token PROPERTY
-%token PROTECTED
-%token PUBLIC
-%token RAISE_EVENT
-%token READONLY
-%token REDIM
-%token REMOVE_HANDLER
-%token RESUME
-%token RETURN
-%token SBYTE
-%token SELECT
-%token SET
-%token SHADOWS
-%token SHARED
-%token SHORT
-%token SINGLE
-%token SKIP
-%token STATIC
-%token STEP
-%token STOP
-%token STRING
-%token STRUCT
-%token SUB
-%token SYNC_LOCK
-%token TAKE
-%token THEN
-%token THROW
-%token TO
-%token TRY
-%token TRY_CAST
-%token TYPE_OF
-%token UINTEGER
-%token ULONG
-%token UNTIL
-%token USHORT
-%token USING
-%token VARIANT
-%token WEND
-%token WHEN
-%token WHILE
-%token WIDENING
-%token WITH
-%token WITH_EVENTS
-%token WRITE_ONLY
+/* Types */
+%token BOOLEAN BYTE CHAR DATE DECIMAL DOUBLE INTEGER LONG OBJECT SBYTE SHORT
+       SINGLE STRING UINTEGER ULONG USHORT VARIANT
 
+/* Conversions */
+%token CBOOL CBYTE CCHAR CDATE CDBL CDEC CINT CLNG COBJ CSBYTE CSHORT CSNG
+       CSTR CUINT CULNG CUSHORT CTYPE DIRECT_CAST TRY_CAST
+
+/* Conditions and loops */
+%token IF THEN ELSE ELSEIF SELECT CASE FOR EACH NEXT TO STEP DO LOOP WHILE
+       WEND UNTIL IN WHEN CONTINUE EXIT
+
+/* Other statements */
+%token CALL END GOTO GO_SUB RETURN STOP RESUME ERROR THROW TRY CATCH FINALLY
+       WITH USING SYNC_LOCK REDIM ERASE PRESERVE ADD_HANDLER REMOVE_HANDLER
+       RAISE_EVENT
+
+/* Declarations */
+%token DIM CONST STATIC FUNCTION SUB CLASS STRUCT MODULE NAMESPACE ENUM
+       INTERFACE DELEGATE EVENT PROPERTY OPERATOR DECLARE LIB ALIAS ASSEMBLY
+       IMPORTS OPTION GET SET INHERITS IMPLEMENTS HANDLES
+
+/* Modifiers */
+%token PUBLIC PRIVATE PROTECTED FRIEND SHARED READONLY WRITE_ONLY OVERLOADS
+       OVERRIDABLE OVERRIDES NOT_OVERRIDABLE MUST_OVERRIDE MUST_INHERIT
+       NOT_INHERITABLE SHADOWS DEFAULT PARTIAL NARROWING WIDENING ITERATOR
+       WITH_EVENTS
+
+/* Parameters and types */
+%token BYREF BYVAL OPTIONAL PARAMARRAY OUT AS OF
+
+/* Expressions */
+%token ME MYBASE MYCLASS NOTHING TYPE_OF GET_TYPE NAME_OF ADDRESS_OF
+       GET_XML_NAMESPACE GLOBAL MID LIKE
+
+/* Query */
+%token BY GROUP INTO JOIN ON ORDER SKIP TAKE
+
+/* Assignment operators */
+%token ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN FLOORDIV_ASSIGN
+       EXP_ASSIGN STRCAT_ASSIGN LSHIFT_ASSIGN RSHIFT_ASSIGN
+
+/* Separators */
+%token ENDL
+
+/* Identifiers and literals */
 %token <id>            ID
 %token <intLiteral>    INT_LIT
 %token <floatLiteral>  FLOAT_LIT
 %token <stringLiteral> STR_LIT
 %token <charLiteral>   CHAR_LIT
 %token <boolLiteral>   BOOL_LIT
-
-%token ADD_ASSIGN
-%token SUB_ASSIGN
-%token MUL_ASSIGN
-%token DIV_ASSIGN
-%token FLOORDIV_ASSIGN
-%token EXP_ASSIGN
-%token STRCAT_ASSIGN
-%token LSHIFT_ASSIGN
-%token RSHIFT_ASSIGN
-%token ENDL
 
 %left NEW
 %left OR OR_ELSE XOR
