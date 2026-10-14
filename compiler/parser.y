@@ -317,14 +317,6 @@ jump_stmt: CONTINUE DO | CONTINUE FOR | CONTINUE WHILE
  *  Statements and blocks
  * ====================================================================== */
 
-block: stmt
-     | block stmt
-     ;
-
-block_e: /* empty */
-       | block
-       ;
-
 stmt: simple_stmt endlc_list
     | if_stmt
     | select_stmt
@@ -333,6 +325,14 @@ stmt: simple_stmt endlc_list
     | while_stmt
     | var_declaration
     ;
+
+block: stmt
+     | block stmt
+     ;
+
+block_e: /* empty */
+       | block
+       ;
 
 inline_stmts: simple_stmt
             | inline_stmts ':' simple_stmt
