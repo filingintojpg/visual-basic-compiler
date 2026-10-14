@@ -334,35 +334,22 @@ block_e: /* empty */
        | block
        ;
 
-inline_stmts: simple_stmt
-            | inline_stmts ':' simple_stmt
-            | inline_stmts ':'
-            ;
-
 /* ======================================================================
  *  If
  * ====================================================================== */
 
-if_stmt: single_line_if
-       | block_if
+if_stmt: IF expr THEN inline_stmts endlc_list
+       | IF expr THEN inline_stmts ELSE inline_stmts endlc_list
+       | IF expr THEN endlc_list block_e else_if_stmts END IF endlc_list
+       | IF expr THEN endlc_list block_e else_if_stmts ELSE endlc_list block_e END IF endlc_list
        ;
 
-single_line_if: IF expr THEN inline_stmts endl_list
-              | IF expr THEN inline_stmts ELSE inline_stmts endl_list
-              ;
-
-block_if: IF expr THEN endlc_list block_e else_if_stmts else_clause_e END IF endlc_list
-        ;
+inline_stmts: simple_stmt
+            | inline_stmts ':' simple_stmt
+            ;
 
 else_if_stmts: /* empty */
-             | else_if_stmts else_if_clause
-             ;
-
-else_if_clause: ELSEIF expr THEN endlc_list block_e
-              ;
-
-else_clause_e: /* empty */
-             | ELSE endlc_list block_e
+             | else_if_stmts ELSEIF expr THEN endlc_list block_e
              ;
 
 /* ======================================================================
