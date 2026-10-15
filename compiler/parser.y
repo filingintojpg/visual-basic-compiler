@@ -473,19 +473,24 @@ array_type: ID '(' endl_e ')'
           ;
 
 /* ======================================================================
- *  Classes and their members
+ *  Classes
  * ====================================================================== */
 
-class_declaration: class_modifiers_e CLASS ID type_parameters_e endlc_list
-                   inherits_e structure_body_e END CLASS
+class_declaration: access_modifier_e CLASS ID generic_parameters_e endlc_list inherits_e class_body_e END CLASS
                  ;
 
-type_parameters_e: /* empty */
-                 | type_parameters
+access_modifier_e: /* empty */
+                 | access_modifier
                  ;
 
-type_parameters: '(' endl_e OF endl_e id_list endl_e ')'
+access_modifier: PUBLIC
+               | PRIVATE
+               | PROTECTED
                ;
+
+generic_parameters_e: /* empty */
+                    | '(' endl_e OF endl_e id_list endl_e ')'
+                    ;
 
 id_list: ID
        | id_list ',' endl_e ID
@@ -495,26 +500,26 @@ inherits_e: /* empty */
           | INHERITS ID endlc_list
           ;
 
-structure_body_e: /* empty */
-                | structure_body
-                ;
+class_body_e: /* empty */
+            | class_body
+            ;
 
-structure_body: structure_member
-              | structure_body structure_member
-              ;
+class_body: class_member
+          | class_body class_member
+          ;
 
-structure_member: function_declaration
-                | sub_declaration
-                | field_declaration
-                ;
+class_member: function_declaration
+            | sub_declaration
+            | field_declaration
+            ;
 
-access_modifier: PUBLIC
-               | PRIVATE
-               | PROTECTED
-               ;
+/* ======================================================================
+ *  Fields
+ * ====================================================================== */
 
-class_modifiers_e: /* empty */
-                 | access_modifier
+field_declaration: member_modifiers_e DIM shared_e var_declarator_list endlc_list
+                 | member_modifiers_e CONST shared_e var_declarator_list endlc_list
+                 | member_modifiers var_declarator_list endlc_list
                  ;
 
 member_modifiers: access_modifier
@@ -526,11 +531,6 @@ member_modifiers: access_modifier
 member_modifiers_e: /* empty */
                   | member_modifiers
                   ;
-
-field_declaration: member_modifiers_e DIM shared_e var_declarator_list endlc_list
-                 | member_modifiers_e CONST shared_e var_declarator_list endlc_list
-                 | member_modifiers var_declarator_list endlc_list
-                 ;
 
 shared_e: /* empty */
         | SHARED
