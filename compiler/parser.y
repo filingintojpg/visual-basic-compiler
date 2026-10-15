@@ -356,68 +356,48 @@ else_if_stmts: /* empty */
  *  Select Case
  * ====================================================================== */
 
-select_stmt: select_subject endlc_list case_stmts END SELECT endlc_list
+select_stmt: SELECT expr endlc_list case_stmts END SELECT endlc_list
+           | SELECT CASE expr endlc_list case_stmts END SELECT endlc_list
            ;
 
-select_subject: SELECT expr
-              | SELECT CASE expr
-              ;
-
 case_stmts: /* empty */
+          | CASE ELSE endlc_list block_e
           | case_condition_branches
-          | case_else_stmt
-          | case_condition_branches case_else_stmt
+          | case_condition_branches CASE ELSE endlc_list block_e
           ;
+
+case_condition_branch: CASE case_clauses endlc_list block_e
+                     ;
 
 case_condition_branches: case_condition_branch
                        | case_condition_branches case_condition_branch
                        ;
 
-case_condition_branch: CASE case_clauses endlc_list block_e
-                     ;
-
-case_else_stmt: CASE ELSE endlc_list block_e
-              ;
+case_clause: expr
+           | expr TO expr
+           | comparison_op endl_e expr
+           | IS endl_e comparison_op endl_e expr
+           ;
 
 case_clauses: case_clause
             | case_clauses ',' endl_e case_clause
             ;
 
-case_clause: expr
-           | expr TO expr
-           | case_comparison_op endl_e expr
-           | IS endl_e case_comparison_op endl_e expr
-           ;
-
-case_comparison_op: '='
-                  | NEQ
-                  | '<'
-                  | '>'
-                  | LEQ
-                  | GEQ
-                  ;
+comparison_op: '=' | NEQ | '<' | '>' | LEQ | GEQ
+             ;
 
 /* ======================================================================
  *  Loops
  * ====================================================================== */
 
-while_stmt: WHILE expr endlc_list block_e while_end endlc_list
+while_stmt: WHILE expr endlc_list block_e END WHILE endlc_list
+          | WHILE expr endlc_list block_e WEND endlc_list
           ;
 
-while_end: END WHILE
-         | WEND
-         ;
-
-for_stmt: for_header block_e NEXT endlc_list
+for_stmt: FOR for_loop_variable '=' endl_e expr TO expr endlc_list block_e NEXT endlc_list
+        | FOR for_loop_variable '=' endl_e expr TO expr STEP expr endlc_list block_e NEXT endlc_list
+        | FOR EACH for_loop_variable IN endl_e expr_or_initializer endlc_list block_e NEXT endlc_list
         ;
-
-for_header: FOR for_loop_variable '=' endl_e expr TO expr step_e endlc_list
-          | FOR EACH for_loop_variable IN endl_e expr_or_initializer endlc_list
-          ;
-
-step_e: /* empty */
-      | STEP expr
-      ;
 
 for_loop_variable: ID
                  | ID AS type_name
