@@ -219,7 +219,7 @@ primary_expr: literal
             | primitive_type
             | '(' endl_e expr endl_e ')'
             | cast_operator '(' endl_e expr endl_e ')'
-            | CTYPE '(' endl_e expr ',' endl_e type_name endl_e ')'
+            | CTYPE '(' endl_e expr ',' endl_e type endl_e ')'
             | IF '(' endl_e expr ',' endl_e expr endl_e ')'
             | IF '(' endl_e expr ',' endl_e expr ',' endl_e expr endl_e ')'
             | base_member_access
@@ -243,9 +243,9 @@ cast_operator: CBOOL | CBYTE | CSBYTE | CUSHORT | CSHORT
 new_expr: NEW ID                                                     %prec NEW
         | NEW ID call_args                                           %prec NEW
         | NEW ID call_args collection_initializer                    %prec NEW
-        | NEW ID type_arguments                                      %prec NEW
-        | NEW ID type_arguments call_args                            %prec NEW
-        | NEW ID type_arguments call_args collection_initializer     %prec NEW
+        | NEW ID generic_arguments                                   %prec NEW
+        | NEW ID generic_arguments call_args                         %prec NEW
+        | NEW ID generic_arguments call_args collection_initializer  %prec NEW
         | NEW primitive_type                                         %prec NEW
         | NEW primitive_type array_modifier                          %prec NEW
         | NEW primitive_type array_modifier collection_initializer   %prec NEW
@@ -400,7 +400,7 @@ for_stmt: FOR for_loop_variable '=' endl_e expr TO expr endlc_list block_e NEXT 
         ;
 
 for_loop_variable: ID
-                 | ID AS type_name
+                 | ID AS type
                  ;
 
 do_stmt: DO endlc_list block_e LOOP endlc_list
@@ -424,11 +424,11 @@ var_declarator_list: var_declarator
                    | var_declarator ',' endl_e var_declarator_list
                    ;
 
-var_declarator: var_name AS type_name '=' endl_e expr_or_initializer
-              | var_name AS type_name
+var_declarator: var_name AS type '=' endl_e expr_or_initializer
+              | var_name AS type
               | var_name AS new_expr
               | var_name '=' endl_e expr_or_initializer
-              | var_names AS type_name
+              | var_names AS type
               | var_names AS new_expr
               ;
 
@@ -444,46 +444,33 @@ var_names: var_name ',' endl_e var_name
  *  Types
  * ====================================================================== */
 
-type_name: simple_type_name
-         | array_type
-         ;
+type: simple_type
+    | array_type
+    ;
 
-simple_type_name: ID
-                | generic_type
-                | primitive_type
-                ;
+simple_type: ID
+           | primitive_type
+           | generic_type
+           ;
 
-generic_type: ID type_arguments
+primitive_type: BYTE | SBYTE | USHORT | SHORT | UINTEGER | INTEGER | ULONG | LONG
+              | BOOLEAN | CHAR | STRING | DECIMAL | SINGLE | DOUBLE | OBJECT
+              ;
+
+generic_type: ID generic_arguments
             ;
 
-array_type: ID '(' endl_e ')'
-          | generic_type '(' endl_e ')'
-          | primitive_type '(' endl_e ')'
-          ;
+generic_arguments: '(' endl_e OF endl_e type_list endl_e ')'
+                 ;
 
-type_arguments: '(' endl_e OF endl_e type_list endl_e ')'
-              ;
-
-type_list: simple_type_name
-         | type_list ',' endl_e simple_type_name
+type_list: simple_type
+         | type_list ',' endl_e simple_type
          ;
 
-primitive_type: BYTE
-              | SBYTE
-              | USHORT
-              | SHORT
-              | UINTEGER
-              | INTEGER
-              | ULONG
-              | LONG
-              | BOOLEAN
-              | CHAR
-              | STRING
-              | DECIMAL
-              | SINGLE
-              | DOUBLE
-              | OBJECT
-              ;
+array_type: ID '(' endl_e ')'
+          | primitive_type '(' endl_e ')'
+          | generic_type '(' endl_e ')'
+          ;
 
 /* ======================================================================
  *  Classes and their members
@@ -566,7 +553,7 @@ sub_signature: SUB ID parameter_clause_e
              ;
 
 return_type_e: /* empty */
-             | AS type_name
+             | AS type
              ;
 
 parameter_clause_e: /* empty */
@@ -581,7 +568,7 @@ parameter_list: parameter
               | parameter_list ',' endl_e parameter
               ;
 
-parameter: param_name AS type_name
+parameter: param_name AS type
          | param_name
          ;
 
