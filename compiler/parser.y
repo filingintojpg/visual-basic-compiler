@@ -338,8 +338,8 @@ block_e: /* empty */
  *  If
  * ====================================================================== */
 
-if_stmt: IF expr THEN inline_stmts endlc_list
-       | IF expr THEN inline_stmts ELSE inline_stmts endlc_list
+if_stmt: IF expr THEN inline_stmts endl_list
+       | IF expr THEN inline_stmts ELSE inline_stmts endl_list
        | IF expr THEN endlc_list block_e else_if_stmts END IF endlc_list
        | IF expr THEN endlc_list block_e else_if_stmts ELSE endlc_list block_e END IF endlc_list
        ;
