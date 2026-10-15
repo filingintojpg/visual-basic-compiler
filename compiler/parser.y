@@ -404,13 +404,11 @@ for_loop_variable: ID
                  ;
 
 do_stmt: DO endlc_list block_e LOOP endlc_list
-       | DO endlc_list block_e LOOP loop_condition expr endlc_list
-       | DO loop_condition expr endlc_list block_e LOOP endlc_list
+       | DO endlc_list block_e LOOP WHILE expr endlc_list
+       | DO endlc_list block_e LOOP UNTIL expr endlc_list
+       | DO WHILE expr endlc_list block_e LOOP endlc_list
+       | DO UNTIL expr endlc_list block_e LOOP endlc_list
        ;
-
-loop_condition: WHILE
-              | UNTIL
-              ;
 
 /* ======================================================================
  *  Variable declarations
