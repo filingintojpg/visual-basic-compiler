@@ -141,7 +141,7 @@ endl_list: ENDL
          | endl_list ENDL
          ;
 
-endl_e: /* empty */
+endl_e: %empty
       | ENDL
       ;
 
@@ -153,7 +153,7 @@ endlc_list: endlc
           | endlc_list endlc
           ;
 
-endlc_list_e: /* empty */
+endlc_list_e: %empty
             | endlc_list
             ;
 
@@ -330,7 +330,7 @@ block: stmt
      | block stmt
      ;
 
-block_e: /* empty */
+block_e: %empty
        | block
        ;
 
@@ -348,7 +348,7 @@ inline_stmts: simple_stmt
             | inline_stmts ':' simple_stmt
             ;
 
-else_if_stmts: /* empty */
+else_if_stmts: %empty
              | else_if_stmts ELSEIF expr THEN endlc_list block_e
              ;
 
@@ -360,7 +360,7 @@ select_stmt: SELECT expr endlc_list case_stmts END SELECT endlc_list
            | SELECT CASE expr endlc_list case_stmts END SELECT endlc_list
            ;
 
-case_stmts: /* empty */
+case_stmts: %empty
           | CASE ELSE endlc_list block_e
           | case_condition_branches
           | case_condition_branches CASE ELSE endlc_list block_e
@@ -479,7 +479,7 @@ array_type: ID '(' endl_e ')'
 class_declaration: access_modifier_e CLASS ID generic_parameters_e endlc_list inherits_e class_body_e END CLASS
                  ;
 
-access_modifier_e: /* empty */
+access_modifier_e: %empty
                  | access_modifier
                  ;
 
@@ -488,7 +488,7 @@ access_modifier: PUBLIC
                | PROTECTED
                ;
 
-generic_parameters_e: /* empty */
+generic_parameters_e: %empty
                     | '(' endl_e OF endl_e id_list endl_e ')'
                     ;
 
@@ -496,11 +496,11 @@ id_list: ID
        | id_list ',' endl_e ID
        ;
 
-inherits_e: /* empty */
+inherits_e: %empty
           | INHERITS ID endlc_list
           ;
 
-class_body_e: /* empty */
+class_body_e: %empty
             | class_body
             ;
 
@@ -528,11 +528,11 @@ member_modifiers: access_modifier
                 | SHARED access_modifier
                 ;
 
-member_modifiers_e: /* empty */
+member_modifiers_e: %empty
                   | member_modifiers
                   ;
 
-shared_e: /* empty */
+shared_e: %empty
         | SHARED
         ;
 
@@ -546,7 +546,7 @@ func_declaration: member_modifiers_e FUNCTION ID parameter_clause_e return_type_
 sub_declaration: member_modifiers_e SUB ID parameter_clause_e endl_list block_e END SUB endlc_list
                ;
 
-parameter_clause_e: /* empty */
+parameter_clause_e: %empty
                   | parameter_clause
                   ;
 
@@ -566,7 +566,7 @@ param_name: ID
           | ID '(' endl_e ')'
           ;
 
-return_type_e: /* empty */
+return_type_e: %empty
              | AS type
              ;
 
