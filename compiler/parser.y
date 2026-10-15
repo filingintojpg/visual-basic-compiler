@@ -414,39 +414,30 @@ do_stmt: DO endlc_list block_e LOOP endlc_list
  *  Variable declarations
  * ====================================================================== */
 
-var_declaration: var_decl_kw var_declarator_list endlc_list
+var_declaration: DIM var_declarator_list endlc_list
+               | CONST var_declarator_list endlc_list
                ;
 
-var_decl_kw: DIM
-           | CONST
-           ;
-
 var_declarator_list: var_declarator
-                   | variable_name
+                   | var_name
                    | var_names
                    | var_declarator ',' endl_e var_declarator_list
                    ;
 
-var_declarator: variable_name AS type_name initializer_e
-              | variable_name AS new_expr
-              | variable_name initializer
+var_declarator: var_name AS type_name '=' endl_e expr_or_initializer
+              | var_name AS type_name
+              | var_name AS new_expr
+              | var_name '=' endl_e expr_or_initializer
               | var_names AS type_name
               | var_names AS new_expr
               ;
 
-initializer: '=' endl_e expr_or_initializer
-           ;
+var_name: ID
+        | ID array_modifier
+        ;
 
-initializer_e: /* empty */
-             | initializer
-             ;
-
-variable_name: ID
-             | ID array_modifier
-             ;
-
-var_names: variable_name ',' endl_e variable_name
-         | var_names ',' endl_e variable_name
+var_names: var_name ',' endl_e var_name
+         | var_names ',' endl_e var_name
          ;
 
 /* ======================================================================
@@ -549,7 +540,8 @@ member_modifiers_e: /* empty */
                   | member_modifiers
                   ;
 
-field_declaration: member_modifiers_e var_decl_kw shared_e var_declarator_list endlc_list
+field_declaration: member_modifiers_e DIM shared_e var_declarator_list endlc_list
+                 | member_modifiers_e CONST shared_e var_declarator_list endlc_list
                  | member_modifiers var_declarator_list endlc_list
                  ;
 
