@@ -563,6 +563,7 @@ parameter: ID AS type
          | ID '(' endl_e ')' AS type
          | ID
          | ID '(' endl_e ')'
+         | OPTIONAL ID AS type '=' endl_e expr
          ;
 
 %%
