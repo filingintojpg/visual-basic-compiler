@@ -508,7 +508,7 @@ class_body: class_member
           | class_body class_member
           ;
 
-class_member: function_declaration
+class_member: func_declaration
             | sub_declaration
             | field_declaration
             ;
@@ -540,21 +540,11 @@ shared_e: /* empty */
  *  Methods
  * ====================================================================== */
 
-function_declaration: member_modifiers_e function_signature endl_list block_e END FUNCTION endlc_list
-                    ;
+func_declaration: member_modifiers_e FUNCTION ID parameter_clause_e return_type_e endl_list block_e END FUNCTION endlc_list
+                ;
 
-sub_declaration: member_modifiers_e sub_signature endl_list block_e END SUB endlc_list
+sub_declaration: member_modifiers_e SUB ID parameter_clause_e endl_list block_e END SUB endlc_list
                ;
-
-function_signature: FUNCTION ID parameter_clause_e return_type_e
-                  ;
-
-sub_signature: SUB ID parameter_clause_e
-             ;
-
-return_type_e: /* empty */
-             | AS type
-             ;
 
 parameter_clause_e: /* empty */
                   | parameter_clause
@@ -575,5 +565,9 @@ parameter: param_name AS type
 param_name: ID
           | ID '(' endl_e ')'
           ;
+
+return_type_e: /* empty */
+             | AS type
+             ;
 
 %%
