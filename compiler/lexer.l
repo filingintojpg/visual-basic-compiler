@@ -381,8 +381,17 @@ Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
 
 \[{ID}\] {
     std::string lexeme(yytext);
-    lexprint(yylineno, "IDENTIFIER %s (%s)", yytext, toID(lexeme).c_str());
-    yylval.id = new std::string(lexeme);
+    std::string id = toID(lexeme);
+    lexprint(yylineno, "IDENTIFIER %s (%s)", yytext, id.c_str());
+    yylval.id = new std::string(id);
+    return ID;
+}
+
+{ID} {
+    std::string lexeme(yytext);
+    std::string id = toID(lexeme);
+    lexprint(yylineno, "IDENTIFIER %s (%s)", yytext, id.c_str());
+    yylval.id = new std::string(id);
     return ID;
 }
 
