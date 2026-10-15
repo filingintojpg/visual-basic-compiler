@@ -540,7 +540,8 @@ shared_e: %empty
  *  Methods
  * ====================================================================== */
 
-func_declaration: member_modifiers_e FUNCTION ID parameter_clause_e return_type_e endl_list block_e END FUNCTION endlc_list
+func_declaration: member_modifiers_e FUNCTION ID parameter_clause_e AS type endl_list block_e END FUNCTION endlc_list
+                | member_modifiers_e FUNCTION ID parameter_clause_e endl_list block_e END FUNCTION endlc_list
                 ;
 
 sub_declaration: member_modifiers_e SUB ID parameter_clause_e endl_list block_e END SUB endlc_list
@@ -558,16 +559,10 @@ parameter_list: parameter
               | parameter_list ',' endl_e parameter
               ;
 
-parameter: param_name AS type
-         | param_name
+parameter: ID AS type
+         | ID '(' endl_e ')' AS type
+         | ID
+         | ID '(' endl_e ')'
          ;
-
-param_name: ID
-          | ID '(' endl_e ')'
-          ;
-
-return_type_e: %empty
-             | AS type
-             ;
 
 %%
