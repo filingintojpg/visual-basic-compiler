@@ -75,7 +75,6 @@
         IntType         type;
         bool            isUnsigned = false;
 
-        IntLiteral() : value(0), type(IntType::INTEGER) {}
         IntLiteral(long long int value, IntType type, bool isUnsigned) : value(value), type(type), isUnsigned(isUnsigned) {}
     };
 
@@ -83,7 +82,6 @@
         double value;
         FloatType type;
 
-        FloatLiteral() : value(0.0), type(FloatType::DOUBLE) {}
         FloatLiteral(double value, FloatType type) : value(value), type(type) {}
     };
 }
