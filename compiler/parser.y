@@ -28,18 +28,21 @@
 %token BY GROUP INTO JOIN ON ORDER SKIP TAKE
 %token ENDL
 
-/* Assignment operators */
-%token ADD_ASSIGN      "+="
-%token SUB_ASSIGN      "-="
-%token MUL_ASSIGN      "*="
-%token DIV_ASSIGN      "/="
-%token FLOORDIV_ASSIGN "\\="
-%token EXP_ASSIGN      "^="
-%token STRCAT_ASSIGN   "&="
-%token LSHIFT_ASSIGN   "<<="
-%token RSHIFT_ASSIGN   ">>="
+%token ADD_ASSIGN           "+="
+%token SUB_ASSIGN           "-="
+%token MUL_ASSIGN           "*="
+%token DIV_ASSIGN           "/="
+%token FLOORDIV_ASSIGN      "\\="
+%token EXP_ASSIGN           "^="
+%token STRCAT_ASSIGN        "&="
+%token LSHIFT_ASSIGN        "<<="
+%token RSHIFT_ASSIGN        ">>="
+%token NEQ                  "<>"
+%token LEQ                  "<="
+%token GEQ                  ">="
+%token LSHIFT               "<<"
+%token RSHIFT               ">>"
 
-/* Identifiers and literals */
 %token <id>            ID
 %token <intLiteral>    INT_LIT
 %token <floatLiteral>  FLOAT_LIT
@@ -51,8 +54,8 @@
 %left OR OR_ELSE XOR
 %left AND AND_ALSO
 %right NOT
-%left '=' NEQ LEQ GEQ '<' '>' IS ISNOT
-%left LSHIFT RSHIFT
+%left '=' "<>" "<=" ">=" '<' '>' IS ISNOT
+%left "<<" ">>"
 %left '&'
 %left '+' '-'
 %left MOD
@@ -152,17 +155,17 @@ expr: postfix_expr
     | expr '>' ee expr
     | expr '<' ee expr
     | expr '=' ee expr
-    | expr NEQ ee expr
-    | expr LEQ ee expr
-    | expr GEQ ee expr
+    | expr "<>" ee expr
+    | expr "<=" ee expr
+    | expr ">=" ee expr
     | expr AND ee expr
     | expr AND_ALSO ee expr
     | expr OR_ELSE ee expr
     | expr OR ee expr
     | expr XOR ee expr
     | expr MOD ee expr
-    | expr LSHIFT ee expr
-    | expr RSHIFT ee expr
+    | expr "<<" ee expr
+    | expr ">>" ee expr
     | expr IS ee expr
     | expr ISNOT ee expr
     | '+' expr %prec UNPLUS
@@ -340,7 +343,7 @@ case_clauses: case_clause
             | case_clauses ',' ee case_clause
             ;
 
-comparison_op: '=' | NEQ | '<' | '>' | LEQ | GEQ
+comparison_op: '=' | "<>" | '<' | '>' | "<=" | ">="
              ;
 
 /* Loops */
