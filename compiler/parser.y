@@ -55,12 +55,19 @@
 /* Query */
 %token BY GROUP INTO JOIN ON ORDER SKIP TAKE
 
-/* Assignment operators */
-%token ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN FLOORDIV_ASSIGN
-       EXP_ASSIGN STRCAT_ASSIGN LSHIFT_ASSIGN RSHIFT_ASSIGN
-
 /* Separators */
 %token ENDL
+
+/* Assignment operators */
+%token ADD_ASSIGN      "+="
+%token SUB_ASSIGN      "-="
+%token MUL_ASSIGN      "*="
+%token DIV_ASSIGN      "/="
+%token FLOORDIV_ASSIGN "\\="
+%token EXP_ASSIGN      "^="
+%token STRCAT_ASSIGN   "&="
+%token LSHIFT_ASSIGN   "<<="
+%token RSHIFT_ASSIGN   ">>="
 
 /* Identifiers and literals */
 %token <id>            ID
@@ -287,8 +294,7 @@ lvalue: ID
       | base_member_access
       ;
 
-compound_assign_op: ADD_ASSIGN | SUB_ASSIGN | MUL_ASSIGN | DIV_ASSIGN | FLOORDIV_ASSIGN
-                  | EXP_ASSIGN | STRCAT_ASSIGN | LSHIFT_ASSIGN | RSHIFT_ASSIGN
+compound_assign_op: "+=" | "-=" | "*=" | "/=" | "\\=" | "^=" | "&=" | "<<=" | ">>="
                   ;
 
 return_stmt: RETURN
