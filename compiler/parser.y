@@ -119,42 +119,6 @@
 
 %%
 
-/* Program */
-
-program: ecle members
-       ;
-
-members: class_declaration ecle
-       | members class_declaration ecle
-       ;
-
-/* Line breaks and statement separators */
-
-/* List of \n */
-el: ENDL
-  | el ENDL
-  ;
-
-/* \n or nothing */
-ee: %empty
-  | ENDL
-  ;
-
-/* \n or : */
-ec: ENDL
-  | ':'
-  ;
-
-/* List of \n or : */
-ecl: ec
-   | ecl ec
-   ;
-
-/* List of \n or : or nothing */
-ecle: %empty
-    | ecl
-    ;
-
 /* Keywords */
 
 kw: IF | THEN | ELSE | ELSEIF | END | SELECT | CASE | TO
@@ -166,6 +130,37 @@ kw: IF | THEN | ELSE | ELSEIF | END | SELECT | CASE | TO
   | access_modifier | SHARED | READONLY
   | primitive_type | cast_operator | CTYPE
   ;
+
+/* Line breaks and statement separators */
+
+el: ENDL
+  | el ENDL
+  ;
+
+ee: %empty
+  | ENDL
+  ;
+
+ec: ENDL
+  | ':'
+  ;
+
+ecl: ec
+   | ecl ec
+   ;
+
+ecle: %empty
+    | ecl
+    ;
+
+/* Program */
+
+program: ecle members
+       ;
+
+members: class_declaration ecle
+       | members class_declaration ecle
+       ;
 
 /* Expressions */
 
