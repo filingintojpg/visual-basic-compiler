@@ -125,10 +125,30 @@ class_body_e: %empty
             | class_body
             ;
 
-class_member: function_declaration
+class_member: field_declaration ecl
+            | function_declaration
             | sub_declaration
-            | field_declaration
             ;
+
+/* Fields */
+
+field_declaration: member_modifiers_e DIM shared_e var_declarator_list
+                 | member_modifiers_e CONST shared_e var_declarator_list
+                 | member_modifiers var_declarator_list
+                 ;
+
+member_modifiers: access_modifier
+                | access_modifier SHARED
+                | SHARED access_modifier_e
+                ;
+
+member_modifiers_e: %empty
+                  | member_modifiers
+                  ;
+
+shared_e: %empty
+        | SHARED
+        ;
 
 /* Expressions */
 
@@ -413,26 +433,6 @@ array_type: ID '(' ee ')'
           | primitive_type '(' ee ')'
           | generic_type '(' ee ')'
           ;
-
-/* Fields */
-
-field_declaration: member_modifiers_e DIM shared_e var_declarator_list ecl
-                 | member_modifiers_e CONST shared_e var_declarator_list ecl
-                 | member_modifiers var_declarator_list ecl
-                 ;
-
-member_modifiers: access_modifier
-                | access_modifier SHARED
-                | SHARED access_modifier_e
-                ;
-
-member_modifiers_e: %empty
-                  | member_modifiers
-                  ;
-
-shared_e: %empty
-        | SHARED
-        ;
 
 /* Methods */
 
