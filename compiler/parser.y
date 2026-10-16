@@ -119,9 +119,7 @@
 
 %%
 
-/* ======================================================================
- *  Program
- * ====================================================================== */
+/* Program */
 
 program: endlc_list_e program_members
        ;
@@ -133,9 +131,7 @@ program_members: program_member
 program_member: class_declaration endlc_list_e
               ;
 
-/* ======================================================================
- *  Line breaks and statement separators
- * ====================================================================== */
+/* Line breaks and statement separators */
 
 endl_list: ENDL
          | endl_list ENDL
@@ -157,9 +153,7 @@ endlc_list_e: %empty
             | endlc_list
             ;
 
-/* ======================================================================
- *  Keywords
- * ====================================================================== */
+/* Keywords */
 
 kw: IF | THEN | ELSE | ELSEIF | END | SELECT | CASE | TO
   | FOR | EACH | WHILE | NEXT | IN | UNTIL | LOOP | DO | STEP
@@ -171,9 +165,7 @@ kw: IF | THEN | ELSE | ELSEIF | END | SELECT | CASE | TO
   | primitive_type | cast_operator | CTYPE
   ;
 
-/* ======================================================================
- *  Expressions
- * ====================================================================== */
+/* Expressions */
 
 expr: postfix_expr
     | expr '+' endl_e expr
@@ -275,9 +267,7 @@ expr_list: expr
          | expr_list ',' endl_e expr
          ;
 
-/* ======================================================================
- *  Simple statements
- * ====================================================================== */
+/* Simple statements */
 
 simple_stmt: call_stmt
            | assignment_stmt
@@ -313,9 +303,7 @@ jump_stmt: CONTINUE DO | CONTINUE FOR | CONTINUE WHILE
          | EXIT SELECT
          ;
 
-/* ======================================================================
- *  Statements and blocks
- * ====================================================================== */
+/* Statements and blocks */
 
 stmt: simple_stmt endlc_list
     | if_stmt
@@ -334,9 +322,7 @@ block_e: %empty
        | block
        ;
 
-/* ======================================================================
- *  If
- * ====================================================================== */
+/* If */
 
 if_stmt: IF expr THEN inline_stmts endl_list
        | IF expr THEN inline_stmts ELSE inline_stmts endl_list
@@ -352,9 +338,7 @@ else_if_stmts: %empty
              | else_if_stmts ELSEIF expr THEN endlc_list block_e
              ;
 
-/* ======================================================================
- *  Select Case
- * ====================================================================== */
+/* Select Case */
 
 select_stmt: SELECT expr endlc_list case_stmts END SELECT endlc_list
            | SELECT CASE expr endlc_list case_stmts END SELECT endlc_list
@@ -386,9 +370,7 @@ case_clauses: case_clause
 comparison_op: '=' | NEQ | '<' | '>' | LEQ | GEQ
              ;
 
-/* ======================================================================
- *  Loops
- * ====================================================================== */
+/* Loops */
 
 while_stmt: WHILE expr endlc_list block_e END WHILE endlc_list
           | WHILE expr endlc_list block_e WEND endlc_list
@@ -410,9 +392,7 @@ do_stmt: DO endlc_list block_e LOOP endlc_list
        | DO UNTIL expr endlc_list block_e LOOP endlc_list
        ;
 
-/* ======================================================================
- *  Variable declarations
- * ====================================================================== */
+/* Variable declarations */
 
 var_declaration: DIM var_declarator_list endlc_list
                | CONST var_declarator_list endlc_list
@@ -440,9 +420,7 @@ var_names: var_name ',' endl_e var_name
          | var_names ',' endl_e var_name
          ;
 
-/* ======================================================================
- *  Types
- * ====================================================================== */
+/* Types */
 
 type: simple_type
     | array_type
@@ -472,9 +450,7 @@ array_type: ID '(' endl_e ')'
           | generic_type '(' endl_e ')'
           ;
 
-/* ======================================================================
- *  Classes
- * ====================================================================== */
+/* Classes */
 
 class_declaration: access_modifier_e CLASS ID generic_parameters_e endlc_list inherits_e class_body_e END CLASS
                  ;
@@ -513,9 +489,7 @@ class_member: func_declaration
             | field_declaration
             ;
 
-/* ======================================================================
- *  Fields
- * ====================================================================== */
+/* Fields */
 
 field_declaration: member_modifiers_e DIM shared_e var_declarator_list endlc_list
                  | member_modifiers_e CONST shared_e var_declarator_list endlc_list
@@ -536,9 +510,7 @@ shared_e: %empty
         | SHARED
         ;
 
-/* ======================================================================
- *  Methods
- * ====================================================================== */
+/* Methods */
 
 func_declaration: member_modifiers_e FUNCTION ID parameter_clause_e AS type endl_list block_e END FUNCTION endlc_list
                 | member_modifiers_e FUNCTION ID parameter_clause_e endl_list block_e END FUNCTION endlc_list
