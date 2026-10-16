@@ -15,7 +15,33 @@
     }
 %}
 
-%start program
+%code requires {
+    enum class IntType { LONG, INTEGER, SHORT, NONE };
+    struct IntLiteral { long long int value; IntType type; bool isUnsigned = false;
+        IntLiteral(long long int value, IntType type, bool isUnsigned) : value(value), type(type), isUnsigned(isUnsigned) {}
+    };
+
+    enum class FloatType { DECIMAL, SINGLE, DOUBLE, NONE };
+    struct FloatLiteral { double value; FloatType type;
+        FloatLiteral(double value, FloatType type) : value(value), type(type) {}
+    };
+}
+
+%union {
+    IntLiteral*     intLiteral;
+    FloatLiteral*   floatLiteral;
+    std::string*    stringLiteral;
+    char            charLiteral;
+    bool            boolLiteral;
+    std::string*    id;
+}
+
+%token <id>            ID
+%token <intLiteral>    INT_LIT
+%token <floatLiteral>  FLOAT_LIT
+%token <stringLiteral> STR_LIT
+%token <charLiteral>   CHAR_LIT
+%token <boolLiteral>   BOOL_LIT
 
 %token BOOLEAN BYTE CHAR DATE DECIMAL DOUBLE INTEGER LONG OBJECT SBYTE SHORT SINGLE STRING UINTEGER ULONG USHORT VARIANT
 %token CBOOL CBYTE CCHAR CDATE CDBL CDEC CINT CLNG COBJ CSBYTE CSHORT CSNG CSTR CUINT CULNG CUSHORT CTYPE DIRECT_CAST TRY_CAST
@@ -43,13 +69,6 @@
 %token LSHIFT               "<<"
 %token RSHIFT               ">>"
 
-%token <id>            ID
-%token <intLiteral>    INT_LIT
-%token <floatLiteral>  FLOAT_LIT
-%token <stringLiteral> STR_LIT
-%token <charLiteral>   CHAR_LIT
-%token <boolLiteral>   BOOL_LIT
-
 %left NEW
 %left OR OR_ELSE XOR
 %left AND AND_ALSO
@@ -66,26 +85,7 @@
 %left '.'
 %nonassoc '(' ')' '{' '}'
 
-%code requires {
-    enum class IntType { LONG, INTEGER, SHORT, NONE };
-    struct IntLiteral { long long int value; IntType type; bool isUnsigned = false;
-        IntLiteral(long long int value, IntType type, bool isUnsigned) : value(value), type(type), isUnsigned(isUnsigned) {}
-    };
-
-    enum class FloatType { DECIMAL, SINGLE, DOUBLE, NONE };
-    struct FloatLiteral { double value; FloatType type;
-        FloatLiteral(double value, FloatType type) : value(value), type(type) {}
-    };
-}
-
-%union {
-    IntLiteral*     intLiteral;
-    FloatLiteral*   floatLiteral;
-    std::string*    stringLiteral;
-    char            charLiteral;
-    bool            boolLiteral;
-    std::string*    id;
-}
+%start program
 
 %%
 
