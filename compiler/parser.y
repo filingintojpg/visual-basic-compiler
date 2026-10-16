@@ -87,40 +87,6 @@
 
 %%
 
-/* Keywords */
-
-keyword: IF | THEN | ELSE | ELSEIF | END | SELECT | CASE | TO
-       | FOR | EACH | WHILE | NEXT | IN | UNTIL | LOOP | DO | STEP
-       | CALL | GOTO | CONTINUE | EXIT | STOP | RETURN | REDIM | ERASE
-       | ME | MYBASE | MYCLASS | NEW | AS | OF
-       | DIM | CONST | STATIC | FUNCTION | SUB | CLASS | STRUCT | INHERITS
-       | BYREF | BYVAL | PARAMARRAY | OPTIONAL
-       | access_modifier | SHARED | READONLY
-       | primitive_type | cast_operator | CTYPE
-       ;
-
-/* Line breaks and statement separators */
-
-el: ENDL
-  | el ENDL
-  ;
-
-ee: %empty
-  | ENDL
-  ;
-
-ec: ENDL
-  | ':'
-  ;
-
-ecl: ec
-   | ecl ec
-   ;
-
-ecle: %empty
-    | ecl
-    ;
-
 /* Program */
 
 program: ecle members
@@ -501,5 +467,39 @@ parameter: ID AS type
          | ID '(' ee ')'
          | OPTIONAL ID AS type '=' ee expr
          ;
+
+/* Keywords */
+
+keyword: IF | THEN | ELSE | ELSEIF | END | SELECT | CASE | TO
+       | FOR | EACH | WHILE | NEXT | IN | UNTIL | LOOP | DO | STEP
+       | CALL | GOTO | CONTINUE | EXIT | STOP | RETURN | REDIM | ERASE
+       | ME | MYBASE | MYCLASS | NEW | AS | OF
+       | DIM | CONST | STATIC | FUNCTION | SUB | CLASS | STRUCT | INHERITS
+       | BYREF | BYVAL | PARAMARRAY | OPTIONAL
+       | access_modifier | SHARED | READONLY
+       | primitive_type | cast_operator | CTYPE
+       ;
+
+/* Line breaks and statement separators */
+
+el: ENDL
+  | el ENDL
+  ;
+
+ee: %empty
+  | ENDL
+  ;
+
+ec: ENDL
+  | ':'
+  ;
+
+ecl: ec
+   | ecl ec
+   ;
+
+ecle: %empty
+    | ecl
+    ;
 
 %%
