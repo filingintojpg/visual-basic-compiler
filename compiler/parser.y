@@ -121,37 +121,39 @@
 
 /* Program */
 
-program: endlc_list_e program_members
+program: ecle members
        ;
 
-program_members: program_member
-               | program_members program_member
-               ;
-
-program_member: class_declaration endlc_list_e
-              ;
+members: class_declaration ecle
+       | members class_declaration ecle
+       ;
 
 /* Line breaks and statement separators */
 
-endl_list: ENDL
-         | endl_list ENDL
-         ;
+/* List of \n */
+el: ENDL
+  | el ENDL
+  ;
 
-endl_e: %empty
-      | ENDL
-      ;
+/* \n or nothing */
+ee: %empty
+  | ENDL
+  ;
 
-endlc: ENDL
-     | ':'
-     ;
+/* \n or : */
+ec: ENDL
+  | ':'
+  ;
 
-endlc_list: endlc
-          | endlc_list endlc
-          ;
+/* List of \n or : */
+ecl: ec
+   | ecl ec
+   ;
 
-endlc_list_e: %empty
-            | endlc_list
-            ;
+/* List of \n or : or nothing */
+ecle: %empty
+    | ecl
+    ;
 
 /* Keywords */
 
@@ -168,29 +170,29 @@ kw: IF | THEN | ELSE | ELSEIF | END | SELECT | CASE | TO
 /* Expressions */
 
 expr: postfix_expr
-    | expr '+' endl_e expr
-    | expr '-' endl_e expr
-    | expr '*' endl_e expr
-    | expr '/' endl_e expr
-    | expr '\\' endl_e expr
-    | expr '^' endl_e expr
-    | expr '&' endl_e expr
-    | expr '>' endl_e expr
-    | expr '<' endl_e expr
-    | expr '=' endl_e expr
-    | expr NEQ endl_e expr
-    | expr LEQ endl_e expr
-    | expr GEQ endl_e expr
-    | expr AND endl_e expr
-    | expr AND_ALSO endl_e expr
-    | expr OR_ELSE endl_e expr
-    | expr OR endl_e expr
-    | expr XOR endl_e expr
-    | expr MOD endl_e expr
-    | expr LSHIFT endl_e expr
-    | expr RSHIFT endl_e expr
-    | expr IS endl_e expr
-    | expr ISNOT endl_e expr
+    | expr '+' ee expr
+    | expr '-' ee expr
+    | expr '*' ee expr
+    | expr '/' ee expr
+    | expr '\\' ee expr
+    | expr '^' ee expr
+    | expr '&' ee expr
+    | expr '>' ee expr
+    | expr '<' ee expr
+    | expr '=' ee expr
+    | expr NEQ ee expr
+    | expr LEQ ee expr
+    | expr GEQ ee expr
+    | expr AND ee expr
+    | expr AND_ALSO ee expr
+    | expr OR_ELSE ee expr
+    | expr OR ee expr
+    | expr XOR ee expr
+    | expr MOD ee expr
+    | expr LSHIFT ee expr
+    | expr RSHIFT ee expr
+    | expr IS ee expr
+    | expr ISNOT ee expr
     | '+' expr %prec UNPLUS
     | '-' expr %prec UNMINUS
     | NOT expr
@@ -201,19 +203,19 @@ postfix_expr: primary_expr
             ;
 
 access_expr: postfix_expr call_args
-           | postfix_expr '.' endl_e ID
-           | postfix_expr '.' endl_e kw
+           | postfix_expr '.' ee ID
+           | postfix_expr '.' ee kw
            ;
 
 primary_expr: literal
             | ID
             | ME
             | primitive_type
-            | '(' endl_e expr endl_e ')'
-            | cast_operator '(' endl_e expr endl_e ')'
-            | CTYPE '(' endl_e expr ',' endl_e type endl_e ')'
-            | IF '(' endl_e expr ',' endl_e expr endl_e ')'
-            | IF '(' endl_e expr ',' endl_e expr ',' endl_e expr endl_e ')'
+            | '(' ee expr ee ')'
+            | cast_operator '(' ee expr ee ')'
+            | CTYPE '(' ee expr ',' ee type ee ')'
+            | IF '(' ee expr ',' ee expr ee ')'
+            | IF '(' ee expr ',' ee expr ',' ee expr ee ')'
             | base_member_access
             | new_expr
             ;
@@ -221,10 +223,10 @@ primary_expr: literal
 literal: INT_LIT | FLOAT_LIT | STR_LIT | CHAR_LIT | BOOL_LIT | NOTHING
        ;
 
-base_member_access: MYBASE '.' endl_e ID
-                  | MYBASE '.' endl_e kw
-                  | MYCLASS '.' endl_e ID
-                  | MYCLASS '.' endl_e kw
+base_member_access: MYBASE '.' ee ID
+                  | MYBASE '.' ee kw
+                  | MYCLASS '.' ee ID
+                  | MYCLASS '.' ee kw
                   ;
 
 cast_operator: CBOOL | CBYTE | CSBYTE | CUSHORT | CSHORT
@@ -243,28 +245,28 @@ new_expr: NEW ID                                                     %prec NEW
         | NEW primitive_type array_modifier collection_initializer   %prec NEW
         ;
 
-array_modifier: '(' endl_e ')'
-              | '(' endl_e expr endl_e ')'
+array_modifier: '(' ee ')'
+              | '(' ee expr ee ')'
               ;
 
-call_args: '(' endl_e ')'
-         | '(' endl_e arg_list endl_e ')'
+call_args: '(' ee ')'
+         | '(' ee arg_list ee ')'
          ;
 
 arg_list: expr_or_initializer
-        | arg_list ',' endl_e expr_or_initializer
+        | arg_list ',' ee expr_or_initializer
         ;
 
 expr_or_initializer: expr
                    | collection_initializer
                    ;
 
-collection_initializer: '{' endl_e expr_list endl_e '}'
-                      | '{' endl_e '}'
+collection_initializer: '{' ee expr_list ee '}'
+                      | '{' ee '}'
                       ;
 
 expr_list: expr
-         | expr_list ',' endl_e expr
+         | expr_list ',' ee expr
          ;
 
 /* Simple statements */
@@ -281,8 +283,8 @@ call_stmt: ID
          | CALL expr
          ;
 
-assignment_stmt: lvalue '=' endl_e expr_or_initializer
-               | lvalue compound_assign_op endl_e expr
+assignment_stmt: lvalue '=' ee expr_or_initializer
+               | lvalue compound_assign_op ee expr
                ;
 
 lvalue: ID
@@ -305,7 +307,7 @@ jump_stmt: CONTINUE DO | CONTINUE FOR | CONTINUE WHILE
 
 /* Statements and blocks */
 
-stmt: simple_stmt endlc_list
+stmt: simple_stmt ecl
     | if_stmt
     | select_stmt
     | for_stmt
@@ -324,10 +326,10 @@ block_e: %empty
 
 /* If */
 
-if_stmt: IF expr THEN inline_stmts endl_list
-       | IF expr THEN inline_stmts ELSE inline_stmts endl_list
-       | IF expr THEN endlc_list block_e else_if_stmts END IF endlc_list
-       | IF expr THEN endlc_list block_e else_if_stmts ELSE endlc_list block_e END IF endlc_list
+if_stmt: IF expr THEN inline_stmts el
+       | IF expr THEN inline_stmts ELSE inline_stmts el
+       | IF expr THEN ecl block_e else_if_stmts END IF ecl
+       | IF expr THEN ecl block_e else_if_stmts ELSE ecl block_e END IF ecl
        ;
 
 inline_stmts: simple_stmt
@@ -335,22 +337,22 @@ inline_stmts: simple_stmt
             ;
 
 else_if_stmts: %empty
-             | else_if_stmts ELSEIF expr THEN endlc_list block_e
+             | else_if_stmts ELSEIF expr THEN ecl block_e
              ;
 
 /* Select Case */
 
-select_stmt: SELECT expr endlc_list case_stmts END SELECT endlc_list
-           | SELECT CASE expr endlc_list case_stmts END SELECT endlc_list
+select_stmt: SELECT expr ecl case_stmts END SELECT ecl
+           | SELECT CASE expr ecl case_stmts END SELECT ecl
            ;
 
 case_stmts: %empty
-          | CASE ELSE endlc_list block_e
+          | CASE ELSE ecl block_e
           | case_condition_branches
-          | case_condition_branches CASE ELSE endlc_list block_e
+          | case_condition_branches CASE ELSE ecl block_e
           ;
 
-case_condition_branch: CASE case_clauses endlc_list block_e
+case_condition_branch: CASE case_clauses ecl block_e
                      ;
 
 case_condition_branches: case_condition_branch
@@ -359,12 +361,12 @@ case_condition_branches: case_condition_branch
 
 case_clause: expr
            | expr TO expr
-           | comparison_op endl_e expr
-           | IS endl_e comparison_op endl_e expr
+           | comparison_op ee expr
+           | IS ee comparison_op ee expr
            ;
 
 case_clauses: case_clause
-            | case_clauses ',' endl_e case_clause
+            | case_clauses ',' ee case_clause
             ;
 
 comparison_op: '=' | NEQ | '<' | '>' | LEQ | GEQ
@@ -372,42 +374,42 @@ comparison_op: '=' | NEQ | '<' | '>' | LEQ | GEQ
 
 /* Loops */
 
-while_stmt: WHILE expr endlc_list block_e END WHILE endlc_list
-          | WHILE expr endlc_list block_e WEND endlc_list
+while_stmt: WHILE expr ecl block_e END WHILE ecl
+          | WHILE expr ecl block_e WEND ecl
           ;
 
-for_stmt: FOR for_loop_variable '=' endl_e expr TO expr endlc_list block_e NEXT endlc_list
-        | FOR for_loop_variable '=' endl_e expr TO expr STEP expr endlc_list block_e NEXT endlc_list
-        | FOR EACH for_loop_variable IN endl_e expr_or_initializer endlc_list block_e NEXT endlc_list
+for_stmt: FOR for_loop_variable '=' ee expr TO expr ecl block_e NEXT ecl
+        | FOR for_loop_variable '=' ee expr TO expr STEP expr ecl block_e NEXT ecl
+        | FOR EACH for_loop_variable IN ee expr_or_initializer ecl block_e NEXT ecl
         ;
 
 for_loop_variable: ID
                  | ID AS type
                  ;
 
-do_stmt: DO endlc_list block_e LOOP endlc_list
-       | DO endlc_list block_e LOOP WHILE expr endlc_list
-       | DO endlc_list block_e LOOP UNTIL expr endlc_list
-       | DO WHILE expr endlc_list block_e LOOP endlc_list
-       | DO UNTIL expr endlc_list block_e LOOP endlc_list
+do_stmt: DO ecl block_e LOOP ecl
+       | DO ecl block_e LOOP WHILE expr ecl
+       | DO ecl block_e LOOP UNTIL expr ecl
+       | DO WHILE expr ecl block_e LOOP ecl
+       | DO UNTIL expr ecl block_e LOOP ecl
        ;
 
 /* Variable declarations */
 
-var_declaration: DIM var_declarator_list endlc_list
-               | CONST var_declarator_list endlc_list
+var_declaration: DIM var_declarator_list ecl
+               | CONST var_declarator_list ecl
                ;
 
 var_declarator_list: var_declarator
                    | var_name
                    | var_names
-                   | var_declarator ',' endl_e var_declarator_list
+                   | var_declarator ',' ee var_declarator_list
                    ;
 
-var_declarator: var_name AS type '=' endl_e expr_or_initializer
+var_declarator: var_name AS type '=' ee expr_or_initializer
               | var_name AS type
               | var_name AS new_expr
-              | var_name '=' endl_e expr_or_initializer
+              | var_name '=' ee expr_or_initializer
               | var_names AS type
               | var_names AS new_expr
               ;
@@ -416,8 +418,8 @@ var_name: ID
         | ID array_modifier
         ;
 
-var_names: var_name ',' endl_e var_name
-         | var_names ',' endl_e var_name
+var_names: var_name ',' ee var_name
+         | var_names ',' ee var_name
          ;
 
 /* Types */
@@ -438,21 +440,21 @@ primitive_type: BYTE | SBYTE | USHORT | SHORT | UINTEGER | INTEGER | ULONG | LON
 generic_type: ID generic_arguments
             ;
 
-generic_arguments: '(' endl_e OF endl_e type_list endl_e ')'
+generic_arguments: '(' ee OF ee type_list ee ')'
                  ;
 
 type_list: simple_type
-         | type_list ',' endl_e simple_type
+         | type_list ',' ee simple_type
          ;
 
-array_type: ID '(' endl_e ')'
-          | primitive_type '(' endl_e ')'
-          | generic_type '(' endl_e ')'
+array_type: ID '(' ee ')'
+          | primitive_type '(' ee ')'
+          | generic_type '(' ee ')'
           ;
 
 /* Classes */
 
-class_declaration: access_modifier_e CLASS ID generic_parameters_e endlc_list inherits_e class_body_e END CLASS
+class_declaration: access_modifier_e CLASS ID generic_parameters_e ecl inherits_e class_body_e END CLASS
                  ;
 
 access_modifier_e: %empty
@@ -465,15 +467,15 @@ access_modifier: PUBLIC
                ;
 
 generic_parameters_e: %empty
-                    | '(' endl_e OF endl_e id_list endl_e ')'
+                    | '(' ee OF ee id_list ee ')'
                     ;
 
 id_list: ID
-       | id_list ',' endl_e ID
+       | id_list ',' ee ID
        ;
 
 inherits_e: %empty
-          | INHERITS ID endlc_list
+          | INHERITS ID ecl
           ;
 
 class_body_e: %empty
@@ -491,9 +493,9 @@ class_member: func_declaration
 
 /* Fields */
 
-field_declaration: member_modifiers_e DIM shared_e var_declarator_list endlc_list
-                 | member_modifiers_e CONST shared_e var_declarator_list endlc_list
-                 | member_modifiers var_declarator_list endlc_list
+field_declaration: member_modifiers_e DIM shared_e var_declarator_list ecl
+                 | member_modifiers_e CONST shared_e var_declarator_list ecl
+                 | member_modifiers var_declarator_list ecl
                  ;
 
 member_modifiers: access_modifier
@@ -512,30 +514,30 @@ shared_e: %empty
 
 /* Methods */
 
-func_declaration: member_modifiers_e FUNCTION ID parameter_clause_e AS type endl_list block_e END FUNCTION endlc_list
-                | member_modifiers_e FUNCTION ID parameter_clause_e endl_list block_e END FUNCTION endlc_list
+func_declaration: member_modifiers_e FUNCTION ID parameter_clause_e AS type el block_e END FUNCTION ecl
+                | member_modifiers_e FUNCTION ID parameter_clause_e el block_e END FUNCTION ecl
                 ;
 
-sub_declaration: member_modifiers_e SUB ID parameter_clause_e endl_list block_e END SUB endlc_list
+sub_declaration: member_modifiers_e SUB ID parameter_clause_e el block_e END SUB ecl
                ;
 
 parameter_clause_e: %empty
                   | parameter_clause
                   ;
 
-parameter_clause: '(' endl_e ')'
-                | '(' endl_e parameter_list endl_e ')'
+parameter_clause: '(' ee ')'
+                | '(' ee parameter_list ee ')'
                 ;
 
 parameter_list: parameter
-              | parameter_list ',' endl_e parameter
+              | parameter_list ',' ee parameter
               ;
 
 parameter: ID AS type
-         | ID '(' endl_e ')' AS type
+         | ID '(' ee ')' AS type
          | ID
-         | ID '(' endl_e ')'
-         | OPTIONAL ID AS type '=' endl_e expr
+         | ID '(' ee ')'
+         | OPTIONAL ID AS type '=' ee expr
          ;
 
 %%
