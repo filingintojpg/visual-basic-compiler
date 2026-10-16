@@ -98,10 +98,14 @@ members: class_declaration ecle
 
 /* Classes */
 
-class_declaration: access_modifier_e CLASS ID '(' ee OF ee generic_of_list ee ')' ecl INHERITS ID ecl class_body_e END CLASS
-                 | access_modifier_e CLASS ID '(' ee OF ee generic_of_list ee ')' ecl class_body_e END CLASS
-                 | access_modifier_e CLASS ID ecl INHERITS ID ecl class_body_e END CLASS
-                 | access_modifier_e CLASS ID ecl class_body_e END CLASS
+class_declaration: access_modifier CLASS ID ecl INHERITS ID ecl class_body END CLASS
+                 | access_modifier CLASS ID ecl INHERITS ID ecl END CLASS
+                 | access_modifier CLASS ID ecl class_body END CLASS
+                 | access_modifier CLASS ID ecl END CLASS
+                 | CLASS ID ecl INHERITS ID ecl class_body END CLASS
+                 | CLASS ID ecl INHERITS ID ecl END CLASS
+                 | CLASS ID ecl class_body END CLASS
+                 | CLASS ID ecl END CLASS
                  ;
 
 access_modifier: PUBLIC
@@ -109,21 +113,9 @@ access_modifier: PUBLIC
                | PROTECTED
                ;
 
-access_modifier_e: %empty
-                 | access_modifier
-                 ;
-
-generic_of_list: ID
-               | generic_of_list ',' ee ID
-               ;
-
 class_body: class_member
           | class_body class_member
           ;
-       
-class_body_e: %empty
-            | class_body
-            ;
 
 class_member: field_declaration ecl
             | function_declaration ecl
@@ -132,19 +124,18 @@ class_member: field_declaration ecl
 
 /* Fields */
 
-field_declaration: member_modifiers_e DIM shared_e var_declarator_list
-                 | member_modifiers_e CONST shared_e var_declarator_list
+field_declaration: member_modifiers DIM shared_e var_declarator_list
+                 | member_modifiers CONST shared_e var_declarator_list
+                 | DIM shared_e var_declarator_list
+                 | CONST shared_e var_declarator_list
                  | member_modifiers var_declarator_list
                  ;
 
 member_modifiers: access_modifier
+                | SHARED
                 | access_modifier SHARED
-                | SHARED access_modifier_e
+                | SHARED access_modifier
                 ;
-
-member_modifiers_e: %empty
-                  | member_modifiers
-                  ;
 
 shared_e: %empty
         | SHARED
@@ -152,14 +143,14 @@ shared_e: %empty
 
 /* Methods */
 
-function_declaration: member_modifiers_e FUNCTION ID '(' ee OF ee generic_of_list ee ')' parameter_parens_e AS type el block_e END FUNCTION
-                    | member_modifiers_e FUNCTION ID '(' ee OF ee generic_of_list ee ')' parameter_parens_e el block_e END FUNCTION
-                    | member_modifiers_e FUNCTION ID parameter_parens_e AS type el block_e END FUNCTION
-                    | member_modifiers_e FUNCTION ID parameter_parens_e el block_e END FUNCTION
+function_declaration: member_modifiers FUNCTION ID parameter_parens_e AS type el block_e END FUNCTION
+                    | member_modifiers FUNCTION ID parameter_parens_e el block_e END FUNCTION
+                    | FUNCTION ID parameter_parens_e AS type el block_e END FUNCTION
+                    | FUNCTION ID parameter_parens_e el block_e END FUNCTION
                     ;
 
-sub_declaration: member_modifiers_e SUB ID '(' ee OF ee generic_of_list ee ')' parameter_parens_e el block_e END SUB
-               | member_modifiers_e SUB ID parameter_parens_e el block_e END SUB
+sub_declaration: member_modifiers SUB ID parameter_parens_e el block_e END SUB
+               | SUB ID parameter_parens_e el block_e END SUB
                ;
 
 parameter_parens_e: %empty
@@ -251,9 +242,6 @@ cast_operator: CBOOL | CBYTE | CSBYTE | CUSHORT | CSHORT
 new_expr: NEW ID                                                     %prec NEW
         | NEW ID call_args                                           %prec NEW
         | NEW ID call_args collection_initializer                    %prec NEW
-        | NEW ID generic_arguments                                   %prec NEW
-        | NEW ID generic_arguments call_args                         %prec NEW
-        | NEW ID generic_arguments call_args collection_initializer  %prec NEW
         | NEW primitive_type                                         %prec NEW
         | NEW primitive_type array_modifier                          %prec NEW
         | NEW primitive_type array_modifier collection_initializer   %prec NEW
@@ -443,18 +431,11 @@ type: simple_type
 
 simple_type: ID
            | primitive_type
-           | generic_type
            ;
 
 primitive_type: BYTE | SBYTE | USHORT | SHORT | UINTEGER | INTEGER | ULONG | LONG
               | BOOLEAN | CHAR | STRING | DECIMAL | SINGLE | DOUBLE | OBJECT
               ;
-
-generic_type: ID generic_arguments
-            ;
-
-generic_arguments: '(' ee OF ee type_list ee ')'
-                 ;
 
 type_list: simple_type
          | type_list ',' ee simple_type
@@ -462,7 +443,6 @@ type_list: simple_type
 
 array_type: ID '(' ee ')'
           | primitive_type '(' ee ')'
-          | generic_type '(' ee ')'
           ;
 
 /* Keywords */
