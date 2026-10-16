@@ -68,20 +68,12 @@
 
 %code requires {
     enum class IntType { LONG, INTEGER, SHORT, NONE };
-    enum class FloatType { DECIMAL, SINGLE, DOUBLE, NONE };
-
-    struct IntLiteral {
-        long long int   value;
-        IntType         type;
-        bool            isUnsigned = false;
-
+    struct IntLiteral { long long int value; IntType type; bool isUnsigned = false;
         IntLiteral(long long int value, IntType type, bool isUnsigned) : value(value), type(type), isUnsigned(isUnsigned) {}
     };
 
-    struct FloatLiteral {
-        double value;
-        FloatType type;
-
+    enum class FloatType { DECIMAL, SINGLE, DOUBLE, NONE };
+    struct FloatLiteral { double value; FloatType type;
         FloatLiteral(double value, FloatType type) : value(value), type(type) {}
     };
 }
