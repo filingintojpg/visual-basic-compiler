@@ -101,15 +101,15 @@
 
 /* Keywords */
 
-kw: IF | THEN | ELSE | ELSEIF | END | SELECT | CASE | TO
-  | FOR | EACH | WHILE | NEXT | IN | UNTIL | LOOP | DO | STEP
-  | CALL | GOTO | CONTINUE | EXIT | STOP | RETURN | REDIM | ERASE
-  | ME | MYBASE | MYCLASS | NEW | AS | OF
-  | DIM | CONST | STATIC | FUNCTION | SUB | CLASS | STRUCT | INHERITS
-  | BYREF | BYVAL | PARAMARRAY | OPTIONAL
-  | access_modifier | SHARED | READONLY
-  | primitive_type | cast_operator | CTYPE
-  ;
+keyword: IF | THEN | ELSE | ELSEIF | END | SELECT | CASE | TO
+       | FOR | EACH | WHILE | NEXT | IN | UNTIL | LOOP | DO | STEP
+       | CALL | GOTO | CONTINUE | EXIT | STOP | RETURN | REDIM | ERASE
+       | ME | MYBASE | MYCLASS | NEW | AS | OF
+       | DIM | CONST | STATIC | FUNCTION | SUB | CLASS | STRUCT | INHERITS
+       | BYREF | BYVAL | PARAMARRAY | OPTIONAL
+       | access_modifier | SHARED | READONLY
+       | primitive_type | cast_operator | CTYPE
+       ;
 
 /* Line breaks and statement separators */
 
@@ -179,7 +179,7 @@ postfix_expr: primary_expr
 
 access_expr: postfix_expr call_args
            | postfix_expr '.' ee ID
-           | postfix_expr '.' ee kw
+           | postfix_expr '.' ee keyword
            ;
 
 primary_expr: literal
@@ -199,9 +199,9 @@ literal: INT_LIT | FLOAT_LIT | STR_LIT | CHAR_LIT | BOOL_LIT | NOTHING
        ;
 
 base_member_access: MYBASE '.' ee ID
-                  | MYBASE '.' ee kw
+                  | MYBASE '.' ee keyword
                   | MYCLASS '.' ee ID
-                  | MYCLASS '.' ee kw
+                  | MYCLASS '.' ee keyword
                   ;
 
 cast_operator: CBOOL | CBYTE | CSBYTE | CUSHORT | CSHORT
