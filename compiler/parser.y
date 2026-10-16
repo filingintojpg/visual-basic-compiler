@@ -143,27 +143,29 @@ shared_e: %empty
 
 /* Methods */
 
-function_declaration: member_modifiers FUNCTION ID parameter_parens_e AS type el block_e END FUNCTION
-                    | member_modifiers FUNCTION ID parameter_parens_e el block_e END FUNCTION
-                    | FUNCTION ID parameter_parens_e AS type el block_e END FUNCTION
-                    | FUNCTION ID parameter_parens_e el block_e END FUNCTION
+function_declaration: member_modifiers FUNCTION ID '(' ee parameter_list_e ')' AS type el block_e END FUNCTION
+                    | member_modifiers FUNCTION ID '(' ee parameter_list_e ')' el block_e END FUNCTION
+                    | member_modifiers FUNCTION ID AS type el block_e END FUNCTION
+                    | member_modifiers FUNCTION ID el block_e END FUNCTION
+                    | FUNCTION ID '(' ee parameter_list_e ')' AS type el block_e END FUNCTION
+                    | FUNCTION ID '(' ee parameter_list_e ')' el block_e END FUNCTION
+                    | FUNCTION ID AS type el block_e END FUNCTION
+                    | FUNCTION ID el block_e END FUNCTION
                     ;
 
-sub_declaration: member_modifiers SUB ID parameter_parens_e el block_e END SUB
-               | SUB ID parameter_parens_e el block_e END SUB
+sub_declaration: member_modifiers SUB ID '(' ee parameter_list_e ')' el block_e END SUB
+               | member_modifiers SUB ID el block_e END SUB
+               | SUB ID '(' ee parameter_list_e ')' el block_e END SUB
+               | SUB ID el block_e END SUB
                ;
-
-parameter_parens_e: %empty
-                  | parameter_parens
-                  ;
-
-parameter_parens: '(' ee ')'
-                | '(' ee parameter_list ee ')'
-                ;
 
 parameter_list: parameter
               | parameter_list ',' ee parameter
               ;
+
+parameter_list_e: %empty
+                | parameter_list ee
+                ;
 
 parameter: ID
          | ID AS type
