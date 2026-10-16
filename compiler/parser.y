@@ -96,6 +96,40 @@ members: class_declaration ecle
        | members class_declaration ecle
        ;
 
+/* Classes */
+
+class_declaration: access_modifier_e CLASS ID '(' ee OF ee generic_of_list ee ')' ecl INHERITS ID ecl class_body_e END CLASS
+                 | access_modifier_e CLASS ID '(' ee OF ee generic_of_list ee ')' ecl class_body_e END CLASS
+                 | access_modifier_e CLASS ID ecl INHERITS ID ecl class_body_e END CLASS
+                 | access_modifier_e CLASS ID ecl class_body_e END CLASS
+                 ;
+
+access_modifier: PUBLIC
+               | PRIVATE
+               | PROTECTED
+               ;
+
+access_modifier_e: %empty
+                 | access_modifier
+                 ;
+
+generic_of_list: ID
+               | generic_of_list ',' ee ID
+               ;
+
+class_body: class_member
+          | class_body class_member
+          ;
+       
+class_body_e: %empty
+            | class_body
+            ;
+
+class_member: function_declaration
+            | sub_declaration
+            | field_declaration
+            ;
+
 /* Expressions */
 
 expr: postfix_expr
@@ -380,45 +414,6 @@ array_type: ID '(' ee ')'
           | generic_type '(' ee ')'
           ;
 
-/* Classes */
-
-class_declaration: access_modifier_e CLASS ID generic_parameters_e ecl inherits_e class_body_e END CLASS
-                 ;
-
-access_modifier_e: %empty
-                 | access_modifier
-                 ;
-
-access_modifier: PUBLIC
-               | PRIVATE
-               | PROTECTED
-               ;
-
-generic_parameters_e: %empty
-                    | '(' ee OF ee id_list ee ')'
-                    ;
-
-id_list: ID
-       | id_list ',' ee ID
-       ;
-
-inherits_e: %empty
-          | INHERITS ID ecl
-          ;
-
-class_body_e: %empty
-            | class_body
-            ;
-
-class_body: class_member
-          | class_body class_member
-          ;
-
-class_member: func_declaration
-            | sub_declaration
-            | field_declaration
-            ;
-
 /* Fields */
 
 field_declaration: member_modifiers_e DIM shared_e var_declarator_list ecl
@@ -427,9 +422,8 @@ field_declaration: member_modifiers_e DIM shared_e var_declarator_list ecl
                  ;
 
 member_modifiers: access_modifier
-                | SHARED
                 | access_modifier SHARED
-                | SHARED access_modifier
+                | SHARED access_modifier_e
                 ;
 
 member_modifiers_e: %empty
@@ -442,9 +436,9 @@ shared_e: %empty
 
 /* Methods */
 
-func_declaration: member_modifiers_e FUNCTION ID parameter_clause_e AS type el block_e END FUNCTION ecl
-                | member_modifiers_e FUNCTION ID parameter_clause_e el block_e END FUNCTION ecl
-                ;
+function_declaration: member_modifiers_e FUNCTION ID parameter_clause_e AS type el block_e END FUNCTION ecl
+                    | member_modifiers_e FUNCTION ID parameter_clause_e el block_e END FUNCTION ecl
+                    ;
 
 sub_declaration: member_modifiers_e SUB ID parameter_clause_e el block_e END SUB ecl
                ;
