@@ -126,8 +126,8 @@ class_body_e: %empty
             ;
 
 class_member: field_declaration ecl
-            | function_declaration
-            | sub_declaration
+            | function_declaration ecl
+            | sub_declaration ecl
             ;
 
 /* Fields */
@@ -149,6 +149,37 @@ member_modifiers_e: %empty
 shared_e: %empty
         | SHARED
         ;
+
+/* Methods */
+
+function_declaration: member_modifiers_e FUNCTION ID '(' ee OF ee generic_of_list ee ')' parameter_parens_e AS type el block_e END FUNCTION
+                    | member_modifiers_e FUNCTION ID '(' ee OF ee generic_of_list ee ')' parameter_parens_e el block_e END FUNCTION
+                    | member_modifiers_e FUNCTION ID parameter_parens_e AS type el block_e END FUNCTION
+                    | member_modifiers_e FUNCTION ID parameter_parens_e el block_e END FUNCTION
+                    ;
+
+sub_declaration: member_modifiers_e SUB ID '(' ee OF ee generic_of_list ee ')' parameter_parens_e el block_e END SUB
+               | member_modifiers_e SUB ID parameter_parens_e el block_e END SUB
+               ;
+
+parameter_parens_e: %empty
+                  | parameter_parens
+                  ;
+
+parameter_parens: '(' ee ')'
+                | '(' ee parameter_list ee ')'
+                ;
+
+parameter_list: parameter
+              | parameter_list ',' ee parameter
+              ;
+
+parameter: ID
+         | ID AS type
+         | ID '(' ee ')'
+         | ID '(' ee ')' AS type
+         | OPTIONAL ID AS type '=' ee expr
+         ;
 
 /* Expressions */
 
@@ -433,34 +464,6 @@ array_type: ID '(' ee ')'
           | primitive_type '(' ee ')'
           | generic_type '(' ee ')'
           ;
-
-/* Methods */
-
-function_declaration: member_modifiers_e FUNCTION ID parameter_clause_e AS type el block_e END FUNCTION ecl
-                    | member_modifiers_e FUNCTION ID parameter_clause_e el block_e END FUNCTION ecl
-                    ;
-
-sub_declaration: member_modifiers_e SUB ID parameter_clause_e el block_e END SUB ecl
-               ;
-
-parameter_clause_e: %empty
-                  | parameter_clause
-                  ;
-
-parameter_clause: '(' ee ')'
-                | '(' ee parameter_list ee ')'
-                ;
-
-parameter_list: parameter
-              | parameter_list ',' ee parameter
-              ;
-
-parameter: ID AS type
-         | ID '(' ee ')' AS type
-         | ID
-         | ID '(' ee ')'
-         | OPTIONAL ID AS type '=' ee expr
-         ;
 
 /* Keywords */
 
