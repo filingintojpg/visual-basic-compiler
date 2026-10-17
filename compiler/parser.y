@@ -176,38 +176,35 @@ parameter: ID
 
 /* Simple statements */
 
-simple_stmt: call_stmt
-           | assignment_stmt
-           | return_stmt
-           | jump_stmt
+simple_stmt: ID
+           | access_expr
+           | CALL expr
+           | base_member_access
+           | lvalue '=' ee expr_or_initializer
+           | lvalue "+=" ee expr
+           | lvalue "-=" ee expr
+           | lvalue "*=" ee expr
+           | lvalue "/=" ee expr
+           | lvalue "\\=" ee expr
+           | lvalue "^=" ee expr
+           | lvalue "&=" ee expr
+           | lvalue "<<=" ee expr
+           | lvalue ">>=" ee expr
+           | RETURN
+           | RETURN expr_or_initializer
+           | CONTINUE DO
+           | CONTINUE FOR
+           | CONTINUE WHILE
+           | EXIT DO
+           | EXIT FOR
+           | EXIT WHILE
+           | EXIT SELECT
            ;
-
-call_stmt: ID
-         | access_expr
-         | base_member_access
-         | CALL expr
-         ;
-
-assignment_stmt: lvalue '=' ee expr_or_initializer
-               | lvalue compound_assign_op ee expr
-               ;
 
 lvalue: ID
       | access_expr
       | base_member_access
       ;
-
-compound_assign_op: "+=" | "-=" | "*=" | "/=" | "\\=" | "^=" | "&=" | "<<=" | ">>="
-                  ;
-
-return_stmt: RETURN
-           | RETURN expr_or_initializer
-           ;
-
-jump_stmt: CONTINUE DO | CONTINUE FOR | CONTINUE WHILE
-         | EXIT DO | EXIT FOR | EXIT WHILE
-         | EXIT SELECT
-         ;
 
 /* Statements and blocks */
 
