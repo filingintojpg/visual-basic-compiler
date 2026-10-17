@@ -98,14 +98,10 @@ members: class_declaration ecle
 
 /* Classes */
 
-class_declaration: access_modifier CLASS ID ecl INHERITS ID ecl class_body END CLASS
-                 | access_modifier CLASS ID ecl INHERITS ID ecl END CLASS
-                 | access_modifier CLASS ID ecl class_body END CLASS
-                 | access_modifier CLASS ID ecl END CLASS
-                 | CLASS ID ecl INHERITS ID ecl class_body END CLASS
-                 | CLASS ID ecl INHERITS ID ecl END CLASS
-                 | CLASS ID ecl class_body END CLASS
-                 | CLASS ID ecl END CLASS
+class_declaration: access_modifier CLASS ID ecl INHERITS ID class_body_e END CLASS
+                 | access_modifier CLASS ID class_body_e END CLASS
+                 | CLASS ID ecl INHERITS ID class_body_e END CLASS
+                 | CLASS ID class_body_e END CLASS
                  ;
 
 access_modifier: PUBLIC
@@ -113,13 +109,17 @@ access_modifier: PUBLIC
                | PROTECTED
                ;
 
-class_body: class_member
-          | class_body class_member
+class_body: class_member ecl
+          | class_body class_member ecl
           ;
 
-class_member: field_declaration ecl
-            | function_declaration ecl
-            | sub_declaration ecl
+class_body_e: ecl
+            | ecl class_body
+            ;
+
+class_member: field_declaration
+            | function_declaration
+            | sub_declaration
             ;
 
 /* Fields */
@@ -143,19 +143,19 @@ shared_e: %empty
 
 /* Methods */
 
-function_declaration: member_modifiers FUNCTION ID '(' ee parameter_list_e ')' AS type block_e END FUNCTION
-                    | member_modifiers FUNCTION ID '(' ee parameter_list_e ')' block_e END FUNCTION
+function_declaration: member_modifiers FUNCTION ID '(' parameter_list_e ')' AS type block_e END FUNCTION
+                    | member_modifiers FUNCTION ID '(' parameter_list_e ')' block_e END FUNCTION
                     | member_modifiers FUNCTION ID AS type block_e END FUNCTION
                     | member_modifiers FUNCTION ID block_e END FUNCTION
-                    | FUNCTION ID '(' ee parameter_list_e ')' AS type block_e END FUNCTION
-                    | FUNCTION ID '(' ee parameter_list_e ')' block_e END FUNCTION
+                    | FUNCTION ID '(' parameter_list_e ')' AS type block_e END FUNCTION
+                    | FUNCTION ID '(' parameter_list_e ')' block_e END FUNCTION
                     | FUNCTION ID AS type block_e END FUNCTION
                     | FUNCTION ID block_e END FUNCTION
                     ;
 
-sub_declaration: member_modifiers SUB ID '(' ee parameter_list_e ')' block_e END SUB
+sub_declaration: member_modifiers SUB ID '(' parameter_list_e ')' block_e END SUB
                | member_modifiers SUB ID block_e END SUB
-               | SUB ID '(' ee parameter_list_e ')' block_e END SUB
+               | SUB ID '(' parameter_list_e ')' block_e END SUB
                | SUB ID block_e END SUB
                ;
 
@@ -163,7 +163,7 @@ parameter_list: parameter
               | parameter_list ',' ee parameter
               ;
 
-parameter_list_e: %empty
+parameter_list_e: ee
                 | parameter_list ee
                 ;
 
@@ -450,10 +450,6 @@ keyword: IF | THEN | ELSE | ELSEIF | END | SELECT | CASE | TO
        ;
 
 /* Line breaks and statement separators */
-
-el: ENDL
-  | el ENDL
-  ;
 
 ee: %empty
   | ENDL
