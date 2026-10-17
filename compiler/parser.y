@@ -216,7 +216,6 @@ stmt: ID
     | FOR for_loop_variable '=' ee expr TO expr STEP expr block_e NEXT
     | FOR EACH for_loop_variable IN ee expr_or_initializer block_e NEXT
     | WHILE expr block_e END WHILE
-    | WHILE expr block_e WEND
     | DO block_e LOOP
     | DO block_e LOOP WHILE expr
     | DO block_e LOOP UNTIL expr
