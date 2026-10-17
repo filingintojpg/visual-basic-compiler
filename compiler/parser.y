@@ -143,20 +143,20 @@ shared_e: %empty
 
 /* Methods */
 
-function_declaration: member_modifiers FUNCTION ID '(' ee parameter_list_e ')' AS type el block_e END FUNCTION
-                    | member_modifiers FUNCTION ID '(' ee parameter_list_e ')' el block_e END FUNCTION
-                    | member_modifiers FUNCTION ID AS type el block_e END FUNCTION
-                    | member_modifiers FUNCTION ID el block_e END FUNCTION
-                    | FUNCTION ID '(' ee parameter_list_e ')' AS type el block_e END FUNCTION
-                    | FUNCTION ID '(' ee parameter_list_e ')' el block_e END FUNCTION
-                    | FUNCTION ID AS type el block_e END FUNCTION
-                    | FUNCTION ID el block_e END FUNCTION
+function_declaration: member_modifiers FUNCTION ID '(' ee parameter_list_e ')' AS type block_e END FUNCTION
+                    | member_modifiers FUNCTION ID '(' ee parameter_list_e ')' block_e END FUNCTION
+                    | member_modifiers FUNCTION ID AS type block_e END FUNCTION
+                    | member_modifiers FUNCTION ID block_e END FUNCTION
+                    | FUNCTION ID '(' ee parameter_list_e ')' AS type block_e END FUNCTION
+                    | FUNCTION ID '(' ee parameter_list_e ')' block_e END FUNCTION
+                    | FUNCTION ID AS type block_e END FUNCTION
+                    | FUNCTION ID block_e END FUNCTION
                     ;
 
-sub_declaration: member_modifiers SUB ID '(' ee parameter_list_e ')' el block_e END SUB
-               | member_modifiers SUB ID el block_e END SUB
-               | SUB ID '(' ee parameter_list_e ')' el block_e END SUB
-               | SUB ID el block_e END SUB
+sub_declaration: member_modifiers SUB ID '(' ee parameter_list_e ')' block_e END SUB
+               | member_modifiers SUB ID block_e END SUB
+               | SUB ID '(' ee parameter_list_e ')' block_e END SUB
+               | SUB ID block_e END SUB
                ;
 
 parameter_list: parameter
@@ -221,18 +221,18 @@ block: stmt ecl
      | block stmt ecl
      ;
 
-block_e: %empty
-       | block
+block_e: ecl
+       | ecl block
        ;
 
 /* If */
 
-if_stmt: IF expr THEN ecl block_e else_if_stmts END IF
-       | IF expr THEN ecl block_e else_if_stmts ELSE ecl block_e END IF
+if_stmt: IF expr THEN block_e else_if_stmts END IF
+       | IF expr THEN block_e else_if_stmts ELSE block_e END IF
        ;
 
 else_if_stmts: %empty
-             | else_if_stmts ELSEIF expr THEN ecl block_e
+             | else_if_stmts ELSEIF expr THEN block_e
              ;
 
 /* Select Case */
@@ -241,12 +241,12 @@ select_stmt: SELECT CASE expr ecl case_stmts END SELECT
            ;
 
 case_stmts: %empty
-          | CASE ELSE ecl block_e
+          | CASE ELSE block_e
           | case_condition_branches
-          | case_condition_branches CASE ELSE ecl block_e
+          | case_condition_branches CASE ELSE block_e
           ;
 
-case_condition_branch: CASE case_clauses ecl block_e
+case_condition_branch: CASE case_clauses block_e
                      ;
 
 case_condition_branches: case_condition_branch
@@ -268,24 +268,24 @@ comparison_op: '=' | "<>" | '<' | '>' | "<=" | ">="
 
 /* Loops */
 
-while_stmt: WHILE expr ecl block_e END WHILE
-          | WHILE expr ecl block_e WEND
+while_stmt: WHILE expr block_e END WHILE
+          | WHILE expr block_e WEND
           ;
 
-for_stmt: FOR for_loop_variable '=' ee expr TO expr ecl block_e NEXT
-        | FOR for_loop_variable '=' ee expr TO expr STEP expr ecl block_e NEXT
-        | FOR EACH for_loop_variable IN ee expr_or_initializer ecl block_e NEXT
+for_stmt: FOR for_loop_variable '=' ee expr TO expr block_e NEXT
+        | FOR for_loop_variable '=' ee expr TO expr STEP expr block_e NEXT
+        | FOR EACH for_loop_variable IN ee expr_or_initializer block_e NEXT
         ;
 
 for_loop_variable: ID
                  | ID AS type
                  ;
 
-do_stmt: DO ecl block_e LOOP
-       | DO ecl block_e LOOP WHILE expr
-       | DO ecl block_e LOOP UNTIL expr
-       | DO WHILE expr ecl block_e LOOP
-       | DO UNTIL expr ecl block_e LOOP
+do_stmt: DO block_e LOOP
+       | DO block_e LOOP WHILE expr
+       | DO block_e LOOP UNTIL expr
+       | DO WHILE expr block_e LOOP
+       | DO UNTIL expr block_e LOOP
        ;
 
 /* Variable declarations */
