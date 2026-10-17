@@ -267,26 +267,18 @@ is_e: %empty
 /* Variable declarations */
 
 var_declaration: var_declarator
-               | var_name
-               | var_names
-               | var_declarator ',' ee var_declaration
+               | var_declaration ',' ee var_declarator
                ;
 
-var_declarator: var_name AS type '=' ee expr_or_initializer
-              | var_name AS type
-              | var_name AS new_expr
-              | var_name '=' ee expr_or_initializer
-              | var_names AS type
-              | var_names AS new_expr
+var_declarator: ID
+              | ID '(' ee ')'
+              | ID '(' ee expr ee ')'
+              | ID '=' ee expr_or_initializer
+              | ID AS new_expr
+              | ID AS type
+              | ID AS simple_type '=' ee expr
+              | ID AS array_type '=' ee collection_initializer
               ;
-
-var_name: ID
-        | ID array_modifier
-        ;
-
-var_names: var_name ',' ee var_name
-         | var_names ',' ee var_name
-         ;
 
 /* Types */
 
