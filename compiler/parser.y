@@ -168,8 +168,7 @@ parameter_list_e: ee
                 ;
 
 parameter: ID
-         | ID AS simple_type
-         | ID AS array_type
+         | ID AS type
          | ID '(' ee ')'
          | ID '(' ee ')' AS simple_type
          | OPTIONAL ID '=' ee expr
@@ -277,30 +276,21 @@ var_declarator: ID
               | ID AS new_expr
               | ID AS type
               | ID AS simple_type '=' ee expr
-              | ID AS array_type '=' ee collection_initializer
+              | ID AS simple_type '(' ee ')' '=' ee collection_initializer
               ;
 
 /* Types */
 
 type: simple_type
-    | array_type
+    | simple_type '(' ee ')'
     ;
 
 simple_type: ID
            | primitive_type
            ;
 
-primitive_type: BYTE | SBYTE | USHORT | SHORT | UINTEGER | INTEGER | ULONG | LONG
-              | BOOLEAN | CHAR | STRING | DECIMAL | SINGLE | DOUBLE | OBJECT
+primitive_type: BYTE | SBYTE | USHORT | SHORT | UINTEGER | INTEGER | ULONG | LONG | BOOLEAN | CHAR | STRING | DECIMAL | SINGLE | DOUBLE | OBJECT
               ;
-
-type_list: simple_type
-         | type_list ',' ee simple_type
-         ;
-
-array_type: ID '(' ee ')'
-          | primitive_type '(' ee ')'
-          ;
 
 /* Expressions */
 
