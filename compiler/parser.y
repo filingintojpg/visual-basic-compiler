@@ -212,9 +212,12 @@ stmt: ID
     | IF expr THEN block_e else_if_stmts END IF
     | IF expr THEN block_e else_if_stmts ELSE block_e END IF
     | SELECT CASE expr ecl case_stmts END SELECT
-    | FOR for_loop_variable '=' ee expr TO expr block_e NEXT
-    | FOR for_loop_variable '=' ee expr TO expr STEP expr block_e NEXT
-    | FOR EACH for_loop_variable IN ee expr_or_initializer block_e NEXT
+    | FOR ID AS simple_type '=' ee expr TO expr STEP expr block_e NEXT
+    | FOR ID AS simple_type '=' ee expr TO expr block_e NEXT
+    | FOR ID '=' ee expr TO expr STEP expr block_e NEXT
+    | FOR ID '=' ee expr TO expr block_e NEXT
+    | FOR EACH ID AS simple_type IN ee expr_or_initializer block_e NEXT
+    | FOR EACH ID IN ee expr_or_initializer block_e NEXT
     | WHILE expr block_e END WHILE
     | DO block_e LOOP
     | DO block_e LOOP WHILE expr
@@ -239,36 +242,27 @@ else_if_stmts: %empty
 /* Select Case */
 
 case_stmts: %empty
-          | CASE ELSE block_e
-          | case_condition_branches
-          | case_condition_branches CASE ELSE block_e
+          | case_stmts CASE case_exprs block_e
+          | case_stmts CASE ELSE block_e
           ;
 
-case_condition_branch: CASE case_clauses block_e
-                     ;
+case_exprs: case_expr
+          | case_exprs ',' ee case_expr
+          ;
 
-case_condition_branches: case_condition_branch
-                       | case_condition_branches case_condition_branch
-                       ;
+case_expr: expr
+         | expr TO expr
+         | is_e '=' ee expr
+         | is_e "<>" ee expr
+         | is_e "<" ee expr
+         | is_e ">" ee expr
+         | is_e "<=" ee expr
+         | is_e ">=" ee expr
+         ;
 
-case_clause: expr
-           | expr TO expr
-           | comparison_op ee expr
-           | IS ee comparison_op ee expr
-           ;
-
-case_clauses: case_clause
-            | case_clauses ',' ee case_clause
-            ;
-
-comparison_op: '=' | "<>" | '<' | '>' | "<=" | ">="
-             ;
-
-/* Loops */
-
-for_loop_variable: ID
-                 | ID AS type
-                 ;
+is_e: %empty
+    | IS ee
+    ;
 
 /* Variable declarations */
 
