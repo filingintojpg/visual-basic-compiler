@@ -209,12 +209,12 @@ lvalue: ID
 /* Statements and blocks */
 
 stmt: simple_stmt ecl
-    | if_stmt
-    | select_stmt
-    | for_stmt
-    | do_stmt
-    | while_stmt
-    | var_declaration
+    | if_stmt ecl
+    | select_stmt ecl
+    | for_stmt ecl
+    | do_stmt ecl
+    | while_stmt ecl
+    | var_declaration ecl
     ;
 
 block: stmt
@@ -227,15 +227,9 @@ block_e: %empty
 
 /* If */
 
-if_stmt: IF expr THEN inline_stmts el
-       | IF expr THEN inline_stmts ELSE inline_stmts el
-       | IF expr THEN ecl block_e else_if_stmts END IF ecl
-       | IF expr THEN ecl block_e else_if_stmts ELSE ecl block_e END IF ecl
+if_stmt: IF expr THEN ecl block_e else_if_stmts END IF
+       | IF expr THEN ecl block_e else_if_stmts ELSE ecl block_e END IF
        ;
-
-inline_stmts: simple_stmt
-            | inline_stmts ':' simple_stmt
-            ;
 
 else_if_stmts: %empty
              | else_if_stmts ELSEIF expr THEN ecl block_e
@@ -243,8 +237,8 @@ else_if_stmts: %empty
 
 /* Select Case */
 
-select_stmt: SELECT expr ecl case_stmts END SELECT ecl
-           | SELECT CASE expr ecl case_stmts END SELECT ecl
+select_stmt: SELECT expr ecl case_stmts END SELECT
+           | SELECT CASE expr ecl case_stmts END SELECT
            ;
 
 case_stmts: %empty
@@ -275,30 +269,30 @@ comparison_op: '=' | "<>" | '<' | '>' | "<=" | ">="
 
 /* Loops */
 
-while_stmt: WHILE expr ecl block_e END WHILE ecl
-          | WHILE expr ecl block_e WEND ecl
+while_stmt: WHILE expr ecl block_e END WHILE
+          | WHILE expr ecl block_e WEND
           ;
 
-for_stmt: FOR for_loop_variable '=' ee expr TO expr ecl block_e NEXT ecl
-        | FOR for_loop_variable '=' ee expr TO expr STEP expr ecl block_e NEXT ecl
-        | FOR EACH for_loop_variable IN ee expr_or_initializer ecl block_e NEXT ecl
+for_stmt: FOR for_loop_variable '=' ee expr TO expr ecl block_e NEXT
+        | FOR for_loop_variable '=' ee expr TO expr STEP expr ecl block_e NEXT
+        | FOR EACH for_loop_variable IN ee expr_or_initializer ecl block_e NEXT
         ;
 
 for_loop_variable: ID
                  | ID AS type
                  ;
 
-do_stmt: DO ecl block_e LOOP ecl
-       | DO ecl block_e LOOP WHILE expr ecl
-       | DO ecl block_e LOOP UNTIL expr ecl
-       | DO WHILE expr ecl block_e LOOP ecl
-       | DO UNTIL expr ecl block_e LOOP ecl
+do_stmt: DO ecl block_e LOOP
+       | DO ecl block_e LOOP WHILE expr
+       | DO ecl block_e LOOP UNTIL expr
+       | DO WHILE expr ecl block_e LOOP
+       | DO UNTIL expr ecl block_e LOOP
        ;
 
 /* Variable declarations */
 
-var_declaration: DIM var_declarator_list ecl
-               | CONST var_declarator_list ecl
+var_declaration: DIM var_declarator_list
+               | CONST var_declarator_list
                ;
 
 var_declarator_list: var_declarator
