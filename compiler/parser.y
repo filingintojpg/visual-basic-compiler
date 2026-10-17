@@ -174,48 +174,7 @@ parameter: ID
          | OPTIONAL ID AS type '=' ee expr
          ;
 
-/* Simple statements */
-
-simple_stmt: ID
-           | access_expr
-           | CALL expr
-           | base_member_access
-           | lvalue '=' ee expr_or_initializer
-           | lvalue "+=" ee expr
-           | lvalue "-=" ee expr
-           | lvalue "*=" ee expr
-           | lvalue "/=" ee expr
-           | lvalue "\\=" ee expr
-           | lvalue "^=" ee expr
-           | lvalue "&=" ee expr
-           | lvalue "<<=" ee expr
-           | lvalue ">>=" ee expr
-           | RETURN
-           | RETURN expr_or_initializer
-           | CONTINUE DO
-           | CONTINUE FOR
-           | CONTINUE WHILE
-           | EXIT DO
-           | EXIT FOR
-           | EXIT WHILE
-           | EXIT SELECT
-           ;
-
-lvalue: ID
-      | access_expr
-      | base_member_access
-      ;
-
-/* Statements and blocks */
-
-stmt: simple_stmt
-    | if_stmt
-    | select_stmt
-    | for_stmt
-    | do_stmt
-    | while_stmt
-    | var_declaration
-    ;
+/* Statements */
 
 block: stmt ecl
      | block stmt ecl
@@ -224,6 +183,42 @@ block: stmt ecl
 block_e: ecl
        | ecl block
        ;
+
+stmt: ID
+    | access_expr
+    | CALL expr
+    | base_member_access
+    | lvalue '=' ee expr_or_initializer
+    | lvalue "+=" ee expr
+    | lvalue "-=" ee expr
+    | lvalue "*=" ee expr
+    | lvalue "/=" ee expr
+    | lvalue "\\=" ee expr
+    | lvalue "^=" ee expr
+    | lvalue "&=" ee expr
+    | lvalue "<<=" ee expr
+    | lvalue ">>=" ee expr
+    | RETURN
+    | RETURN expr_or_initializer
+    | CONTINUE DO
+    | CONTINUE FOR
+    | CONTINUE WHILE
+    | EXIT DO
+    | EXIT FOR
+    | EXIT WHILE
+    | EXIT SELECT
+    | if_stmt
+    | select_stmt
+    | for_stmt
+    | do_stmt
+    | while_stmt
+    | var_declaration
+    ;
+
+lvalue: ID
+      | access_expr
+      | base_member_access
+      ;
 
 /* If */
 
