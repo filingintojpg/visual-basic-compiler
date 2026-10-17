@@ -174,105 +174,6 @@ parameter: ID
          | OPTIONAL ID AS type '=' ee expr
          ;
 
-/* Expressions */
-
-expr: postfix_expr
-    | expr '+' ee expr
-    | expr '-' ee expr
-    | expr '*' ee expr
-    | expr '/' ee expr
-    | expr '\\' ee expr
-    | expr '^' ee expr
-    | expr '&' ee expr
-    | expr '>' ee expr
-    | expr '<' ee expr
-    | expr '=' ee expr
-    | expr "<>" ee expr
-    | expr "<=" ee expr
-    | expr ">=" ee expr
-    | expr AND ee expr
-    | expr AND_ALSO ee expr
-    | expr OR_ELSE ee expr
-    | expr OR ee expr
-    | expr XOR ee expr
-    | expr MOD ee expr
-    | expr "<<" ee expr
-    | expr ">>" ee expr
-    | expr IS ee expr
-    | expr ISNOT ee expr
-    | '+' expr %prec UNPLUS
-    | '-' expr %prec UNMINUS
-    | NOT expr
-    ;
-
-postfix_expr: primary_expr
-            | access_expr
-            ;
-
-access_expr: postfix_expr call_args
-           | postfix_expr '.' ee ID
-           | postfix_expr '.' ee keyword
-           ;
-
-primary_expr: literal
-            | ID
-            | ME
-            | primitive_type
-            | '(' ee expr ee ')'
-            | cast_operator '(' ee expr ee ')'
-            | CTYPE '(' ee expr ',' ee type ee ')'
-            | IF '(' ee expr ',' ee expr ee ')'
-            | IF '(' ee expr ',' ee expr ',' ee expr ee ')'
-            | base_member_access
-            | new_expr
-            ;
-
-literal: INT_LIT | FLOAT_LIT | STR_LIT | CHAR_LIT | BOOL_LIT | NOTHING
-       ;
-
-base_member_access: MYBASE '.' ee ID
-                  | MYBASE '.' ee keyword
-                  | MYCLASS '.' ee ID
-                  | MYCLASS '.' ee keyword
-                  ;
-
-cast_operator: CBOOL | CBYTE | CSBYTE | CUSHORT | CSHORT
-             | CINT | CUINT | CLNG | CULNG | CCHAR
-             | CSTR | CDEC | CSNG | CDBL | COBJ
-             ;
-
-new_expr: NEW ID                                                     %prec NEW
-        | NEW ID call_args                                           %prec NEW
-        | NEW ID call_args collection_initializer                    %prec NEW
-        | NEW primitive_type                                         %prec NEW
-        | NEW primitive_type array_modifier                          %prec NEW
-        | NEW primitive_type array_modifier collection_initializer   %prec NEW
-        ;
-
-array_modifier: '(' ee ')'
-              | '(' ee expr ee ')'
-              ;
-
-call_args: '(' ee ')'
-         | '(' ee arg_list ee ')'
-         ;
-
-arg_list: expr_or_initializer
-        | arg_list ',' ee expr_or_initializer
-        ;
-
-expr_or_initializer: expr
-                   | collection_initializer
-                   ;
-
-collection_initializer: '{' ee expr_list ee '}'
-                      | '{' ee '}'
-                      ;
-
-expr_list: expr
-         | expr_list ',' ee expr
-         ;
-
 /* Simple statements */
 
 simple_stmt: call_stmt
@@ -446,6 +347,105 @@ type_list: simple_type
 array_type: ID '(' ee ')'
           | primitive_type '(' ee ')'
           ;
+
+/* Expressions */
+
+expr: postfix_expr
+    | expr '+' ee expr
+    | expr '-' ee expr
+    | expr '*' ee expr
+    | expr '/' ee expr
+    | expr '\\' ee expr
+    | expr '^' ee expr
+    | expr '&' ee expr
+    | expr '>' ee expr
+    | expr '<' ee expr
+    | expr '=' ee expr
+    | expr "<>" ee expr
+    | expr "<=" ee expr
+    | expr ">=" ee expr
+    | expr AND ee expr
+    | expr AND_ALSO ee expr
+    | expr OR_ELSE ee expr
+    | expr OR ee expr
+    | expr XOR ee expr
+    | expr MOD ee expr
+    | expr "<<" ee expr
+    | expr ">>" ee expr
+    | expr IS ee expr
+    | expr ISNOT ee expr
+    | '+' expr %prec UNPLUS
+    | '-' expr %prec UNMINUS
+    | NOT expr
+    ;
+
+postfix_expr: primary_expr
+            | access_expr
+            ;
+
+access_expr: postfix_expr call_args
+           | postfix_expr '.' ee ID
+           | postfix_expr '.' ee keyword
+           ;
+
+primary_expr: literal
+            | ID
+            | ME
+            | primitive_type
+            | '(' ee expr ee ')'
+            | cast_operator '(' ee expr ee ')'
+            | CTYPE '(' ee expr ',' ee type ee ')'
+            | IF '(' ee expr ',' ee expr ee ')'
+            | IF '(' ee expr ',' ee expr ',' ee expr ee ')'
+            | base_member_access
+            | new_expr
+            ;
+
+literal: INT_LIT | FLOAT_LIT | STR_LIT | CHAR_LIT | BOOL_LIT | NOTHING
+       ;
+
+base_member_access: MYBASE '.' ee ID
+                  | MYBASE '.' ee keyword
+                  | MYCLASS '.' ee ID
+                  | MYCLASS '.' ee keyword
+                  ;
+
+cast_operator: CBOOL | CBYTE | CSBYTE | CUSHORT | CSHORT
+             | CINT | CUINT | CLNG | CULNG | CCHAR
+             | CSTR | CDEC | CSNG | CDBL | COBJ
+             ;
+
+new_expr: NEW ID                                                     %prec NEW
+        | NEW ID call_args                                           %prec NEW
+        | NEW ID call_args collection_initializer                    %prec NEW
+        | NEW primitive_type                                         %prec NEW
+        | NEW primitive_type array_modifier                          %prec NEW
+        | NEW primitive_type array_modifier collection_initializer   %prec NEW
+        ;
+
+array_modifier: '(' ee ')'
+              | '(' ee expr ee ')'
+              ;
+
+call_args: '(' ee ')'
+         | '(' ee arg_list ee ')'
+         ;
+
+arg_list: expr_or_initializer
+        | arg_list ',' ee expr_or_initializer
+        ;
+
+expr_or_initializer: expr
+                   | collection_initializer
+                   ;
+
+collection_initializer: '{' ee expr_list ee '}'
+                      | '{' ee '}'
+                      ;
+
+expr_list: expr
+         | expr_list ',' ee expr
+         ;
 
 /* Keywords */
 
