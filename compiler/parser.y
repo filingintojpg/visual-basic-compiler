@@ -208,17 +208,17 @@ lvalue: ID
 
 /* Statements and blocks */
 
-stmt: simple_stmt ecl
-    | if_stmt ecl
-    | select_stmt ecl
-    | for_stmt ecl
-    | do_stmt ecl
-    | while_stmt ecl
-    | var_declaration ecl
+stmt: simple_stmt
+    | if_stmt
+    | select_stmt
+    | for_stmt
+    | do_stmt
+    | while_stmt
+    | var_declaration
     ;
 
-block: stmt
-     | block stmt
+block: stmt ecl
+     | block stmt ecl
      ;
 
 block_e: %empty
