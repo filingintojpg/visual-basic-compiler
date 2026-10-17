@@ -186,8 +186,8 @@ block_e: ecl
 
 stmt: ID
     | access_expr
-    | CALL expr
     | base_member_access
+    | CALL expr
     | lvalue '=' ee expr_or_initializer
     | lvalue "+=" ee expr
     | lvalue "-=" ee expr
