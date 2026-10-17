@@ -124,10 +124,14 @@ class_member: field_declaration
 
 /* Fields */
 
-field_declaration: member_modifiers DIM shared_e var_declarator_list
-                 | member_modifiers CONST shared_e var_declarator_list
-                 | DIM shared_e var_declarator_list
-                 | CONST shared_e var_declarator_list
+field_declaration: member_modifiers DIM SHARED var_declarator_list
+                 | member_modifiers DIM var_declarator_list
+                 | member_modifiers CONST SHARED var_declarator_list
+                 | member_modifiers CONST var_declarator_list
+                 | DIM SHARED var_declarator_list
+                 | DIM var_declarator_list
+                 | CONST SHARED var_declarator_list
+                 | CONST var_declarator_list
                  | member_modifiers var_declarator_list
                  ;
 
@@ -136,10 +140,6 @@ member_modifiers: access_modifier
                 | access_modifier SHARED
                 | SHARED access_modifier
                 ;
-
-shared_e: %empty
-        | SHARED
-        ;
 
 /* Methods */
 
