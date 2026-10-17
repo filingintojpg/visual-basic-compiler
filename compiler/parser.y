@@ -124,15 +124,15 @@ class_member: field_declaration
 
 /* Fields */
 
-field_declaration: member_modifiers DIM SHARED var_declarator_list
-                 | member_modifiers DIM var_declarator_list
-                 | member_modifiers CONST SHARED var_declarator_list
-                 | member_modifiers CONST var_declarator_list
-                 | DIM SHARED var_declarator_list
-                 | DIM var_declarator_list
-                 | CONST SHARED var_declarator_list
-                 | CONST var_declarator_list
-                 | member_modifiers var_declarator_list
+field_declaration: member_modifiers DIM SHARED var_declaration
+                 | member_modifiers DIM var_declaration
+                 | member_modifiers CONST SHARED var_declaration
+                 | member_modifiers CONST var_declaration
+                 | DIM SHARED var_declaration
+                 | DIM var_declaration
+                 | CONST SHARED var_declaration
+                 | CONST var_declaration
+                 | member_modifiers var_declaration
                  ;
 
 member_modifiers: access_modifier
@@ -224,8 +224,8 @@ stmt: ID
     | DO block_e LOOP UNTIL expr
     | DO WHILE expr block_e LOOP
     | DO UNTIL expr block_e LOOP
-    | DIM var_declarator_list
-    | CONST var_declarator_list
+    | DIM var_declaration
+    | CONST var_declaration
     ;
 
 lvalue: ID
@@ -266,11 +266,11 @@ is_e: %empty
 
 /* Variable declarations */
 
-var_declarator_list: var_declarator
-                   | var_name
-                   | var_names
-                   | var_declarator ',' ee var_declarator_list
-                   ;
+var_declaration: var_declarator
+               | var_name
+               | var_names
+               | var_declarator ',' ee var_declaration
+               ;
 
 var_declarator: var_name AS type '=' ee expr_or_initializer
               | var_name AS type
