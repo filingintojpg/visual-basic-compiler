@@ -237,8 +237,7 @@ else_if_stmts: %empty
 
 /* Select Case */
 
-select_stmt: SELECT expr ecl case_stmts END SELECT
-           | SELECT CASE expr ecl case_stmts END SELECT
+select_stmt: SELECT CASE expr ecl case_stmts END SELECT
            ;
 
 case_stmts: %empty
