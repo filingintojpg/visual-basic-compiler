@@ -168,10 +168,12 @@ parameter_list_e: ee
                 ;
 
 parameter: ID
-         | ID AS type
+         | ID AS simple_type
+         | ID AS array_type
          | ID '(' ee ')'
-         | ID '(' ee ')' AS type
-         | OPTIONAL ID AS type '=' ee expr
+         | ID '(' ee ')' AS simple_type
+         | OPTIONAL ID '=' ee expr
+         | OPTIONAL ID AS simple_type '=' ee expr
          ;
 
 /* Statements */
