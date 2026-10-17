@@ -207,12 +207,21 @@ stmt: ID
     | EXIT FOR
     | EXIT WHILE
     | EXIT SELECT
-    | if_stmt
-    | select_stmt
-    | for_stmt
-    | do_stmt
-    | while_stmt
-    | var_declaration
+    | IF expr THEN block_e else_if_stmts END IF
+    | IF expr THEN block_e else_if_stmts ELSE block_e END IF
+    | SELECT CASE expr ecl case_stmts END SELECT
+    | FOR for_loop_variable '=' ee expr TO expr block_e NEXT
+    | FOR for_loop_variable '=' ee expr TO expr STEP expr block_e NEXT
+    | FOR EACH for_loop_variable IN ee expr_or_initializer block_e NEXT
+    | WHILE expr block_e END WHILE
+    | WHILE expr block_e WEND
+    | DO block_e LOOP
+    | DO block_e LOOP WHILE expr
+    | DO block_e LOOP UNTIL expr
+    | DO WHILE expr block_e LOOP
+    | DO UNTIL expr block_e LOOP
+    | DIM var_declarator_list
+    | CONST var_declarator_list
     ;
 
 lvalue: ID
@@ -222,18 +231,11 @@ lvalue: ID
 
 /* If */
 
-if_stmt: IF expr THEN block_e else_if_stmts END IF
-       | IF expr THEN block_e else_if_stmts ELSE block_e END IF
-       ;
-
 else_if_stmts: %empty
              | else_if_stmts ELSEIF expr THEN block_e
              ;
 
 /* Select Case */
-
-select_stmt: SELECT CASE expr ecl case_stmts END SELECT
-           ;
 
 case_stmts: %empty
           | CASE ELSE block_e
@@ -263,31 +265,11 @@ comparison_op: '=' | "<>" | '<' | '>' | "<=" | ">="
 
 /* Loops */
 
-while_stmt: WHILE expr block_e END WHILE
-          | WHILE expr block_e WEND
-          ;
-
-for_stmt: FOR for_loop_variable '=' ee expr TO expr block_e NEXT
-        | FOR for_loop_variable '=' ee expr TO expr STEP expr block_e NEXT
-        | FOR EACH for_loop_variable IN ee expr_or_initializer block_e NEXT
-        ;
-
 for_loop_variable: ID
                  | ID AS type
                  ;
 
-do_stmt: DO block_e LOOP
-       | DO block_e LOOP WHILE expr
-       | DO block_e LOOP UNTIL expr
-       | DO WHILE expr block_e LOOP
-       | DO UNTIL expr block_e LOOP
-       ;
-
 /* Variable declarations */
-
-var_declaration: DIM var_declarator_list
-               | CONST var_declarator_list
-               ;
 
 var_declarator_list: var_declarator
                    | var_name
