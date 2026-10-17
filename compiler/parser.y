@@ -372,9 +372,7 @@ base_member_access: MYBASE '.' ee ID
                   | MYCLASS '.' ee keyword
                   ;
 
-cast_operator: CBOOL | CBYTE | CSBYTE | CUSHORT | CSHORT
-             | CINT | CUINT | CLNG | CULNG | CCHAR
-             | CSTR | CDEC | CSNG | CDBL | COBJ
+cast_operator: CBOOL | CBYTE | CSBYTE | CUSHORT | CSHORT | CINT | CUINT | CLNG | CULNG | CCHAR | CSTR | CDEC | CSNG | CDBL | COBJ
              ;
 
 new_expr: NEW ID                                                     %prec NEW
