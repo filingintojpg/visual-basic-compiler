@@ -338,7 +338,7 @@ expr: ID
     | MYBASE '.' ee id_or_kw
     | MYCLASS '.' ee id_or_kw
     | '{' expr_list_e '}'
-    | cast_operator '(' ee expr ee ')'               // Оператор преобразования в другой тип, не функция
+    | cast_operator '(' ee expr ee ')'              // Оператор преобразования в другой тип, не функция
     | CTYPE '(' ee expr ',' ee type ee ')'          // Оператор преобразования в другой тип, не функция
     | IF '(' ee expr ',' ee expr ',' ee expr ee ')' // Тернарный оператор
     | IF '(' ee expr ',' ee expr ee ')'             // Не тернарный оператор: если expr_1 является NOTHING, то выбрать expr_2
