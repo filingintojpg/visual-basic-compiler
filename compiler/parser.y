@@ -172,7 +172,7 @@ parameter: ID
          | ID '(' ee ')'
          | ID '(' ee ')' AS simple_type
          | OPTIONAL ID '=' ee expr
-         | OPTIONAL ID AS simple_type '=' ee expr
+         | OPTIONAL ID AS type '=' ee expr
          ;
 
 /* Statements */
