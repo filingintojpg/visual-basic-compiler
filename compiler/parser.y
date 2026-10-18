@@ -271,19 +271,6 @@ var_declarator: ID
               | ID AS type '=' ee expr
               ;
 
-/* Types */
-
-type: simple_type
-    | simple_type '(' ee ')'
-    ;
-
-simple_type: ID
-           | primitive_type
-           ;
-
-primitive_type: BYTE | SBYTE | USHORT | SHORT | UINTEGER | INTEGER | ULONG | LONG | BOOLEAN | CHAR | STRING | DECIMAL | SINGLE | DOUBLE | OBJECT
-              ;
-
 /* Expressions */
 
 expr: ID
@@ -338,14 +325,14 @@ expr: ID
     | '(' ee expr ee ')'
     | expr '(' ee ')'
     | expr '(' ee expr_list ee')'
-    | cast_operator '(' ee expr_list ee')'
-    | CTYPE '(' ee expr ',' ee type ee ')'
-    | IF '(' ee expr ',' ee expr ',' ee expr ee ')'
-    | IF '(' ee expr ',' ee expr ee ')'
     | expr '.' ee id_or_kw
     | MYBASE '.' ee id_or_kw
     | MYCLASS '.' ee id_or_kw
     | collection_initializer
+    | cast_operator '(' ee expr_list ee')'
+    | CTYPE '(' ee expr ',' ee type ee ')'
+    | IF '(' ee expr ',' ee expr ',' ee expr ee ')'
+    | IF '(' ee expr ',' ee expr ee ')'
     | NEW ID                                                            %prec NEW
     | NEW ID '(' ee ')'                                                 %prec NEW
     | NEW ID '(' ee ')' collection_initializer                          %prec NEW
@@ -358,6 +345,10 @@ expr: ID
     | NEW primitive_type '(' ee expr_list ee ')' collection_initializer %prec NEW
     ;
 
+expr_list: expr
+         | expr_list ',' ee expr
+         ;
+
 cast_operator: CBOOL | CBYTE | CSBYTE | CUSHORT | CSHORT | CINT | CUINT | CLNG | CULNG | CCHAR | CSTR | CDEC | CSNG | CDBL | COBJ
              ;
 
@@ -365,9 +356,20 @@ collection_initializer: '{' ee expr_list ee '}'
                       | '{' ee '}'
                       ;
 
-expr_list: expr
-         | expr_list ',' ee expr
-         ;
+/* Types */
+
+type: simple_type
+    | simple_type '(' ee ')'
+    ;
+
+simple_type: ID
+           | primitive_type
+           ;
+
+primitive_type: BYTE | SBYTE | USHORT | SHORT | UINTEGER | INTEGER | ULONG | LONG | BOOLEAN | CHAR | STRING | DECIMAL | SINGLE | DOUBLE | OBJECT
+              ;
+
+/* Keywords */
 
 id_or_kw: ID
         | IF | THEN | ELSE | ELSEIF | END | SELECT | CASE | TO
@@ -376,8 +378,9 @@ id_or_kw: ID
         | ME | MYBASE | MYCLASS | NEW | AS | OF
         | DIM | CONST | STATIC | FUNCTION | SUB | CLASS | STRUCT | INHERITS
         | BYREF | BYVAL | PARAMARRAY | OPTIONAL
-        | access_modifier | SHARED | READONLY
-        | primitive_type | cast_operator | CTYPE
+        | PUBLIC | PRIVATE | PROTECTED | SHARED | READONLY
+        | BYTE | SBYTE | USHORT | SHORT | UINTEGER | INTEGER | ULONG | LONG | BOOLEAN | CHAR | STRING | DECIMAL | SINGLE | DOUBLE | OBJECT 
+        | CBOOL | CBYTE | CSBYTE | CUSHORT | CSHORT | CINT | CUINT | CLNG | CULNG | CCHAR | CSTR | CDEC | CSNG | CDBL | COBJ | CTYPE
         ;
 
 /* Line breaks and statement separators */
