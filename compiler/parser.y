@@ -145,12 +145,18 @@ member_modifiers: access_modifier
 
 function_declaration: member_modifiers FUNCTION ID '(' parameter_list_e ')' AS type block_e END FUNCTION
                     | member_modifiers FUNCTION ID '(' parameter_list_e ')' block_e END FUNCTION
+                    | member_modifiers FUNCTION ID AS type block_e END FUNCTION
+                    | member_modifiers FUNCTION ID block_e END FUNCTION
                     | FUNCTION ID '(' parameter_list_e ')' AS type block_e END FUNCTION
                     | FUNCTION ID '(' parameter_list_e ')' block_e END FUNCTION
+                    | FUNCTION ID AS type block_e END FUNCTION
+                    | FUNCTION ID block_e END FUNCTION
                     ;
 
 sub_declaration: member_modifiers SUB ID '(' parameter_list_e ')' block_e END SUB
+               | member_modifiers SUB ID block_e END SUB
                | SUB ID '(' parameter_list_e ')' block_e END SUB
+               | SUB ID block_e END SUB
                ;
 
 parameter_list: parameter
@@ -179,8 +185,12 @@ block_e: ecl
        | ecl block
        ;
 
-stmt: expr '(' expr_list_e ')'
-    | CALL expr '(' expr_list_e ')'
+stmt: ID
+    | expr '(' expr_list_e ')'
+    | expr '.' ee id_or_kw
+    | MYBASE '.' ee id_or_kw
+    | MYCLASS '.' ee id_or_kw
+    | CALL expr
     | expr '=' ee expr
     | expr "+=" ee expr
     | expr "-=" ee expr
