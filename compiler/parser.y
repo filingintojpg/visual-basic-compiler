@@ -200,6 +200,8 @@ stmt: expr '(' expr_list_e ')'
     | EXIT FOR
     | EXIT WHILE
     | EXIT SELECT
+    | EXIT FUNCTION
+    | EXIT SUB
     | IF expr THEN block_e else_if_stmts END IF
     | IF expr THEN block_e else_if_stmts ELSE block_e END IF
     | SELECT CASE expr ecl case_stmts END SELECT
