@@ -327,16 +327,16 @@ expr: ID
     | CTYPE '(' ee expr ',' ee type ee ')'
     | IF '(' ee expr ',' ee expr ',' ee expr ee ')'
     | IF '(' ee expr ',' ee expr ee ')'
-    | NEW ID                                                            %prec NEW
-    | NEW ID '(' ee ')'                                                 %prec NEW
-    | NEW ID '(' ee ')' collection_initializer                          %prec NEW
-    | NEW ID '(' ee expr_list ee ')'                                    %prec NEW
-    | NEW ID '(' ee expr_list ee ')' collection_initializer             %prec NEW
-    | NEW primitive_type                                                %prec NEW
-    | NEW primitive_type '(' ee ')'                                     %prec NEW
-    | NEW primitive_type '(' ee ')' collection_initializer              %prec NEW
-    | NEW primitive_type '(' ee expr_list ee ')'                        %prec NEW
-    | NEW primitive_type '(' ee expr_list ee ')' collection_initializer %prec NEW
+    | NEW ID %prec NEW
+    | NEW ID '(' ee ')'
+    | NEW ID '(' ee ')' collection_initializer
+    | NEW ID '(' ee expr_list ee ')'
+    | NEW ID '(' ee expr_list ee ')' collection_initializer
+    | NEW primitive_type %prec NEW
+    | NEW primitive_type '(' ee ')'
+    | NEW primitive_type '(' ee ')' collection_initializer
+    | NEW primitive_type '(' ee expr_list ee ')'
+    | NEW primitive_type '(' ee expr_list ee ')' collection_initializer
     ;
 
 expr_list: expr
