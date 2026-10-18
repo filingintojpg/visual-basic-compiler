@@ -179,10 +179,8 @@ block_e: ecl
        | ecl block
        ;
 
-stmt: expr '(' ee ')'
-    | expr '(' ee expr_list ee ')'
-    | CALL expr '(' ee ')'
-    | CALL expr '(' ee expr_list ee ')'
+stmt: expr '(' expr_list_e ')'
+    | CALL expr '(' expr_list_e ')'
     | expr '=' ee expr
     | expr "+=" ee expr
     | expr "-=" ee expr
@@ -318,38 +316,33 @@ expr: ID
     | '+' expr %prec UNPLUS
     | '-' expr %prec UNMINUS
     | '(' ee expr ee ')'
-    | expr '(' ee ')'
-    | expr '(' ee expr_list ee')'
+    | expr '(' expr_list_e ')'
     | expr '.' ee id_or_kw
     | MYBASE '.' ee id_or_kw
     | MYCLASS '.' ee id_or_kw
-    | collection_initializer
+    | '{' expr_list_e '}'
     | cast_operator '(' ee expr ee')'
     | CTYPE '(' ee expr ',' ee type ee ')'
     | IF '(' ee expr ',' ee expr ',' ee expr ee ')'
     | IF '(' ee expr ',' ee expr ee ')'
     | NEW ID %prec NEW
-    | NEW ID '(' ee ')'
-    | NEW ID '(' ee ')' collection_initializer
-    | NEW ID '(' ee expr_list ee ')'
-    | NEW ID '(' ee expr_list ee ')' collection_initializer
+    | NEW ID '(' expr_list_e ')'
+    | NEW ID '(' expr_list_e ')' '{' expr_list_e '}'
     | NEW primitive_type %prec NEW
-    | NEW primitive_type '(' ee ')'
-    | NEW primitive_type '(' ee ')' collection_initializer
-    | NEW primitive_type '(' ee expr_list ee ')'
-    | NEW primitive_type '(' ee expr_list ee ')' collection_initializer
+    | NEW primitive_type '(' expr_list_e ')'
+    | NEW primitive_type '(' expr_list_e ')' '{' expr_list_e '}'
     ;
 
-expr_list: expr
+expr_list: ee expr
          | expr_list ',' ee expr
          ;
 
+expr_list_e: ee
+           | expr_list ee
+           ;
+
 cast_operator: CBOOL | CBYTE | CSBYTE | CUSHORT | CSHORT | CINT | CUINT | CLNG | CULNG | CCHAR | CSTR | CDEC | CSNG | CDBL | COBJ
              ;
-
-collection_initializer: '{' ee expr_list ee '}'
-                      | '{' ee '}'
-                      ;
 
 /* Types */
 
