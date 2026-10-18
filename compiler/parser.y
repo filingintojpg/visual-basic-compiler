@@ -185,22 +185,21 @@ block_e: ecl
        | ecl block
        ;
 
-stmt: ID
-    | access_expr
-    | base_member_access
+stmt: expr '(' ee ')'
+    | expr '(' ee expr_list ee ')'
     | CALL expr
-    | lvalue '=' ee expr_or_initializer
-    | lvalue "+=" ee expr
-    | lvalue "-=" ee expr
-    | lvalue "*=" ee expr
-    | lvalue "/=" ee expr
-    | lvalue "\\=" ee expr
-    | lvalue "^=" ee expr
-    | lvalue "&=" ee expr
-    | lvalue "<<=" ee expr
-    | lvalue ">>=" ee expr
+    | expr '=' ee expr
+    | expr "+=" ee expr
+    | expr "-=" ee expr
+    | expr "*=" ee expr
+    | expr "/=" ee expr
+    | expr "\\=" ee expr
+    | expr "^=" ee expr
+    | expr "&=" ee expr
+    | expr "<<=" ee expr
+    | expr ">>=" ee expr
     | RETURN
-    | RETURN expr_or_initializer
+    | RETURN expr
     | CONTINUE DO
     | CONTINUE FOR
     | CONTINUE WHILE
@@ -215,8 +214,8 @@ stmt: ID
     | FOR ID AS simple_type '=' ee expr TO expr block_e NEXT
     | FOR ID '=' ee expr TO expr STEP expr block_e NEXT
     | FOR ID '=' ee expr TO expr block_e NEXT
-    | FOR EACH ID AS simple_type IN ee expr_or_initializer block_e NEXT
-    | FOR EACH ID IN ee expr_or_initializer block_e NEXT
+    | FOR EACH ID AS simple_type IN ee expr block_e NEXT
+    | FOR EACH ID IN ee expr block_e NEXT
     | WHILE expr block_e END WHILE
     | DO block_e LOOP
     | DO block_e LOOP WHILE expr
@@ -226,11 +225,6 @@ stmt: ID
     | DIM var_declaration
     | CONST var_declaration
     ;
-
-lvalue: ID
-      | access_expr
-      | base_member_access
-      ;
 
 /* If */
 
@@ -270,13 +264,11 @@ var_declaration: var_declarator
                ;
 
 var_declarator: ID
+              | ID '=' ee expr
               | ID '(' ee ')'
               | ID '(' ee expr ee ')'
-              | ID '=' ee expr_or_initializer
-              | ID AS new_expr
               | ID AS type
-              | ID AS simple_type '=' ee expr
-              | ID AS simple_type '(' ee ')' '=' ee collection_initializer
+              | ID AS type '=' ee expr
               ;
 
 /* Types */
@@ -294,7 +286,29 @@ primitive_type: BYTE | SBYTE | USHORT | SHORT | UINTEGER | INTEGER | ULONG | LON
 
 /* Expressions */
 
-expr: postfix_expr
+expr: ID
+    | INT_LIT
+    | FLOAT_LIT
+    | STR_LIT
+    | CHAR_LIT
+    | BOOL_LIT
+    | NOTHING
+    | ME
+    | BYTE
+    | SBYTE
+    | USHORT
+    | SHORT
+    | UINTEGER
+    | INTEGER
+    | ULONG
+    | LONG
+    | BOOLEAN
+    | CHAR
+    | STRING
+    | DECIMAL
+    | SINGLE
+    | DOUBLE
+    | OBJECT
     | expr '+' ee expr
     | expr '-' ee expr
     | expr '*' ee expr
@@ -318,68 +332,34 @@ expr: postfix_expr
     | expr ">>" ee expr
     | expr IS ee expr
     | expr ISNOT ee expr
+    | NOT expr
     | '+' expr %prec UNPLUS
     | '-' expr %prec UNMINUS
-    | NOT expr
+    | '(' ee expr ee ')'
+    | expr '(' ee ')'
+    | expr '(' ee expr_list ee')'
+    | cast_operator '(' ee expr_list ee')'
+    | CTYPE '(' ee expr ',' ee type ee ')'
+    | IF '(' ee expr ',' ee expr ',' ee expr ee ')'
+    | IF '(' ee expr ',' ee expr ee ')'
+    | expr '.' ee id_or_kw
+    | MYBASE '.' ee id_or_kw
+    | MYCLASS '.' ee id_or_kw
+    | collection_initializer
+    | NEW ID                                                            %prec NEW
+    | NEW ID '(' ee ')'                                                 %prec NEW
+    | NEW ID '(' ee ')' collection_initializer                          %prec NEW
+    | NEW ID '(' ee expr_list ee ')'                                    %prec NEW
+    | NEW ID '(' ee expr_list ee ')' collection_initializer             %prec NEW
+    | NEW primitive_type                                                %prec NEW
+    | NEW primitive_type '(' ee ')'                                     %prec NEW
+    | NEW primitive_type '(' ee ')' collection_initializer              %prec NEW
+    | NEW primitive_type '(' ee expr_list ee ')'                        %prec NEW
+    | NEW primitive_type '(' ee expr_list ee ')' collection_initializer %prec NEW
     ;
-
-postfix_expr: primary_expr
-            | access_expr
-            ;
-
-access_expr: postfix_expr call_args
-           | postfix_expr '.' ee ID
-           | postfix_expr '.' ee keyword
-           ;
-
-primary_expr: literal
-            | ID
-            | ME
-            | primitive_type
-            | '(' ee expr ee ')'
-            | cast_operator '(' ee expr ee ')'
-            | CTYPE '(' ee expr ',' ee type ee ')'
-            | IF '(' ee expr ',' ee expr ee ')'
-            | IF '(' ee expr ',' ee expr ',' ee expr ee ')'
-            | base_member_access
-            | new_expr
-            ;
-
-literal: INT_LIT | FLOAT_LIT | STR_LIT | CHAR_LIT | BOOL_LIT | NOTHING
-       ;
-
-base_member_access: MYBASE '.' ee ID
-                  | MYBASE '.' ee keyword
-                  | MYCLASS '.' ee ID
-                  | MYCLASS '.' ee keyword
-                  ;
 
 cast_operator: CBOOL | CBYTE | CSBYTE | CUSHORT | CSHORT | CINT | CUINT | CLNG | CULNG | CCHAR | CSTR | CDEC | CSNG | CDBL | COBJ
              ;
-
-new_expr: NEW ID                                                     %prec NEW
-        | NEW ID call_args                                           %prec NEW
-        | NEW ID call_args collection_initializer                    %prec NEW
-        | NEW primitive_type                                         %prec NEW
-        | NEW primitive_type array_modifier                          %prec NEW
-        | NEW primitive_type array_modifier collection_initializer   %prec NEW
-        ;
-
-array_modifier: '(' ee ')'
-              | '(' ee expr ee ')'
-              ;
-
-call_args: '(' ee ')'
-         | '(' ee arg_list ee ')'
-         ;
-
-arg_list: expr_or_initializer
-        | arg_list ',' ee expr_or_initializer
-        ;
-
-expr_or_initializer: expr
-                   | collection_initializer
-                   ;
 
 collection_initializer: '{' ee expr_list ee '}'
                       | '{' ee '}'
@@ -389,17 +369,16 @@ expr_list: expr
          | expr_list ',' ee expr
          ;
 
-/* Keywords */
-
-keyword: IF | THEN | ELSE | ELSEIF | END | SELECT | CASE | TO
-       | FOR | EACH | WHILE | NEXT | IN | UNTIL | LOOP | DO | STEP
-       | CALL | GOTO | CONTINUE | EXIT | STOP | RETURN | REDIM | ERASE
-       | ME | MYBASE | MYCLASS | NEW | AS | OF
-       | DIM | CONST | STATIC | FUNCTION | SUB | CLASS | STRUCT | INHERITS
-       | BYREF | BYVAL | PARAMARRAY | OPTIONAL
-       | access_modifier | SHARED | READONLY
-       | primitive_type | cast_operator | CTYPE
-       ;
+id_or_kw: ID
+        | IF | THEN | ELSE | ELSEIF | END | SELECT | CASE | TO
+        | FOR | EACH | WHILE | NEXT | IN | UNTIL | LOOP | DO | STEP
+        | CALL | GOTO | CONTINUE | EXIT | STOP | RETURN | REDIM | ERASE
+        | ME | MYBASE | MYCLASS | NEW | AS | OF
+        | DIM | CONST | STATIC | FUNCTION | SUB | CLASS | STRUCT | INHERITS
+        | BYREF | BYVAL | PARAMARRAY | OPTIONAL
+        | access_modifier | SHARED | READONLY
+        | primitive_type | cast_operator | CTYPE
+        ;
 
 /* Line breaks and statement separators */
 
