@@ -181,7 +181,8 @@ block_e: ecl
 
 stmt: expr '(' ee ')'
     | expr '(' ee expr_list ee ')'
-    | CALL expr
+    | CALL expr '(' ee ')'
+    | CALL expr '(' ee expr_list ee ')'
     | expr '=' ee expr
     | expr "+=" ee expr
     | expr "-=" ee expr
