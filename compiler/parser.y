@@ -270,10 +270,17 @@ var_declaration: var_declarator
 
 var_declarator: ID
               | ID '=' ee expr
-              | ID '(' ee ')'
-              | ID '(' ee expr ee ')'
               | ID AS type
               | ID AS type '=' ee expr
+              | ID AS NEW ID
+              | ID AS NEW ID '(' expr_list_e ')'
+              | ID AS NEW ID '(' expr_list_e ')' '{' expr_list_e '}'
+              | ID AS NEW primitive_type
+              | ID AS NEW primitive_type '(' expr_list_e ')'
+              | ID AS NEW primitive_type '(' expr_list_e ')' '{' expr_list_e '}'
+              | ID '(' expr_list_e ')'
+              | ID '(' expr_list_e ')' AS simple_type
+              | ID '(' expr_list_e ')' AS simple_type '=' ee expr
               ;
 
 /* Expressions */
