@@ -324,7 +324,7 @@ expr: ID
     | MYBASE '.' ee id_or_kw
     | MYCLASS '.' ee id_or_kw
     | collection_initializer
-    | cast_operator '(' ee expr_list ee')'
+    | cast_operator '(' ee expr ee')'
     | CTYPE '(' ee expr ',' ee type ee ')'
     | IF '(' ee expr ',' ee expr ',' ee expr ee ')'
     | IF '(' ee expr ',' ee expr ee ')'
