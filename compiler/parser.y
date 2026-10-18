@@ -145,7 +145,7 @@ member_modifiers: access_modifier
 
 function_declaration: member_modifiers FUNCTION ID '(' parameter_list_e ')' AS type block_e END FUNCTION
                     | member_modifiers FUNCTION ID '(' parameter_list_e ')' block_e END FUNCTION
-                    | member_modifiers FUNCTION ID AS type block_e END FUNCTION
+                    | member_modifiers FUNCTION ID AS type block_e END FUNCTION // Функцию без аргументов можно объявить без скобок
                     | member_modifiers FUNCTION ID block_e END FUNCTION
                     | FUNCTION ID '(' parameter_list_e ')' AS type block_e END FUNCTION
                     | FUNCTION ID '(' parameter_list_e ')' block_e END FUNCTION
@@ -154,7 +154,7 @@ function_declaration: member_modifiers FUNCTION ID '(' parameter_list_e ')' AS t
                     ;
 
 sub_declaration: member_modifiers SUB ID '(' parameter_list_e ')' block_e END SUB
-               | member_modifiers SUB ID block_e END SUB
+               | member_modifiers SUB ID block_e END SUB // Процедуру без аргументов можно объявить без скобок
                | SUB ID '(' parameter_list_e ')' block_e END SUB
                | SUB ID block_e END SUB
                ;
@@ -185,12 +185,12 @@ block_e: ecl
        | ecl block
        ;
 
-stmt: ID
-    | expr '(' expr_list_e ')'
-    | expr '.' ee id_or_kw
-    | MYBASE '.' ee id_or_kw
-    | MYCLASS '.' ee id_or_kw
-    | CALL expr
+stmt: ID                        // Вызов метода без скобок: MyFunc (только ID, потому что kw разрешается только после точек. [Function] - ID; SomeClass.Function - kw)
+    | expr '(' expr_list_e ')'  // Вызов метода со скобками любой вложенности (в том числе MyBase.MyOther.MyFunc())
+    | expr '.' ee id_or_kw      // Вызов метода без скобок любой вложенности (в том числе MyBase.MyOther.MyFunc)
+    | MYBASE '.' ee id_or_kw    // Вызов метода родителя вложенности 1 без скобок: MyBase.MyFunc; после '.' может стоять ID или kw без экранирования MyBase.Function
+    | MYCLASS '.' ee id_or_kw   // Вызов метода класса вложенности 1 без скобок: MyClass.MyFunc; после '.' может стоять ID или kw без экранирования MyClass.Function
+    | CALL expr                 // Вызов метода
     | expr '=' ee expr
     | expr "+=" ee expr
     | expr "-=" ee expr
@@ -203,14 +203,14 @@ stmt: ID
     | expr ">>=" ee expr
     | RETURN
     | RETURN expr
-    | CONTINUE DO
+    | CONTINUE DO       // Находят ближайший по вложенности такой цикл и приступают к следующей его итерации
     | CONTINUE FOR
     | CONTINUE WHILE
-    | EXIT DO
+    | EXIT DO           // Находят ближайший по вложенности такой цикл и выходят из всех циклов вплоть до нужного
     | EXIT FOR
     | EXIT WHILE
     | EXIT SELECT
-    | EXIT FUNCTION
+    | EXIT FUNCTION     // Возвращает дефолт значение для возвращаемого типа: для Integer и Double 0, для Boolean False, для String Nothing и т. д.
     | EXIT SUB
     | IF expr THEN block_e else_if_stmts END IF
     | IF expr THEN block_e else_if_stmts ELSE block_e END IF
@@ -241,7 +241,7 @@ else_if_stmts: %empty
 
 case_stmts: %empty
           | case_stmts CASE case_exprs block_e
-          | case_stmts CASE ELSE block_e
+          | case_stmts CASE ELSE block_e // ELSE на любом месте будет валидироваться на семантике - должен быть последним
           ;
 
 case_exprs: case_expr
@@ -268,17 +268,17 @@ var_declaration: var_declarator
                | var_declaration ',' ee var_declarator
                ;
 
-var_declarator: ID
-              | ID '=' ee expr
-              | ID AS type
-              | ID AS type '=' ee expr
-              | ID AS NEW ID
-              | ID AS NEW ID '(' expr_list_e ')'
-              | ID AS NEW primitive_type
-              | ID AS NEW primitive_type '(' ee ')'
-              | ID '(' expr_list_e ')'
-              | ID '(' expr_list_e ')' AS simple_type
-              | ID '(' expr_list_e ')' AS simple_type '=' ee expr
+var_declarator: ID                                                  // x
+              | ID '=' ee expr                                      // x = 1, x = MyFunc(), x = {1, 2, 3}, ...
+              | ID AS type                                          // x As Integer, x As Integer(), x As MyType, x As MyType()
+              | ID AS type '=' ee expr                              // x As MyType = 1, x As MyType() = {1, 2, 3}, ...
+              | ID AS NEW ID                                        // x As New MyType
+              | ID AS NEW ID '(' expr_list_e ')'                    // x As New MyType(1, true)
+              | ID AS NEW primitive_type                            // x As New Integer
+              | ID AS NEW primitive_type '(' ee ')'                 // x As New Integer()
+              | ID '(' expr_list_e ')'                              // x(), x(2)
+              | ID '(' expr_list_e ')' AS simple_type               // x() As MyType, x(2) As MyType
+              | ID '(' expr_list_e ')' AS simple_type '=' ee expr   // x() As MyType = {1, 2, 3}
               ;
 
 /* Expressions */
@@ -290,8 +290,8 @@ expr: ID
     | CHAR_LIT
     | BOOL_LIT
     | NOTHING
-    | ME
-    | BYTE
+    | ME        // this
+    | BYTE      // Примитивные типы являеются expr, так как имеют свои статические поля и методы
     | SBYTE
     | USHORT
     | SHORT
@@ -338,16 +338,16 @@ expr: ID
     | MYBASE '.' ee id_or_kw
     | MYCLASS '.' ee id_or_kw
     | '{' expr_list_e '}'
-    | cast_operator '(' ee expr ee')'
-    | CTYPE '(' ee expr ',' ee type ee ')'
-    | IF '(' ee expr ',' ee expr ',' ee expr ee ')'
-    | IF '(' ee expr ',' ee expr ee ')'
-    | NEW ID                                                     %prec NEW
-    | NEW ID '(' expr_list_e ')'                                 %prec NEW
-    | NEW ID '(' expr_list_e ')' '{' expr_list_e '}'             %prec NEW
-    | NEW primitive_type                                         %prec NEW
-    | NEW primitive_type '(' expr_list_e ')'                     %prec NEW
-    | NEW primitive_type '(' expr_list_e ')' '{' expr_list_e '}' %prec NEW
+    | cast_operator '(' ee expr ee')'               // Оператор преобразования в другой тип, не функция
+    | CTYPE '(' ee expr ',' ee type ee ')'          // Оператор преобразования в другой тип, не функция
+    | IF '(' ee expr ',' ee expr ',' ee expr ee ')' // Тернарный оператор
+    | IF '(' ee expr ',' ee expr ee ')'             // Не тернарный оператор: если expr_1 является NOTHING, то выбрать expr_2
+    | NEW ID                                                     %prec NEW  // New MyType
+    | NEW ID '(' expr_list_e ')'                                 %prec NEW  // New MyType(1, true)
+    | NEW ID '(' expr_list_e ')' '{' expr_list_e '}'             %prec NEW  // New MyType() {1, 2, 3}, New MyType(2) {1, 2, 3}
+    | NEW primitive_type                                         %prec NEW  // New Integer
+    | NEW primitive_type '(' expr_list_e ')'                     %prec NEW  // New Integer()
+    | NEW primitive_type '(' expr_list_e ')' '{' expr_list_e '}' %prec NEW  // New Integer() {1, 2, 3}, New Integer(2) {1, 2, 3}
     ;
 
 expr_list: ee expr
@@ -376,7 +376,7 @@ primitive_type: BYTE | SBYTE | USHORT | SHORT | UINTEGER | INTEGER | ULONG | LON
 
 /* Keywords */
 
-id_or_kw: ID
+id_or_kw: ID // Всё, что можно указывать в качестве имени метода/поля (ID и любое ключевое слово, не экранированное в [])
         | IF | THEN | ELSE | ELSEIF | END | SELECT | CASE | TO
         | FOR | EACH | WHILE | NEXT | IN | UNTIL | LOOP | DO | STEP
         | CALL | GOTO | CONTINUE | EXIT | STOP | RETURN | REDIM | ERASE
