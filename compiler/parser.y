@@ -325,12 +325,12 @@ expr: ID
     | CTYPE '(' ee expr ',' ee type ee ')'
     | IF '(' ee expr ',' ee expr ',' ee expr ee ')'
     | IF '(' ee expr ',' ee expr ee ')'
-    | NEW ID %prec NEW
-    | NEW ID '(' expr_list_e ')'
-    | NEW ID '(' expr_list_e ')' '{' expr_list_e '}'
-    | NEW primitive_type %prec NEW
-    | NEW primitive_type '(' expr_list_e ')'
-    | NEW primitive_type '(' expr_list_e ')' '{' expr_list_e '}'
+    | NEW ID                                                     %prec NEW
+    | NEW ID '(' expr_list_e ')'                                 %prec NEW
+    | NEW ID '(' expr_list_e ')' '{' expr_list_e '}'             %prec NEW
+    | NEW primitive_type                                         %prec NEW
+    | NEW primitive_type '(' expr_list_e ')'                     %prec NEW
+    | NEW primitive_type '(' expr_list_e ')' '{' expr_list_e '}' %prec NEW
     ;
 
 expr_list: ee expr
