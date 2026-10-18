@@ -240,8 +240,8 @@ case_expr: expr
          | expr TO expr
          | is_e '=' ee expr
          | is_e "<>" ee expr
-         | is_e "<" ee expr
-         | is_e ">" ee expr
+         | is_e '<' ee expr
+         | is_e '>' ee expr
          | is_e "<=" ee expr
          | is_e ">=" ee expr
          ;
