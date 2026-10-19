@@ -48,7 +48,7 @@
 %token DIM CONST STATIC FUNCTION SUB CLASS STRUCT MODULE NAMESPACE ENUM INTERFACE DELEGATE EVENT PROPERTY OPERATOR DECLARE LIB ALIAS ASSEMBLY IMPORTS OPTION GET SET INHERITS IMPLEMENTS HANDLES
 %token PUBLIC PRIVATE PROTECTED FRIEND SHARED READONLY WRITE_ONLY OVERLOADS OVERRIDABLE OVERRIDES NOT_OVERRIDABLE MUST_OVERRIDE MUST_INHERIT NOT_INHERITABLE SHADOWS DEFAULT PARTIAL NARROWING WIDENING ITERATOR WITH_EVENTS
 %token BYREF BYVAL OPTIONAL PARAMARRAY OUT AS OF
-%token ME MYBASE MYCLASS NOTHING TYPE_OF GET_TYPE NAME_OF ADDRESS_OF GET_XML_NAMESPACE GLOBAL MID LIKE
+%token ME MYBASE MYCLASS NEW NOTHING TYPE_OF GET_TYPE NAME_OF ADDRESS_OF GET_XML_NAMESPACE GLOBAL MID LIKE
 %token BY GROUP INTO JOIN ON ORDER SKIP TAKE
 %token ENDL
 
@@ -67,7 +67,6 @@
 %token LSHIFT               "<<"
 %token RSHIFT               ">>"
 
-%left NEW
 %left OR OR_ELSE XOR
 %left AND AND_ALSO
 %right NOT
@@ -185,12 +184,15 @@ block_e: ecl
        | ecl block
        ;
 
-stmt: ID                        // Вызов метода без скобок: MyFunc (только ID, потому что kw разрешается только после точек. [Function] - ID; SomeClass.Function - kw)
-    | expr '(' expr_list_e ')'  // Вызов метода со скобками (в том числе MyBase.MyFunc())
-    | expr '.' ee id_or_kw      // Вызов метода без скобок (в том числе MyBase.MyFunc)
-    | MYBASE '.' ee id_or_kw    // Вызов метода родителя без скобок: MyBase.MyFunc; после '.' может стоять ID или kw без экранирования MyBase.Function
-    | MYCLASS '.' ee id_or_kw   // Вызов метода класса без скобок: MyClass.MyFunc; после '.' может стоять ID или kw без экранирования MyClass.Function
-    | CALL expr                 // Вызов метода
+stmt: ID                                            // Вызов метода текущего класса без скобок: MyFunc (только ID, потому что kw разрешается только после точек. [Function] - ID; SomeClass.Function - kw)
+    | ID '(' expr_list_e ')'                        // Вызов метода текущего класса со скобками: MyFunc()
+    | expr '.' ee id_or_kw                          // Вызов метода другого класса без скобок: OtherClass.MyFunc, OtherClass.Field.MyFunc
+    | expr '.' ee id_or_kw '(' expr_list_e ')'      // Вызов метода другого класса со скобками: OtherClass.MyFunc(), OtherClass.Field.MyFunc()
+    | MYBASE '.' ee id_or_kw                        // Вызов метода родителя без скобок: MyBase.MyFunc (после '.' может стоять ID или kw без экранирования MyBase.Function)
+    | MYBASE '.' ee id_or_kw '(' expr_list_e ')'    // Вызов метода родителя со скобками: MyBase.MyFunc()
+    | MYCLASS '.' ee id_or_kw                       // Вызов метода класса без скобок: MyClass.MyFunc
+    | MYCLASS '.' ee id_or_kw '(' expr_list_e ')'   // Вызов метода класса cо скобками: MyClass.MyFunc()
+    | CALL expr                                     // Вызов метода
     | expr '=' ee expr
     | expr "+=" ee expr
     | expr "-=" ee expr
@@ -333,21 +335,24 @@ expr: ID
     | '+' expr %prec UNPLUS
     | '-' expr %prec UNMINUS
     | '(' ee expr ee ')'
-    | expr '(' expr_list_e ')'
+    | ID '(' expr_list_e ')' // Вызов метода или индексация одномерного массива
     | expr '.' ee id_or_kw
+    | expr '.' ee id_or_kw '(' expr_list_e ')'
     | MYBASE '.' ee id_or_kw
+    | MYBASE '.' ee id_or_kw '(' expr_list_e ')'
     | MYCLASS '.' ee id_or_kw
+    | MYCLASS '.' ee id_or_kw '(' expr_list_e ')'
     | '{' expr_list_e '}'
     | cast_operator '(' ee expr ee ')'              // Оператор преобразования в другой тип, не функция
     | CTYPE '(' ee expr ',' ee type ee ')'          // Оператор преобразования в другой тип, не функция
     | IF '(' ee expr ',' ee expr ',' ee expr ee ')' // Тернарный оператор
     | IF '(' ee expr ',' ee expr ee ')'             // Не тернарный оператор: если expr_1 является NOTHING, то выбрать expr_2
-    | NEW ID                                                     %prec NEW  // New MyType
-    | NEW ID '(' expr_list_e ')'                                 %prec NEW  // New MyType(1, true)
-    | NEW ID '(' expr_list_e ')' '{' expr_list_e '}'             %prec NEW  // New MyType() {1, 2, 3}, New MyType(2) {1, 2, 3}
-    | NEW primitive_type                                         %prec NEW  // New Integer
-    | NEW primitive_type '(' expr_list_e ')'                     %prec NEW  // New Integer()
-    | NEW primitive_type '(' expr_list_e ')' '{' expr_list_e '}' %prec NEW  // New Integer() {1, 2, 3}, New Integer(2) {1, 2, 3}
+    | NEW ID                                                        // New MyType
+    | NEW ID '(' expr_list_e ')'                                    // New MyType(1, true)
+    | NEW ID '(' expr_list_e ')' '{' expr_list_e '}'                // New MyType() {1, 2, 3}, New MyType(2) {1, 2, 3}
+    | NEW primitive_type                                            // New Integer
+    | NEW primitive_type '(' expr_list_e ')'                        // New Integer()
+    | NEW primitive_type '(' expr_list_e ')' '{' expr_list_e '}'    // New Integer() {1, 2, 3}, New Integer(2) {1, 2, 3}
     ;
 
 expr_list: ee expr
