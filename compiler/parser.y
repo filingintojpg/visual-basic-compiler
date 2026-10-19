@@ -217,6 +217,7 @@ stmt: ID                                            // Вызов метода �
     | IF expr THEN block_e else_if_stmts END IF
     | IF expr THEN block_e else_if_stmts ELSE block_e END IF
     | SELECT CASE expr ecl case_stmts END SELECT
+    | SELECT CASE expr ecl case_stmts CASE ELSE block_e END SELECT
     | FOR ID AS simple_type '=' ee expr TO expr STEP expr block_e NEXT
     | FOR ID AS simple_type '=' ee expr TO expr block_e NEXT
     | FOR ID '=' ee expr TO expr STEP expr block_e NEXT
@@ -243,7 +244,6 @@ else_if_stmts: %empty
 
 case_stmts: %empty
           | case_stmts CASE case_exprs block_e
-          | case_stmts CASE ELSE block_e // ELSE на любом месте будет валидироваться на семантике - должен быть последним
           ;
 
 case_exprs: case_expr
