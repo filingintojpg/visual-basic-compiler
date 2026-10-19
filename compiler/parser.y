@@ -186,10 +186,10 @@ block_e: ecl
        ;
 
 stmt: ID                        // Вызов метода без скобок: MyFunc (только ID, потому что kw разрешается только после точек. [Function] - ID; SomeClass.Function - kw)
-    | expr '(' expr_list_e ')'  // Вызов метода со скобками любой вложенности (в том числе MyBase.MyOther.MyFunc())
-    | expr '.' ee id_or_kw      // Вызов метода без скобок любой вложенности (в том числе MyBase.MyOther.MyFunc)
-    | MYBASE '.' ee id_or_kw    // Вызов метода родителя вложенности 1 без скобок: MyBase.MyFunc; после '.' может стоять ID или kw без экранирования MyBase.Function
-    | MYCLASS '.' ee id_or_kw   // Вызов метода класса вложенности 1 без скобок: MyClass.MyFunc; после '.' может стоять ID или kw без экранирования MyClass.Function
+    | expr '(' expr_list_e ')'  // Вызов метода со скобками (в том числе MyBase.MyFunc())
+    | expr '.' ee id_or_kw      // Вызов метода без скобок (в том числе MyBase.MyFunc)
+    | MYBASE '.' ee id_or_kw    // Вызов метода родителя без скобок: MyBase.MyFunc; после '.' может стоять ID или kw без экранирования MyBase.Function
+    | MYCLASS '.' ee id_or_kw   // Вызов метода класса без скобок: MyClass.MyFunc; после '.' может стоять ID или kw без экранирования MyClass.Function
     | CALL expr                 // Вызов метода
     | expr '=' ee expr
     | expr "+=" ee expr
