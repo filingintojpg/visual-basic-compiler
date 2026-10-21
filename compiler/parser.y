@@ -15,7 +15,7 @@
 
 %code requires {
     enum class IntType { LONG, INTEGER, SHORT, NONE };
-    struct IntLiteral { long long int value; IntType type; bool isUnsigned = false;
+    struct IntLiteral { long long int value; IntType type; bool isUnsigned;
         IntLiteral(long long int value, IntType type, bool isUnsigned) : value(value), type(type), isUnsigned(isUnsigned) {}
     };
 
