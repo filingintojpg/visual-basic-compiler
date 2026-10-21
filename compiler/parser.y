@@ -313,8 +313,8 @@ expr: ID
     | expr ">=" ee expr
     | expr AND ee expr
     | expr AND_ALSO ee expr
-    | expr OR_ELSE ee expr
     | expr OR ee expr
+    | expr OR_ELSE ee expr
     | expr MOD ee expr
     | expr IS ee expr
     | expr ISNOT ee expr
@@ -329,7 +329,6 @@ expr: ID
     | MYBASE '.' ee id_or_kw '(' expr_list_e ')'
     | MYCLASS '.' ee id_or_kw
     | MYCLASS '.' ee id_or_kw '(' expr_list_e ')'
-    | '{' expr_list_e '}'
     | cast_operator '(' ee expr ee ')'              // Оператор преобразования в другой тип, не функция
     | CTYPE '(' ee expr ',' ee type ee ')'          // Оператор преобразования в другой тип, не функция
     | IF '(' ee expr ',' ee expr ',' ee expr ee ')' // Тернарный оператор
@@ -340,6 +339,7 @@ expr: ID
     | NEW primitive_type                                            // New Integer
     | NEW primitive_type '(' expr_list_e ')'                        // New Integer()
     | NEW primitive_type '(' expr_list_e ')' '{' expr_list_e '}'    // New Integer() {1, 2, 3}, New Integer(2) {1, 2, 3}
+    | '{' expr_list_e '}'
     ;
 
 expr_list: ee expr
