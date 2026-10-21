@@ -56,19 +56,14 @@
 %token FLOORDIV_ASSIGN      "\\="
 %token EXP_ASSIGN           "^="
 %token STRCAT_ASSIGN        "&="
-%token LSHIFT_ASSIGN        "<<="
-%token RSHIFT_ASSIGN        ">>="
 %token NEQ                  "<>"
 %token LEQ                  "<="
 %token GEQ                  ">="
-%token LSHIFT               "<<"
-%token RSHIFT               ">>"
 
 %left OR OR_ELSE
 %left AND AND_ALSO
 %right NOT
 %left '=' "<>" "<=" ">=" '<' '>' IS ISNOT
-%left "<<" ">>"
 %left '&'
 %left '+' '-'
 %left MOD
@@ -198,8 +193,6 @@ stmt: ID                                            // Вызов метода �
     | expr "\\=" ee expr
     | expr "^=" ee expr
     | expr "&=" ee expr
-    | expr "<<=" ee expr
-    | expr ">>=" ee expr
     | RETURN
     | RETURN expr
     | CONTINUE DO       // Находят ближайший по вложенности такой цикл и приступают к следующей его итерации
@@ -323,8 +316,6 @@ expr: ID
     | expr OR_ELSE ee expr
     | expr OR ee expr
     | expr MOD ee expr
-    | expr "<<" ee expr
-    | expr ">>" ee expr
     | expr IS ee expr
     | expr ISNOT ee expr
     | NOT expr

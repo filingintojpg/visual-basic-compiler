@@ -160,11 +160,6 @@ While              { lexprint(yylineno, "KEYWORD While"); return WHILE; }
 \&=     { lexprint(yylineno, "OPERATOR &="); return STRCAT_ASSIGN; }
 \&      { lexprint(yylineno, "OPERATOR &"); return '&'; }
 
-\>\>=   { lexprint(yylineno, "OPERATOR >>="); return RSHIFT_ASSIGN; }
-\<\<=   { lexprint(yylineno, "OPERATOR <<="); return LSHIFT_ASSIGN; }
-\>\>    { lexprint(yylineno, "OPERATOR >>"); return RSHIFT; }
-\<\<    { lexprint(yylineno, "OPERATOR <<"); return LSHIFT; }
-
 \\=     { lexprint(yylineno, "OPERATOR \\="); return FLOORDIV_ASSIGN; }
 \/=     { lexprint(yylineno, "OPERATOR /="); return DIV_ASSIGN; }
 
