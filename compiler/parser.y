@@ -64,7 +64,7 @@
 %token LSHIFT               "<<"
 %token RSHIFT               ">>"
 
-%left OR OR_ELSE XOR
+%left OR OR_ELSE
 %left AND AND_ALSO
 %right NOT
 %left '=' "<>" "<=" ">=" '<' '>' IS ISNOT
@@ -322,7 +322,6 @@ expr: ID
     | expr AND_ALSO ee expr
     | expr OR_ELSE ee expr
     | expr OR ee expr
-    | expr XOR ee expr
     | expr MOD ee expr
     | expr "<<" ee expr
     | expr ">>" ee expr

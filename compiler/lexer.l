@@ -135,7 +135,6 @@ ULong              { lexprint(yylineno, "KEYWORD ULong"); return ULONG; }
 UShort             { lexprint(yylineno, "KEYWORD UShort"); return USHORT; }
 Until              { lexprint(yylineno, "KEYWORD Until"); return UNTIL; }
 While              { lexprint(yylineno, "KEYWORD While"); return WHILE; }
-Xor                { lexprint(yylineno, "KEYWORD Xor"); return XOR; }
 
     /* Operators */
 
