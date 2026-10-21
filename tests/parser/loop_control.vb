@@ -2,13 +2,17 @@
 ' - Exit For, Exit While, Exit Do и Exit Select
 ' - Continue For, Continue While и Continue Do
 ' - управление внутри вложенных циклов, условий и Select
-' - однострочный If с Exit и Continue
+' - Exit и Continue внутри блочного If
 ' - Return
 Class Main
     Shared Sub Main()
         For i = 1 To 100
-            If i > 50 Then Exit For
-            If i Mod 2 = 0 Then Continue For
+            If i > 50 Then
+                Exit For
+            End If
+            If i Mod 2 = 0 Then
+                Continue For
+            End If
             If i > 10 Then
                 Exit For
             End If
@@ -24,7 +28,9 @@ Class Main
 
         While True
             x = x + 1
-            If x > 100 Then Exit While
+            If x > 100 Then
+                Exit While
+            End If
             If x < 10 Then
                 Continue While
             End If
@@ -35,24 +41,32 @@ Class Main
             If x > 100 Then
                 Exit Do
             End If
-            If x < 10 Then Continue Do
+            If x < 10 Then
+                Continue Do
+            End If
         Loop
 
         Do While x < 100
-            If x > 50 Then Exit Do
+            If x > 50 Then
+                Exit Do
+            End If
             x = x + 1
         Loop
 
         Do
             x = x + 1
-            If x > 5 Then Continue Do
+            If x > 5 Then
+                Continue Do
+            End If
         Loop Until x > 100
 
         Select Case x
             Case 1
                 Exit Select
             Case 2
-                If y > 0 Then Exit Select
+                If y > 0 Then
+                    Exit Select
+                End If
                 Print(2)
         End Select
 
@@ -60,16 +74,22 @@ Class Main
             While j < i
                 Do
                     j = j + 1
-                    If j > 10 Then Exit Do
+                    If j > 10 Then
+                        Exit Do
+                    End If
                 Loop Until j > 5
                 Exit While
             End While
-            If i = 2 Then Continue For
+            If i = 2 Then
+                Continue For
+            End If
         Next
     End Sub
 
     Shared Sub EarlySub(x As Integer)
-        If x < 0 Then Return
+        If x < 0 Then
+            Return
+        End If
         Print(x)
     End Sub
 

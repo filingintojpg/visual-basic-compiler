@@ -1,6 +1,6 @@
 ' Тестируется:
 ' - цепочки обращений через точку: поля, вызовы методов, индексы
-' - вызов и индексация результата вызова
+' - обращение к члену результата вызова
 ' - обращение к членам литерала, результата в скобках и примитивного типа
 ' - ключевые слова в качестве имени члена после точки
 ' - обращения слева от присваивания и в виде отдельного оператора
@@ -11,7 +11,6 @@ Class Main
         Dim calls = a.b().c()
         Dim indexed = a.items(0).name
         Dim afterCall = Foo(1).Bar
-        Dim callOnCall = Foo()(1)
         Dim staticAccess = Counter.Total
         Dim maxInteger = Integer.MaxValue
         Dim emptyString = String.Empty

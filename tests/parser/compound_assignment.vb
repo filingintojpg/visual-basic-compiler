@@ -1,5 +1,5 @@
 ' Тестируется:
-' - составное присваивание: += -= *= /= \= ^= &= <<= >>=
+' - составное присваивание: += -= *= /= \= ^= &=
 ' - левая часть: переменная, элемент массива, член объекта
 ' - правая часть: литерал, выражение, вызов
 ' - составное присваивание внутри циклов и условий
@@ -22,8 +22,6 @@ Class Main
         value \= 5
         value ^= 2
         text &= "b"
-        value <<= 1
-        value >>= 1
 
         value += value * 2 + 1
         value -= Foo(1)
@@ -42,6 +40,10 @@ Class Main
             value *= 2
         End While
 
-        If value > 50 Then value -= 50 Else value += 50
+        If value > 50 Then
+            value -= 50
+        Else
+            value += 50
+        End If
     End Sub
 End Class

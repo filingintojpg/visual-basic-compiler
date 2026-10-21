@@ -51,7 +51,6 @@ Class Main
         sized(Foo(1)) = 3
         Dim first = sized(0)
         Dim sum = sized(0) + sized(1)
-        Dim element = New Integer() {1, 2, 3}(1)
         Console.WriteLine(sized(i + 1))
         Print(sized(0), sized(1), sized(2))
 

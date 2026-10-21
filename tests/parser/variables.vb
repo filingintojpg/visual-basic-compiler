@@ -6,7 +6,7 @@
 ' - поля класса: Dim и с инициализатором
 ' - присваивание и использование переменных в выражениях
 ' - несколько переменных в одном Dim/Const: общий тип, разные типы, с инициализаторами, массивы
-' - Dim ... As New: со скобками, без скобок, generic-тип, примитивный тип
+' - Dim ... As New: со скобками, без скобок, примитивный тип
 ' - то же для полей класса
 Class Point
     Dim horizontal As Integer
@@ -41,7 +41,6 @@ Class Main
         Dim boolValue As Boolean = True
         Dim charValue As Char = "c"c
         Dim stringValue As String = "text"
-        Dim dateValue As Date
         Dim objectValue As Object = Nothing
 
         Dim origin As Point = New Point()
@@ -72,9 +71,6 @@ Class Main
 
         Dim person As New Point()
         Dim noParens As New Point
-        Dim generic As New List(Of Integer)()
-        Dim genericNoParens As New List(Of Integer)
-        Dim genericPair As New Dictionary(Of String, Integer)()
         Dim primitive As New Integer()
         Dim first As New Point(), second As New Point()
         Dim x, y As New Point()

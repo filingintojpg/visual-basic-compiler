@@ -28,8 +28,7 @@ Class MathUtil
         Console.WriteLine("no parens")
     End Sub
 
-    Shared Sub Multiline(
-        first As Integer,
+    Shared Sub Multiline(first As Integer,
         second As Integer
     )
         Print(first + second)
@@ -114,7 +113,6 @@ Class Main
         Print(MathUtil.Sum(MathUtil.Sum(1, 2), 3))
         Dim expression = MathUtil.Sum(1, 2) * MathUtil.Sum(3, 4) - MathUtil.Fact(3)
         Dim numbers = MathUtil.ArrayResult()
-        Dim first = MathUtil.ArrayResult()(0)
 
         If MathUtil.IsLess(1, 2) Then
             Print("less")

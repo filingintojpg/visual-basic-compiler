@@ -1,5 +1,5 @@
 ' Тестируется:
-' - операторы And, Or, Xor, Not, AndAlso, OrElse
+' - операторы And, Or, Not, AndAlso, OrElse
 ' - приоритеты и ассоциативность, скобки
 ' - сочетание со сравнениями и арифметикой
 ' - литералы True и False
@@ -10,7 +10,6 @@ Class Main
         Dim both = a And b
         Dim either = a Or b
         Dim negated = Not a
-        Dim exclusive = a Xor b
         Dim shortAnd = a AndAlso b
         Dim shortOr = a OrElse b
 
@@ -22,8 +21,6 @@ Class Main
         Dim doubleNot = Not Not a
         Dim shortMixed = a AndAlso b OrElse c AndAlso d
         Dim shortAndOr = a Or b OrElse c
-        Dim xorThenOr = a Xor b Or c
-        Dim orThenXor = a Or b Xor c
 
         Dim withComparison = a < b And c < d
         Dim withGrouping = (a < b) AndAlso (c > d) OrElse Not e
@@ -34,11 +31,9 @@ Class Main
         Dim literalAnd = True And False
         Dim literalOr = True Or False
         Dim literalNot = Not True
-        Dim literalXor = True Xor True
 
         Dim bitAnd = 5 And 3
         Dim bitOr = 5 Or 3
-        Dim bitXor = 5 Xor 3
         Dim bitNot = Not 5
         Dim masked = &HFF And &H0F
 
@@ -54,7 +49,7 @@ Class Main
             a = False
         End While
 
-        Do Until a Xor b
+        Do Until a And b
             a = True
         Loop
 

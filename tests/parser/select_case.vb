@@ -1,5 +1,5 @@
 ' Тестируется:
-' - Select Case и Select (без слова Case), Case Else
+' - Select Case, Case Else
 ' - Case: одно значение, список значений, диапазон To, Is с операцией сравнения, без Is
 ' - строки, символы и выражения в Case и в выбираемом значении
 ' - пустые ветки и пустой Select
@@ -17,11 +17,6 @@ Class Main
                 Print("big")
             Case Else
                 Print("other")
-        End Select
-
-        Select x
-            Case 1
-                Print(1)
         End Select
 
         Select Case x

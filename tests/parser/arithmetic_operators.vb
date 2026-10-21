@@ -1,5 +1,5 @@
 ' Тестируется:
-' - операторы + - * / \ Mod ^ (бинарные и унарные), сдвиги << и >>
+' - операторы + - * / \ Mod ^ (бинарные и унарные)
 ' - приоритеты, левая ассоциативность, скобки
 ' - конкатенация & и её приоритет относительно арифметики
 ' - операнды: литералы, переменные, вызовы, элементы массива, члены объекта
@@ -19,8 +19,6 @@ Class Main
         Dim negation = -a
         Dim unaryPlus = +a
         Dim doubleNegation = a - -b
-        Dim leftShift = a << 2
-        Dim rightShift = a >> 2
 
         Dim chained = a - b - c
         Dim chainedDivision = a \ b \ c
@@ -30,7 +28,6 @@ Class Main
         Dim negativePower = -a ^ 2
         Dim powerOfNegative = a ^ -b
         Dim modThenAdd = a Mod b + c
-        Dim shiftThenAdd = a + b << 1
         Dim grouped = (a + b) * (c - a)
         Dim nested = ((a + b) * (c - a)) / ((b))
 

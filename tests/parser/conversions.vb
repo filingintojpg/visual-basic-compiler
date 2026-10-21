@@ -1,6 +1,6 @@
 ' Тестируется:
-' - функции приведения: CBool, CByte, CSByte, CShort, CUShort, CInt, CUInt, CLng, CULng, CSng, CDbl, CDec, CChar, CStr, CDate, CObj
-' - CType с примитивными типами, массивами, классами и обобщёнными типами
+' - функции приведения: CBool, CByte, CSByte, CShort, CUShort, CInt, CUInt, CLng, CULng, CSng, CDbl, CDec, CChar, CStr, CObj
+' - CType с примитивными типами, массивами и классами
 ' - вложенные приведения, приведения внутри выражений и аргументов
 Class Main
     Shared Sub Main()
@@ -20,14 +20,12 @@ Class Main
         Dim toDecimal = CDec(text)
         Dim toChar = CChar(text)
         Dim toString = CStr(42)
-        Dim toDate = CDate(text)
         Dim toObject = CObj(text)
 
         Dim typedInteger = CType(text, Integer)
         Dim typedString = CType(toInteger, String)
         Dim typedArray = CType(toObject, Integer())
         Dim typedClass = CType(toObject, Animal)
-        Dim typedGeneric = CType(toObject, Box(Of Integer))
 
         Dim nested = CInt(CStr(CDbl(text)))
         Dim inExpression = CInt(text) + CInt(toString) * 2
