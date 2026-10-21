@@ -1,10 +1,10 @@
 ' This is a simple class to represent a person
 Public Class Person
 
-    Public Property Name As String
-    Public Property Age As Integer
+    Public Name As String
+    Public Age As Integer
 
-    Public Sub New(ByVal name As String, ByVal age As Integer)
+    Public Sub Init(name As String, age As Integer)
         Me.Name = name
         Me.Age = age
     End Sub
@@ -13,9 +13,10 @@ End Class
 ' This is a simple program to demonstrate the use of a Person class
 Public Class Form1
 
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+    Private Sub Button1_Click(sender As Object, e As EventArgs)
 
-        Dim person As New Person("John", 25)
+        Dim person As New Person
+        person.Init("John", 25)
         MsgBox(person.Name & " " & person.Age)
 
     End Sub
