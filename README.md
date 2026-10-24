@@ -2,13 +2,22 @@
 
 The project includes lexer, parser, semantic analysis and translation to JVM bytecode.
 
-## Use with Docker
+## Run with Docker
 
-Build project: `docker compose build`
+### Build project
+```bash
+docker compose build
+```
 
-Run compiler: `docker compose run --rm vbc <file.vb>`
+### Run compiler
+```bash
+docker compose run --rm vbc <file.vb>
+```
 
-Run AST-visualizer: `docker compose run --rm ast <file.vb>`
+### Run AST visualizer
+```bash
+docker compose run --rm ast <file.vb>
+```
 
 ## Useful information
 
