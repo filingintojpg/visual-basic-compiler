@@ -1,5 +1,5 @@
 services:
-  vbc:
+  vb:
     build:
       context: .
       dockerfile: Dockerfile

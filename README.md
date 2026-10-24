@@ -11,7 +11,7 @@ docker compose build
 
 ### Run compiler
 ```bash
-docker compose run --rm vbc <file.vb>
+docker compose run --rm vb <file.vb>
 ```
 
 ### Run AST visualizer
