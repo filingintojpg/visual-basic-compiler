@@ -19,7 +19,7 @@ if [ ! -f "$src" ]; then
 fi
 
 name="$(basename "${src%.*}")"
-out="${2:-${script_dir}/${name}.svg}"
+out="${2:-${script_dir}/output/${name}.svg}"
 out_dir="$(dirname "$out")"
 mkdir -p "$out_dir"
 
