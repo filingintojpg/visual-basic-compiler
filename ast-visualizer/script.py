@@ -15,7 +15,6 @@ def create_nterm(id, nterm_type, nodes):
 
 def print_parse_tree(root):
     print("digraph {")
-    print("\"SCRIPT VERSION: 0.0.1\"")
     print_parse_node(root)
     print("}")
 
