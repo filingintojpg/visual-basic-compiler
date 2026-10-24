@@ -6,3 +6,16 @@ services:
     working_dir: /app
     volumes:
       - .:/app
+
+  ast:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app
+    entrypoint: ["bash", "/app/ast-visualizer/build.sh"]
+    volumes:
+      - .:/app
+      - ast-build:/build
+
+volumes:
+  ast-build:

@@ -8,6 +8,9 @@ RUN apt-get update && \
         bison \
         libfl-dev \
         g++ \
+        python3 \
+        graphviz \
+        fonts-dejavu-core \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
