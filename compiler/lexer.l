@@ -56,7 +56,13 @@ ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
 %{
     std::string commentValue;
     std::string stringValue;
-    std::string istringValue;
+
+    static int pendingToken = 0;
+    if (pendingToken) {
+        int returningToken = pendingToken;
+        pendingToken = 0;
+        return returningToken;
+    }
 %}
 
     /* Keywords */
@@ -232,32 +238,27 @@ While              { lexprint(yylineno, "KEYWORD While"); return WHILE; }
     /* Interpolated string literals */
 
 \$\" {
-    yy_push_state(ISTR);
-    istringValue.clear();
     lexprint(yylineno, "ISTRING START");
-    return ISTR_START;
+    yy_push_state(ISTR);
+    return '(';
 }
 <ISTR>[^\n"{}]+ {
-    istringValue += yytext;
+    lexprint(yylineno, "ISTRING PART \"%s\"", yytext);
+    yylval.stringLiteral = new std::string(yytext);
+    pendingToken = '&';
+    return STR_LIT;
 }
-<ISTR>\{\{ {
-    istringValue += "{";
-}
-<ISTR>\}\} {
-    istringValue += "}";
-}
-<ISTR>\"\" {
-    istringValue += "\"";
+<ISTR>\{\{|\}\}|\"\" {
+    lexprint(yylineno, "ISTRING PART \"%c\"", yytext[0]);
+    yylval.stringLiteral = new std::string(1, yytext[0]);
+    pendingToken = '&';
+    return STR_LIT;
 }
 <ISTR>\{ {
-    if (!istringValue.empty()) {
-        lexprint(yylineno, "ISTRING PART \"%s\"", istringValue.c_str());
-        istringValue.clear();
-        yyless(0);
-        return ISTR_PART;
-    }
+    lexprint(yylineno, "ISTRING CSTR(");
     yy_push_state(ISTR_EXPR);
-    return ISTR_EXPR_START;
+    pendingToken = '(';
+    return CSTR;
 }
 <ISTR>\} {
     lexerror(yylineno, "Single '}' in interpolated string");
@@ -265,22 +266,18 @@ While              { lexprint(yylineno, "KEYWORD While"); return WHILE; }
 <ISTR>\n {
     lexerror(yylineno - 1, "Interpolated string literal wasn't closed");
     yy_pop_state();
-    return ISTR_END;
+    return ')';
 }
 <ISTR><<EOF>> {
     lexerror(yylineno, "Interpolated string literal wasn't closed at last line");
     yyterminate();
 }
 <ISTR>\" {
-    if (!istringValue.empty()) {
-        lexprint(yylineno, "ISTRING PART \"%s\"", istringValue.c_str());
-        istringValue.clear();
-        yyless(0);
-        return ISTR_PART;
-    }
     lexprint(yylineno, "ISTRING END");
     yy_pop_state();
-    return ISTR_END;
+    yylval.stringLiteral = new std::string();
+    pendingToken = ')';
+    return STR_LIT;
 }
 
 <ISTR_EXPR,ISTR_BRACE>\{ {
@@ -296,7 +293,8 @@ While              { lexprint(yylineno, "KEYWORD While"); return WHILE; }
 <ISTR_EXPR>\} {
     lexprint(yylineno, "SEPARATOR }");
     yy_pop_state();
-    return ISTR_EXPR_END;
+    pendingToken = '&';
+    return ')';
 }
 
     /* Number literals */
