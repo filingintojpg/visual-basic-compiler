@@ -10,7 +10,8 @@
     extern int yylineno;
     extern char* yytext;
 
-    void yyerror(const char* s) { fprintf(stderr, "\nPARSER ERROR at line %d: %s - %s\n", yylineno, yytext, s); }
+    int parserErrors = 0;
+    void yyerror(const char* s) { parserErrors++; fprintf(stderr, "\nPARSER ERROR at line %d: %s - %s\n", yylineno, yytext, s); }
 %}
 
 %code requires {

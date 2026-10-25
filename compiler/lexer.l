@@ -31,6 +31,8 @@ ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
     bool DEBUG_LEXER_BY_LINE;
     bool DEBUG_LEXER_EOL;
 
+    int lexerErrors = 0;
+
     void lexprint(int line, const char *format, ...);
     void lexerror(int line, const char *format, ...);
     std::string toLower(const std::string& str);
@@ -431,14 +433,16 @@ void lexprint(int line, const char *format, ...) {
 }
 
 void lexerror(int line, const char *format, ...) {
-    printf("\nLEXER ERROR at line %d: ", line);
+    lexerErrors++;
+
+    fprintf(stderr, "\nLEXER ERROR at line %d: ", line);
 
     va_list args;
     va_start(args, format);
-    vprintf(format, args);
+    vfprintf(stderr, format, args);
     va_end(args);
 
-    printf("\n");
+    fprintf(stderr, "\n");
 }
 
     /* Generating descriptions while debugging */

@@ -9,6 +9,9 @@ extern int yydebug;
 extern int yyparse();
 extern FILE* yyin;
 
+extern int lexerErrors;
+extern int parserErrors;
+
 void setDebugOptions() {
     // Lexer
     DEBUG_LEXER = false;
@@ -35,6 +38,10 @@ int main(int argc, char* argv[]) {
 
     yyparse();
     fclose(yyin);
+    if (lexerErrors > 0 || parserErrors > 0) {
+        std::cerr << "\nCompilation failed: " << lexerErrors << " lexer error(s), " << parserErrors << " parser error(s)" << std::endl;
+        return 1;
+    }
 
     return 0;
 }
