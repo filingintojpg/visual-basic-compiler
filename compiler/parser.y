@@ -149,9 +149,13 @@ function_declaration: member_modifiers FUNCTION ID '(' parameter_list_e ')' AS t
                     ;
 
 sub_declaration: member_modifiers SUB ID '(' parameter_list_e ')' block_e END SUB
+               | member_modifiers SUB NEW '(' parameter_list_e ')' block_e END SUB // Конструктор
                | member_modifiers SUB ID block_e END SUB // Процедуру без аргументов можно объявить без скобок
+               | member_modifiers SUB NEW block_e END SUB
                | SUB ID '(' parameter_list_e ')' block_e END SUB // По умолчанию Public
+               | SUB NEW '(' parameter_list_e ')' block_e END SUB
                | SUB ID block_e END SUB
+               | SUB NEW block_e END SUB
                ;
 
 parameter_list: parameter
