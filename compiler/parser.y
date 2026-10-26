@@ -127,7 +127,7 @@ field_declaration: member_modifiers DIM SHARED var_declaration
                  | member_modifiers DIM var_declaration
                  | member_modifiers CONST SHARED var_declaration
                  | member_modifiers CONST var_declaration
-                 | DIM SHARED var_declaration
+                 | DIM SHARED var_declaration // По умолчанию Private
                  | DIM var_declaration
                  | CONST SHARED var_declaration
                  | CONST var_declaration
@@ -144,13 +144,13 @@ member_modifiers: access_modifier
 
 function_declaration: member_modifiers FUNCTION ID '(' parameter_list_e ')' AS type block_e END FUNCTION
                     | member_modifiers FUNCTION ID AS type block_e END FUNCTION // Функцию без аргументов можно объявить без скобок
-                    | FUNCTION ID '(' parameter_list_e ')' AS type block_e END FUNCTION
+                    | FUNCTION ID '(' parameter_list_e ')' AS type block_e END FUNCTION // По умолчанию Public
                     | FUNCTION ID AS type block_e END FUNCTION
                     ;
 
 sub_declaration: member_modifiers SUB ID '(' parameter_list_e ')' block_e END SUB
                | member_modifiers SUB ID block_e END SUB // Процедуру без аргументов можно объявить без скобок
-               | SUB ID '(' parameter_list_e ')' block_e END SUB
+               | SUB ID '(' parameter_list_e ')' block_e END SUB // По умолчанию Public
                | SUB ID block_e END SUB
                ;
 
@@ -177,11 +177,11 @@ block_e: ecl
        | ecl block
        ;
 
-stmt: ID                                            // Вызов метода текущего класса без скобок: MyFunc (только ID, потому что kw разрешается только после точек. [Function] - ID; SomeClass.Function - kw)
+stmt: ID                                            // Вызов метода текущего класса без скобок: MyFunc
     | ID '(' expr_list_e ')'                        // Вызов метода текущего класса со скобками: MyFunc()
     | expr '.' ee id_or_kw                          // Вызов метода другого класса без скобок: OtherClass.MyFunc, OtherClass.Field.MyFunc
     | expr '.' ee id_or_kw '(' expr_list_e ')'      // Вызов метода другого класса со скобками: OtherClass.MyFunc(), OtherClass.Field.MyFunc()
-    | MYBASE '.' ee id_or_kw                        // Вызов метода родителя без скобок: MyBase.MyFunc (после '.' может стоять ID или kw без экранирования MyBase.Function)
+    | MYBASE '.' ee id_or_kw                        // Вызов метода родителя без скобок: MyBase.MyFunc
     | MYBASE '.' ee id_or_kw '(' expr_list_e ')'    // Вызов метода родителя со скобками: MyBase.MyFunc()
     | MYCLASS '.' ee id_or_kw                       // Вызов метода класса без скобок: MyClass.MyFunc
     | MYCLASS '.' ee id_or_kw '(' expr_list_e ')'   // Вызов метода класса cо скобками: MyClass.MyFunc()
@@ -335,7 +335,7 @@ expr: ID
     | NEW ID '(' expr_list_e ')'                                    // New MyType(1, true)
     | NEW ID '(' expr_list_e ')' '{' expr_list_e '}'                // New MyType() {1, 2, 3}, New MyType(2) {1, 2, 3}
     | NEW primitive_type                                            // New Integer
-    | NEW primitive_type '(' expr_list_e ')'                        // New Integer()
+    | NEW primitive_type '(' expr_list_e ')'                        // New Integer(), New Integer(2)
     | NEW primitive_type '(' expr_list_e ')' '{' expr_list_e '}'    // New Integer() {1, 2, 3}, New Integer(2) {1, 2, 3}
     | '{' expr_list_e '}'
     ;
@@ -366,7 +366,7 @@ primitive_type: BYTE | SBYTE | USHORT | SHORT | UINTEGER | INTEGER | ULONG | LON
 
 /* Keywords */
 
-id_or_kw: ID // Всё, что можно указывать в качестве имени метода/поля (ID и любое ключевое слово, не экранированное в [])
+id_or_kw: ID
         | IF | THEN | ELSE | ELSEIF | END | SELECT | CASE | TO
         | FOR | EACH | WHILE | NEXT | IN | UNTIL | LOOP | DO | STEP
         | ME | MYBASE | MYCLASS | NEW | AS | OPTIONAL
