@@ -177,16 +177,8 @@ block_e: ecl
        | ecl block
        ;
 
-stmt: ID                                            // Вызов метода текущего класса без скобок: MyFunc
-    | ID '(' expr_list_e ')'                        // Вызов метода текущего класса со скобками: MyFunc()
-    | expr '.' ee id_or_kw                          // Вызов метода другого класса без скобок: OtherClass.MyFunc, OtherClass.Field.MyFunc
-    | expr '.' ee id_or_kw '(' expr_list_e ')'      // Вызов метода другого класса со скобками: OtherClass.MyFunc(), OtherClass.Field.MyFunc()
-    | MYBASE '.' ee id_or_kw                        // Вызов метода родителя без скобок: MyBase.MyFunc
-    | MYBASE '.' ee id_or_kw '(' expr_list_e ')'    // Вызов метода родителя со скобками: MyBase.MyFunc()
-    | MYCLASS '.' ee id_or_kw                       // Вызов метода класса без скобок: MyClass.MyFunc
-    | MYCLASS '.' ee id_or_kw '(' expr_list_e ')'   // Вызов метода класса cо скобками: MyClass.MyFunc()
-    | CALL expr                                     // Вызов метода
-    | expr '=' ee expr
+stmt: expr              // Вызов метода или присваивание expr = expr
+    | CALL expr         // Вызов метода
     | expr "+=" ee expr
     | expr "-=" ee expr
     | expr "*=" ee expr
