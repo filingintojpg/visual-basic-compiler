@@ -49,8 +49,8 @@
 %token <charLiteral>   CHAR_LIT
 %token <boolLiteral>   BOOL_LIT
 
-%token BOOLEAN BYTE CHAR DECIMAL DOUBLE INTEGER LONG OBJECT SBYTE SHORT SINGLE STRING UINTEGER ULONG USHORT
-%token CBOOL CBYTE CCHAR CDBL CDEC CINT CLNG COBJ CSBYTE CSHORT CSNG CSTR CUINT CULNG CUSHORT CTYPE
+%token BOOLEAN BYTE CHAR DECIMAL DOUBLE INTEGER LONG SBYTE SHORT SINGLE STRING UINTEGER ULONG USHORT
+%token CBOOL CBYTE CCHAR CDBL CDEC CINT CLNG CSBYTE CSHORT CSNG CSTR CUINT CULNG CUSHORT CTYPE
 %token IF THEN ELSE ELSEIF SELECT CASE FOR EACH NEXT TO STEP DO LOOP WHILE UNTIL IN CONTINUE EXIT
 %token DIM CONST FUNCTION SUB CLASS INHERITS CALL END RETURN
 %token PUBLIC PRIVATE PROTECTED SHARED
@@ -143,13 +143,9 @@ member_modifiers: access_modifier
 /* Methods */
 
 function_declaration: member_modifiers FUNCTION ID '(' parameter_list_e ')' AS type block_e END FUNCTION
-                    | member_modifiers FUNCTION ID '(' parameter_list_e ')' block_e END FUNCTION
                     | member_modifiers FUNCTION ID AS type block_e END FUNCTION // Функцию без аргументов можно объявить без скобок
-                    | member_modifiers FUNCTION ID block_e END FUNCTION
                     | FUNCTION ID '(' parameter_list_e ')' AS type block_e END FUNCTION
-                    | FUNCTION ID '(' parameter_list_e ')' block_e END FUNCTION
                     | FUNCTION ID AS type block_e END FUNCTION
-                    | FUNCTION ID block_e END FUNCTION
                     ;
 
 sub_declaration: member_modifiers SUB ID '(' parameter_list_e ')' block_e END SUB
@@ -166,11 +162,8 @@ parameter_list_e: ee
                 | parameter_list ee
                 ;
 
-parameter: ID
-         | ID AS type
-         | ID '(' ee ')'
+parameter: ID AS type
          | ID '(' ee ')' AS simple_type
-         | OPTIONAL ID '=' ee expr
          | OPTIONAL ID AS type '=' ee expr
          ;
 
@@ -268,15 +261,13 @@ var_declaration: var_declarator
                | var_declaration ',' ee var_declarator
                ;
 
-var_declarator: ID                                                  // x
-              | ID '=' ee expr                                      // x = 1, x = MyFunc(), x = {1, 2, 3}, ...
+var_declarator: ID '=' ee expr                                      // x = 1, x = MyFunc(), x = {1, 2, 3}, ...
               | ID AS type                                          // x As Integer, x As Integer(), x As MyType, x As MyType()
               | ID AS type '=' ee expr                              // x As MyType = 1, x As MyType() = {1, 2, 3}, ...
               | ID AS NEW ID                                        // x As New MyType
               | ID AS NEW ID '(' expr_list_e ')'                    // x As New MyType(1, true)
               | ID AS NEW primitive_type                            // x As New Integer
               | ID AS NEW primitive_type '(' ee ')'                 // x As New Integer()
-              | ID '(' expr_list_e ')'                              // x(), x(2)
               | ID '(' expr_list_e ')' AS simple_type               // x() As MyType, x(2) As MyType
               | ID '(' expr_list_e ')' AS simple_type '=' ee expr   // x() As MyType = {1, 2, 3}
               ;
@@ -305,7 +296,6 @@ expr: ID
     | DECIMAL
     | SINGLE
     | DOUBLE
-    | OBJECT
     | expr '+' ee expr
     | expr '-' ee expr
     | expr '*' ee expr
@@ -358,7 +348,7 @@ expr_list_e: ee
            | expr_list ee
            ;
 
-cast_operator: CBOOL | CBYTE | CSBYTE | CUSHORT | CSHORT | CINT | CUINT | CLNG | CULNG | CCHAR | CSTR | CDEC | CSNG | CDBL | COBJ
+cast_operator: CBOOL | CBYTE | CSBYTE | CUSHORT | CSHORT | CINT | CUINT | CLNG | CULNG | CCHAR | CSTR | CDEC | CSNG | CDBL
              ;
 
 /* Types */
@@ -371,7 +361,7 @@ simple_type: ID
            | primitive_type
            ;
 
-primitive_type: BYTE | SBYTE | USHORT | SHORT | UINTEGER | INTEGER | ULONG | LONG | BOOLEAN | CHAR | STRING | DECIMAL | SINGLE | DOUBLE | OBJECT
+primitive_type: BYTE | SBYTE | USHORT | SHORT | UINTEGER | INTEGER | ULONG | LONG | BOOLEAN | CHAR | STRING | DECIMAL | SINGLE | DOUBLE
               ;
 
 /* Keywords */
@@ -382,8 +372,8 @@ id_or_kw: ID // Всё, что можно указывать в качестве
         | ME | MYBASE | MYCLASS | NEW | AS | OPTIONAL
         | DIM | CONST | FUNCTION | SUB | CLASS | INHERITS | CALL | CONTINUE | EXIT | RETURN
         | PUBLIC | PRIVATE | PROTECTED | SHARED
-        | BYTE | SBYTE | USHORT | SHORT | UINTEGER | INTEGER | ULONG | LONG | BOOLEAN | CHAR | STRING | DECIMAL | SINGLE | DOUBLE | OBJECT 
-        | CBOOL | CBYTE | CSBYTE | CUSHORT | CSHORT | CINT | CUINT | CLNG | CULNG | CCHAR | CSTR | CDEC | CSNG | CDBL | COBJ | CTYPE
+        | BYTE | SBYTE | USHORT | SHORT | UINTEGER | INTEGER | ULONG | LONG | BOOLEAN | CHAR | STRING | DECIMAL | SINGLE | DOUBLE
+        | CBOOL | CBYTE | CSBYTE | CUSHORT | CSHORT | CINT | CUINT | CLNG | CULNG | CCHAR | CSTR | CDEC | CSNG | CDBL | CTYPE
         ;
 
 /* Line breaks and statement separators */

@@ -85,7 +85,6 @@ Char               { lexprint(yylineno, "KEYWORD Char"); return CHAR; }
 CInt               { lexprint(yylineno, "KEYWORD CInt"); return CINT; }
 Class              { lexprint(yylineno, "KEYWORD Class"); return CLASS; }
 CLng               { lexprint(yylineno, "KEYWORD CLng"); return CLNG; }
-CObj               { lexprint(yylineno, "KEYWORD CObj"); return COBJ; }
 Const              { lexprint(yylineno, "KEYWORD Const"); return CONST; }
 Continue           { lexprint(yylineno, "KEYWORD Continue"); return CONTINUE; }
 CSByte             { lexprint(yylineno, "KEYWORD CSByte"); return CSBYTE; }
@@ -124,7 +123,6 @@ New                { lexprint(yylineno, "KEYWORD New"); return NEW; }
 Next               { lexprint(yylineno, "KEYWORD Next"); return NEXT; }
 Not                { lexprint(yylineno, "KEYWORD Not"); return NOT; }
 Nothing            { lexprint(yylineno, "NOTHING Nothing"); return NOTHING; }
-Object             { lexprint(yylineno, "KEYWORD Object"); return OBJECT; }
 Optional           { lexprint(yylineno, "KEYWORD Optional"); return OPTIONAL; }
 Or                 { lexprint(yylineno, "KEYWORD Or"); return OR; }
 OrElse             { lexprint(yylineno, "KEYWORD OrElse"); return OR_ELSE; }
