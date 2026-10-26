@@ -331,12 +331,12 @@ expr: ID
     | CTYPE '(' ee expr ',' ee type ee ')'          // Оператор преобразования в другой тип, не функция
     | IF '(' ee expr ',' ee expr ',' ee expr ee ')' // Тернарный оператор
     | IF '(' ee expr ',' ee expr ee ')'             // Не тернарный оператор: если expr_1 является NOTHING, то выбрать expr_2
-    | NEW ID                                                        // New MyType
-    | NEW ID '(' expr_list_e ')'                                    // New MyType(1, true)
-    | NEW ID '(' expr_list_e ')' '{' expr_list_e '}'                // New MyType() {1, 2, 3}, New MyType(2) {1, 2, 3}
-    | NEW primitive_type                                            // New Integer
-    | NEW primitive_type '(' expr_list_e ')'                        // New Integer(), New Integer(2)
-    | NEW primitive_type '(' expr_list_e ')' '{' expr_list_e '}'    // New Integer() {1, 2, 3}, New Integer(2) {1, 2, 3}
+    | NEW ID                                                        // Объект: New MyType
+    | NEW ID '(' expr_list_e ')'                                    // Объект: New MyType(1, true)
+    | NEW ID '(' expr_list_e ')' '{' expr_list_e '}'                // Массив: New MyType() {1, 2, 3}, New MyType(2) {1, 2, 3}
+    | NEW primitive_type                                            // Объект: New Integer
+    | NEW primitive_type '(' expr_list_e ')'                        // Объект: New Integer(5)
+    | NEW primitive_type '(' expr_list_e ')' '{' expr_list_e '}'    // Массив: New Integer() {1, 2, 3}, New Integer(2) {1, 2, 3}
     | '{' expr_list_e '}'
     ;
 
