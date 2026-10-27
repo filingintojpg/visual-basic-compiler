@@ -3,6 +3,7 @@
 ' - Continue For, Continue While и Continue Do
 ' - управление внутри вложенных циклов, условий и Select
 ' - Exit и Continue внутри блочного If
+' - Exit Sub и Exit Function: безусловно и внутри условий и циклов
 ' - Return
 Class Main
     Shared Sub Main()
@@ -95,5 +96,30 @@ Class Main
 
     Shared Function EarlyFunction(x As Integer) As Integer
         Return x
+    End Function
+
+    Shared Sub ExitSub(x As Integer)
+        If x < 0 Then
+            Exit Sub
+        End If
+        For i = 0 To x
+            If i = 3 Then
+                Exit Sub
+            End If
+        Next
+        Exit Sub
+    End Sub
+
+    Shared Function ExitFunction(x As Integer) As Integer
+        If x < 0 Then
+            Exit Function
+        End If
+        While x > 0
+            x -= 1
+            If x = 5 Then
+                Exit Function
+            End If
+        End While
+        Exit Function
     End Function
 End Class

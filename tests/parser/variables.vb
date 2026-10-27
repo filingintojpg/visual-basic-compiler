@@ -1,20 +1,20 @@
 ' Тестируется:
-' - локальные переменные Dim: без типа, с типом, с инициализатором
+' - локальные переменные Dim: с типом, с инициализатором, с выводом типа (Dim x = 10)
 ' - все примитивные типы
-' - переменные типа-класса, Object и Nothing
+' - переменные типа-класса и Nothing (Object - обычный идентификатор типа)
 ' - локальные константы Const
 ' - поля класса: Dim и с инициализатором
 ' - присваивание и использование переменных в выражениях
-' - несколько переменных в одном Dim/Const: общий тип, разные типы, с инициализаторами, массивы
+' - несколько переменных в одном Dim/Const: у каждой свой тип или инициализатор, массивы, перенос после запятой
 ' - Dim ... As New: со скобками, без скобок, примитивный тип
 ' - то же для полей класса
 Class Point
     Dim horizontal As Integer
     Dim vertical As Integer = 5
     Const dimensions = 2
-    Dim left, right As Integer
-    Public first, second As Integer
-    Private Shared shared1, shared2 As Integer
+    Dim left As Integer, right As Integer
+    Public first As Integer, second As Integer
+    Private Shared shared1 As Integer, shared2 As Integer
     Private Const low = 1, high = 2
     Public origin As New Point()
     Dim copy1 As New Point, copy2 As New Point()
@@ -22,7 +22,6 @@ End Class
 
 Class Main
     Shared Sub Main()
-        Dim untyped
         Dim inferred = 10
         Dim declared As Integer
         Dim initialized As Integer = 10
@@ -58,13 +57,12 @@ Class Main
         Dim fromCall As Integer = Foo(1)
         Dim message = "n = " & intValue
 
-        Dim a, b As Integer
-        Dim c, d, e
+        Dim a As Integer, b As Integer
         Dim f As Integer, g As String
         Dim h = 1, i = 2
         Dim j As Integer = 1, k As String = "k"
-        Dim m(3), n As Integer
-        Dim o,
+        Dim m(3) As Integer, n As Integer
+        Dim o As Integer,
             p As Integer
         Const c1 = 1, c2 = 2
         Const c3 As Integer = 3, c4 As String = "four"
@@ -72,8 +70,10 @@ Class Main
         Dim person As New Point()
         Dim noParens As New Point
         Dim primitive As New Integer()
+        Dim primitiveNoParens As New Integer
+        Dim primitiveDouble As New Double
         Dim first As New Point(), second As New Point()
-        Dim x, y As New Point()
+        Dim x As New Point(), y As New Point(1, 2)
         Dim z As New Point() : Dim w As New Point()
     End Sub
 End Class

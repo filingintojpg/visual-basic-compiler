@@ -1,5 +1,5 @@
 ' Тестируется:
-' - функции приведения: CBool, CByte, CSByte, CShort, CUShort, CInt, CUInt, CLng, CULng, CSng, CDbl, CDec, CChar, CStr, CObj
+' - функции приведения: CBool, CByte, CSByte, CShort, CUShort, CInt, CUInt, CLng, CULng, CSng, CDbl, CDec, CChar, CStr
 ' - CType с примитивными типами, массивами и классами
 ' - вложенные приведения, приведения внутри выражений и аргументов
 Class Main
@@ -20,17 +20,16 @@ Class Main
         Dim toDecimal = CDec(text)
         Dim toChar = CChar(text)
         Dim toString = CStr(42)
-        Dim toObject = CObj(text)
 
         Dim typedInteger = CType(text, Integer)
         Dim typedString = CType(toInteger, String)
-        Dim typedArray = CType(toObject, Integer())
-        Dim typedClass = CType(toObject, Animal)
+        Dim typedArray = CType(text, Integer())
+        Dim typedClass = CType(text, Animal)
 
         Dim nested = CInt(CStr(CDbl(text)))
         Dim inExpression = CInt(text) + CInt(toString) * 2
         Dim onCall = CInt(Console.ReadLine())
-        Dim onMember = CDbl(toObject.Value) / 2
+        Dim onMember = CDbl(text.Length) / 2
         Dim concatenated = CStr(toInteger) & CStr(toDouble)
         Dim typedSum As Integer = CType(toInteger + 1, Integer)
         Print(CInt(1.5R), CDbl(1), CSng(1.5))

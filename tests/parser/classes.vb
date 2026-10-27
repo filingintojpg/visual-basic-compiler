@@ -1,6 +1,6 @@
 ' Тестируется:
 ' - объявление классов: поля (в том числе Const), методы Sub и Function
-' - Inherits: на отдельной строке и через ":", цепочка наследования
+' - Inherits: на отдельной строке и через ":", цепочка наследования, с модификатором доступа у класса
 ' - Me, MyBase и MyClass: обращение к полям и вызов методов
 ' - создание объектов: New Class, New Class(), New с примитивным типом
 ' - присваивание объектов, Nothing, Is и IsNot
@@ -25,6 +25,8 @@ Class Animal
     Public Sub Introduce()
         Console.WriteLine(Me.Name & " says " & Me.Speak())
         Console.WriteLine(MyClass.Speak())
+        Console.WriteLine(MyClass.Name)
+        MyClass.Age = MyClass.Age + 1
     End Sub
 
     Public Sub Rename(Name As String)
@@ -62,6 +64,21 @@ Class Puppy : Inherits Dog
     End Function
 End Class
 
+Public Class Kitten
+    Inherits Animal
+
+    Public Function Meow() As String
+        Return "Meow"
+    End Function
+End Class
+
+Public Class Cub : Inherits Dog
+End Class
+
+Private Class Hidden
+    Inherits Animal
+End Class
+
 Class Empty
 End Class
 
@@ -72,6 +89,9 @@ Class Main
         Dim puppy = New Puppy()
         Dim nothingYet As Animal = Nothing
         Dim zeroInteger = New Integer()
+        Dim bareInteger = New Integer
+        Dim bareDouble = New Double
+        Dim kitten As Animal = New Kitten()
 
         Console.WriteLine(pet.Speak())
         pet.Introduce()

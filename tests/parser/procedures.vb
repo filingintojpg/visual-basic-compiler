@@ -1,11 +1,13 @@
 ' Тестируется:
 ' - Sub и Function: с параметрами и без, со скобками и без скобок
-' - параметры с типом и без типа, параметры-массивы, параметры-объекты
-' - тип результата Function: примитивный, массив, класс; результат без типа
+' - параметры с типом, параметры-массивы, параметры-объекты
+' - тип результата Function: примитивный, массив, класс (тип результата обязателен)
 ' - Return со значением и без, вызов через Call, вызов без скобок
 ' - рекурсия, вызов функции в аргументах и в выражениях
 ' - вызов методов другого класса и собственных методов
 ' - перенос списка параметров на несколько строк
+' - Optional-параметры со значением по умолчанию, в том числе несколько подряд
+' - Sub и Function без модификатора доступа (по умолчанию Public), в том числе без скобок
 Class MathUtil
     Shared Sub Hello()
         Console.WriteLine("Hello")
@@ -16,9 +18,6 @@ Class MathUtil
     End Sub
 
     Shared Sub Pair(left As Integer, right As String)
-    End Sub
-
-    Shared Sub Untyped(first, second)
     End Sub
 
     Shared Sub Empty()
@@ -51,24 +50,12 @@ Class MathUtil
         Return n * Fact(n - 1)
     End Function
 
-    Shared Function NoType(x As Integer)
-        Return x * 2
-    End Function
-
-    Shared Function NoTypeNoParams()
-        Return 1
-    End Function
-
     Shared Function NoParens As Integer
         Return 2
     End Function
 
     Shared Function NoParams() As String
         Return "s"
-    End Function
-
-    Shared Function Bare
-        Return 3
     End Function
 
     Shared Function EmptyFunction() As Integer
@@ -93,6 +80,43 @@ Class MathUtil
     Shared Function Forward(x As Integer) As Integer
         Return Sum(x, Fact(3))
     End Function
+
+    Shared Sub WithOptional(a As Integer, Optional b As Integer = 5)
+        Print(a + b)
+    End Sub
+
+    Shared Sub ManyOptional(Optional a As Integer = 1, Optional name As String = "x", Optional flag As Boolean = True)
+    End Sub
+
+    Shared Function OptionalExpression(a As Integer, Optional b As Integer = 2 * 3 + 1) As Integer
+        Return a + b
+    End Function
+
+    Shared Sub OptionalMultiline(a As Integer,
+        Optional b As Integer = 5,
+        Optional c As Integer =
+            10
+    )
+    End Sub
+
+    Sub PlainSub()
+    End Sub
+
+    Sub PlainSubNoParens
+        Print("plain")
+    End Sub
+
+    Function PlainFunction() As Integer
+        Return 1
+    End Function
+
+    Function PlainFunctionNoParens As Integer
+        Return 2
+    End Function
+
+    Function PlainFunctionWithParams(a As Integer, b As Integer) As Integer
+        Return a * b
+    End Function
 End Class
 
 Class Main
@@ -106,7 +130,10 @@ Class Main
         Hello
         Hello()
         MathUtil.Pair(1, "x")
-        MathUtil.Untyped(1, "x")
+        MathUtil.WithOptional(1)
+        MathUtil.WithOptional(1, 2)
+        MathUtil.ManyOptional()
+        MathUtil.ManyOptional(2, "y", False)
 
         Dim total = MathUtil.Sum(1, 2)
         Dim factorial = MathUtil.Fact(5)
