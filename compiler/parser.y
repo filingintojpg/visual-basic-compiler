@@ -14,30 +14,18 @@
     void yyerror(const char* s) { parserErrors++; fprintf(stderr, "\nPARSER ERROR at line %d: %s - %s\n", yylineno, yytext, s); }
 %}
 
-%code requires {
-    enum class IntType { LONG, INTEGER, SHORT, NONE };
-    struct IntLiteral { long long int value; IntType type; bool isUnsigned;
-        IntLiteral(long long int value, IntType type, bool isUnsigned) : value(value), type(type), isUnsigned(isUnsigned) {}
-    };
-
-    enum class FloatType { DECIMAL, SINGLE, DOUBLE, NONE };
-    struct FloatLiteral { double value; FloatType type;
-        FloatLiteral(double value, FloatType type) : value(value), type(type) {}
-    };
-}
-
 %union {
-    IntLiteral*     intLiteral;
-    FloatLiteral*   floatLiteral;
-    std::string*    stringLiteral;
-    char            charLiteral;
-    bool            boolLiteral;
-    std::string*    id;
+    std::string* id;
+    int          intLiteral;
+    float        floatLiteral;
+    std::string* stringLiteral;
+    char         charLiteral;
+    bool         boolLiteral;
 }
 
 %printer { fprintf(yyo, "\"%s\"", $$->c_str()); } <id>
-%printer { fprintf(yyo, "%lld",   $$->value);   } <intLiteral>
-%printer { fprintf(yyo, "%f",     $$->value);   } <floatLiteral>
+%printer { fprintf(yyo, "%d",     $$);          } <intLiteral>
+%printer { fprintf(yyo, "%f",     $$);          } <floatLiteral>
 %printer { fprintf(yyo, "\"%s\"", $$->c_str()); } <stringLiteral>
 %printer { fprintf(yyo, "%c",     $$);          } <charLiteral>
 %printer { fprintf(yyo, "%d",     $$);          } <boolLiteral>
@@ -49,8 +37,8 @@
 %token <charLiteral>   CHAR_LIT
 %token <boolLiteral>   BOOL_LIT
 
-%token BOOLEAN BYTE CHAR DECIMAL DOUBLE INTEGER LONG SBYTE SHORT SINGLE STRING UINTEGER ULONG USHORT
-%token CBOOL CBYTE CCHAR CDBL CDEC CINT CLNG CSBYTE CSHORT CSNG CSTR CUINT CULNG CUSHORT CTYPE
+%token BOOLEAN CHAR INTEGER SINGLE STRING
+%token CBOOL CCHAR CINT CSNG CSTR CTYPE
 %token IF THEN ELSE ELSEIF SELECT CASE FOR EACH NEXT TO STEP DO LOOP WHILE UNTIL IN CONTINUE EXIT
 %token DIM CONST FUNCTION SUB CLASS INHERITS CALL END RETURN
 %token PUBLIC PRIVATE PROTECTED SHARED
@@ -199,7 +187,7 @@ stmt: expr              // Вызов метода или присваивани
     | EXIT FOR
     | EXIT WHILE
     | EXIT SELECT
-    | EXIT FUNCTION     // Возвращает дефолт значение для возвращаемого типа: для Integer и Double 0, для Boolean False, для String Nothing и т. д.
+    | EXIT FUNCTION     // Возвращает дефолт значение для возвращаемого типа: для Integer и Single 0, для Boolean False, для String Nothing и т. д.
     | EXIT SUB
     | IF expr THEN block_e else_if_stmts END IF
     | IF expr THEN block_e else_if_stmts ELSE block_e END IF
@@ -278,20 +266,11 @@ expr: ID
     | BOOL_LIT
     | NOTHING
     | ME        // this
-    | BYTE      // Примитивные типы являеются expr, так как имеют свои статические поля и методы
-    | SBYTE
-    | USHORT
-    | SHORT
-    | UINTEGER
-    | INTEGER
-    | ULONG
-    | LONG
+    | INTEGER   // Примитивные типы являеются expr, так как имеют свои статические поля и методы
     | BOOLEAN
     | CHAR
     | STRING
-    | DECIMAL
     | SINGLE
-    | DOUBLE
     | expr '+' ee expr
     | expr '-' ee expr
     | expr '*' ee expr
@@ -344,7 +323,7 @@ expr_list_e: ee
            | expr_list ee
            ;
 
-cast_operator: CBOOL | CBYTE | CSBYTE | CUSHORT | CSHORT | CINT | CUINT | CLNG | CULNG | CCHAR | CSTR | CDEC | CSNG | CDBL
+cast_operator: CBOOL | CINT | CCHAR | CSTR | CSNG
              ;
 
 /* Types */
@@ -357,7 +336,7 @@ simple_type: ID
            | primitive_type
            ;
 
-primitive_type: BYTE | SBYTE | USHORT | SHORT | UINTEGER | INTEGER | ULONG | LONG | BOOLEAN | CHAR | STRING | DECIMAL | SINGLE | DOUBLE
+primitive_type: INTEGER | BOOLEAN | CHAR | STRING | SINGLE
               ;
 
 /* Keywords */
@@ -368,8 +347,8 @@ id_or_kw: ID
         | ME | MYBASE | MYCLASS | NEW | AS | OPTIONAL
         | DIM | CONST | FUNCTION | SUB | CLASS | INHERITS | CALL | CONTINUE | EXIT | RETURN
         | PUBLIC | PRIVATE | PROTECTED | SHARED
-        | BYTE | SBYTE | USHORT | SHORT | UINTEGER | INTEGER | ULONG | LONG | BOOLEAN | CHAR | STRING | DECIMAL | SINGLE | DOUBLE
-        | CBOOL | CBYTE | CSBYTE | CUSHORT | CSHORT | CINT | CUINT | CLNG | CULNG | CCHAR | CSTR | CDEC | CSNG | CDBL | CTYPE
+        | INTEGER | BOOLEAN | CHAR | STRING | SINGLE
+        | CBOOL | CINT | CCHAR | CSTR | CSNG | CTYPE
         ;
 
 /* Line breaks and statement separators */

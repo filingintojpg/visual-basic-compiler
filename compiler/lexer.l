@@ -13,9 +13,6 @@ HEX_DIGIT   [a-fA-F0-9]
 NUMBER      {DIGIT}(\_*{DIGIT})*
 EXPONENT    [Ee][+-]?{NUMBER}
 
-INTEGER_SUFFIX          (S|US|I|UI|L|UL)
-FLOAT_SUFFIX   ([Ff]|[Dd]|[Rr])
-
 ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
 
 %{
@@ -38,13 +35,9 @@ ID          ({LETTER}|_[a-zA-Z0-9_])[a-zA-Z0-9_]*
     std::string toLower(const std::string& str);
     std::string integerDescription(const std::string& lexeme);
     std::string floatDescription(const std::string& lexeme);
-    std::string identifierDescription(const std::string& lexeme);
-    long long toInteger(const std::string& lexeme);
-    double toFloat(const std::string& lexeme);
+    int toInteger(const std::string& lexeme);
+    float toFloat(const std::string& lexeme);
     std::string toID(const std::string& lexeme);
-    bool isUnsignedInteger(const std::string& lexeme);
-    IntType typeOfInteger(const std::string& lexeme);
-    FloatType typeOfFloat(const std::string& lexeme);
 %}
 
 %x COMMENT
@@ -73,32 +66,20 @@ And                { lexprint(yylineno, "KEYWORD And"); return AND; }
 AndAlso            { lexprint(yylineno, "KEYWORD AndAlso"); return AND_ALSO; }
 As                 { lexprint(yylineno, "KEYWORD As"); return AS; }
 Boolean            { lexprint(yylineno, "KEYWORD Boolean"); return BOOLEAN; }
-Byte               { lexprint(yylineno, "KEYWORD Byte"); return BYTE; }
 Call               { lexprint(yylineno, "KEYWORD Call"); return CALL; }
 Case               { lexprint(yylineno, "KEYWORD Case"); return CASE; }
 CBool              { lexprint(yylineno, "KEYWORD CBool"); return CBOOL; }
-CByte              { lexprint(yylineno, "KEYWORD CByte"); return CBYTE; }
 CChar              { lexprint(yylineno, "KEYWORD CChar"); return CCHAR; }
-CDbl               { lexprint(yylineno, "KEYWORD CDbl"); return CDBL; }
-CDec               { lexprint(yylineno, "KEYWORD CDec"); return CDEC; }
 Char               { lexprint(yylineno, "KEYWORD Char"); return CHAR; }
 CInt               { lexprint(yylineno, "KEYWORD CInt"); return CINT; }
 Class              { lexprint(yylineno, "KEYWORD Class"); return CLASS; }
-CLng               { lexprint(yylineno, "KEYWORD CLng"); return CLNG; }
 Const              { lexprint(yylineno, "KEYWORD Const"); return CONST; }
 Continue           { lexprint(yylineno, "KEYWORD Continue"); return CONTINUE; }
-CSByte             { lexprint(yylineno, "KEYWORD CSByte"); return CSBYTE; }
-CShort             { lexprint(yylineno, "KEYWORD CShort"); return CSHORT; }
 CSng               { lexprint(yylineno, "KEYWORD CSng"); return CSNG; }
 CStr               { lexprint(yylineno, "KEYWORD CStr"); return CSTR; }
 CType              { lexprint(yylineno, "KEYWORD CType"); return CTYPE; }
-CUInt              { lexprint(yylineno, "KEYWORD CUInt"); return CUINT; }
-CULng              { lexprint(yylineno, "KEYWORD CULng"); return CULNG; }
-CUShort            { lexprint(yylineno, "KEYWORD CUShort"); return CUSHORT; }
-Decimal            { lexprint(yylineno, "KEYWORD Decimal"); return DECIMAL; }
 Dim                { lexprint(yylineno, "KEYWORD Dim"); return DIM; }
 Do                 { lexprint(yylineno, "KEYWORD Do"); return DO; }
-Double             { lexprint(yylineno, "KEYWORD Double"); return DOUBLE; }
 Each               { lexprint(yylineno, "KEYWORD Each"); return EACH; }
 Else               { lexprint(yylineno, "KEYWORD Else"); return ELSE; }
 ElseIf             { lexprint(yylineno, "KEYWORD ElseIf"); return ELSEIF; }
@@ -113,7 +94,6 @@ Inherits           { lexprint(yylineno, "KEYWORD Inherits"); return INHERITS; }
 Integer            { lexprint(yylineno, "KEYWORD Integer"); return INTEGER; }
 Is                 { lexprint(yylineno, "KEYWORD Is"); return IS; }
 IsNot              { lexprint(yylineno, "KEYWORD IsNot"); return ISNOT; }
-Long               { lexprint(yylineno, "KEYWORD Long"); return LONG; }
 Loop               { lexprint(yylineno, "KEYWORD Loop"); return LOOP; }
 Me                 { lexprint(yylineno, "KEYWORD Me"); return ME; }
 Mod                { lexprint(yylineno, "KEYWORD Mod"); return MOD; }
@@ -130,10 +110,8 @@ Private            { lexprint(yylineno, "KEYWORD Private"); return PRIVATE; }
 Protected          { lexprint(yylineno, "KEYWORD Protected"); return PROTECTED; }
 Public             { lexprint(yylineno, "KEYWORD Public"); return PUBLIC; }
 Return             { lexprint(yylineno, "KEYWORD Return"); return RETURN; }
-SByte              { lexprint(yylineno, "KEYWORD SByte"); return SBYTE; }
 Select             { lexprint(yylineno, "KEYWORD Select"); return SELECT; }
 Shared             { lexprint(yylineno, "KEYWORD Shared"); return SHARED; }
-Short              { lexprint(yylineno, "KEYWORD Short"); return SHORT; }
 Single             { lexprint(yylineno, "KEYWORD Single"); return SINGLE; }
 Step               { lexprint(yylineno, "KEYWORD Step"); return STEP; }
 String             { lexprint(yylineno, "KEYWORD String"); return STRING; }
@@ -141,9 +119,6 @@ Sub                { lexprint(yylineno, "KEYWORD Sub"); return SUB; }
 Then               { lexprint(yylineno, "KEYWORD Then"); return THEN; }
 To                 { lexprint(yylineno, "KEYWORD To"); return TO; }
 True               { lexprint(yylineno, "BOOLEAN True"); yylval.boolLiteral = true; return BOOL_LIT; }
-UInteger           { lexprint(yylineno, "KEYWORD UInteger"); return UINTEGER; }
-ULong              { lexprint(yylineno, "KEYWORD ULong"); return ULONG; }
-UShort             { lexprint(yylineno, "KEYWORD UShort"); return USHORT; }
 Until              { lexprint(yylineno, "KEYWORD Until"); return UNTIL; }
 While              { lexprint(yylineno, "KEYWORD While"); return WHILE; }
 
@@ -301,47 +276,47 @@ While              { lexprint(yylineno, "KEYWORD While"); return WHILE; }
 
     /* Integer literals */
 
-\_+{NUMBER}\_*{INTEGER_SUFFIX}?|\_*{NUMBER}\_+{INTEGER_SUFFIX}? {
+\_+{NUMBER}\_*I?|\_*{NUMBER}\_+I? {
     lexerror(yylineno, "Invalid underscore character in number literal: %s", yytext);
 }
 
-{NUMBER}{INTEGER_SUFFIX}? {
+{NUMBER}I? {
     std::string lexeme(yytext);
-    lexprint(yylineno, "%s (%lld)", integerDescription(lexeme).c_str(), toInteger(lexeme));
-    yylval.intLiteral = new IntLiteral(toInteger(lexeme), typeOfInteger(lexeme), isUnsignedInteger(lexeme));
+    lexprint(yylineno, "%s (%d)", integerDescription(lexeme).c_str(), toInteger(lexeme));
+    yylval.intLiteral = toInteger(lexeme);
     return INT_LIT;
 }
 
-&H\_*{HEX_DIGIT}(\_*{HEX_DIGIT}*)*\_+{INTEGER_SUFFIX}? {
+&H\_*{HEX_DIGIT}(\_*{HEX_DIGIT}*)*\_+I? {
     lexerror(yylineno, "Invalid underscore character in hex number literal: %s", yytext);
 }
 
-&H\_*{HEX_DIGIT}(\_*{HEX_DIGIT}*)*{INTEGER_SUFFIX}? {
+&H\_*{HEX_DIGIT}(\_*{HEX_DIGIT}*)*I? {
     std::string lexeme(yytext);
-    lexprint(yylineno, "%s (%lld)", integerDescription(lexeme).c_str(), toInteger(lexeme));
-    yylval.intLiteral = new IntLiteral(toInteger(lexeme), typeOfInteger(lexeme), isUnsignedInteger(lexeme));
+    lexprint(yylineno, "%s (%d)", integerDescription(lexeme).c_str(), toInteger(lexeme));
+    yylval.intLiteral = toInteger(lexeme);
     return INT_LIT;
 }
 
-&O\_*{OCT_DIGIT}(\_*{OCT_DIGIT}*)*\_+{INTEGER_SUFFIX}? {
+&O\_*{OCT_DIGIT}(\_*{OCT_DIGIT}*)*\_+I? {
     lexerror(yylineno, "Invalid underscore character in oct number literal: %s", yytext);
 }
 
-&O\_*{OCT_DIGIT}(\_*{OCT_DIGIT}*)*{INTEGER_SUFFIX}? {
+&O\_*{OCT_DIGIT}(\_*{OCT_DIGIT}*)*I? {
     std::string lexeme(yytext);
-    lexprint(yylineno, "%s (%lld)", integerDescription(lexeme).c_str(), toInteger(lexeme));
-    yylval.intLiteral = new IntLiteral(toInteger(lexeme), typeOfInteger(lexeme), isUnsignedInteger(lexeme));
+    lexprint(yylineno, "%s (%d)", integerDescription(lexeme).c_str(), toInteger(lexeme));
+    yylval.intLiteral = toInteger(lexeme);
     return INT_LIT;
 }
 
-&B\_*{BIN_DIGIT}(\_*{BIN_DIGIT}*)*\_+{INTEGER_SUFFIX}? {
+&B\_*{BIN_DIGIT}(\_*{BIN_DIGIT}*)*\_+I? {
     lexerror(yylineno, "Invalid underscore character in bin number literal: %s", yytext);
 }
 
-&B\_*{BIN_DIGIT}(\_*{BIN_DIGIT}*)*{INTEGER_SUFFIX}? {
+&B\_*{BIN_DIGIT}(\_*{BIN_DIGIT}*)*I? {
     std::string lexeme(yytext);
-    lexprint(yylineno, "%s (%lld)", integerDescription(lexeme).c_str(), toInteger(lexeme));
-    yylval.intLiteral = new IntLiteral(toInteger(lexeme), typeOfInteger(lexeme), isUnsignedInteger(lexeme));
+    lexprint(yylineno, "%s (%d)", integerDescription(lexeme).c_str(), toInteger(lexeme));
+    yylval.intLiteral = toInteger(lexeme);
     return INT_LIT;
 }
 
@@ -349,15 +324,15 @@ While              { lexprint(yylineno, "KEYWORD While"); return WHILE; }
 
 {NUMBER}(\.{NUMBER})?{EXPONENT}|{NUMBER}?\.{NUMBER}{EXPONENT}? {
     std::string lexeme(yytext);
-    lexprint(yylineno, "%s (%g)", floatDescription(lexeme).c_str(), toFloat(lexeme));
-    yylval.floatLiteral = new FloatLiteral(toFloat(lexeme), typeOfFloat(lexeme));
+    lexprint(yylineno, "%s (%f)", floatDescription(lexeme).c_str(), toFloat(lexeme));
+    yylval.floatLiteral = toFloat(lexeme);
     return FLOAT_LIT;
 }
 
-({NUMBER}(\.{NUMBER})?{EXPONENT}?|{NUMBER}?\.{NUMBER}{EXPONENT}?){FLOAT_SUFFIX} {
+({NUMBER}(\.{NUMBER})?{EXPONENT}?|{NUMBER}?\.{NUMBER}{EXPONENT}?)F {
     std::string lexeme(yytext);
-    lexprint(yylineno, "%s (%g)", floatDescription(lexeme).c_str(), toFloat(lexeme));
-    yylval.floatLiteral = new FloatLiteral(toFloat(lexeme), typeOfFloat(lexeme));
+    lexprint(yylineno, "%s (%f)", floatDescription(lexeme).c_str(), toFloat(lexeme));
+    yylval.floatLiteral = toFloat(lexeme);
     return FLOAT_LIT;
 }
 
@@ -385,9 +360,7 @@ While              { lexprint(yylineno, "KEYWORD While"); return WHILE; }
 \)  { lexprint(yylineno, "SEPARATOR )"); return ')'; }
 \{  { lexprint(yylineno, "SEPARATOR {"); return '{'; }
 \}  { lexprint(yylineno, "SEPARATOR }"); return '}'; }
-\?  { lexprint(yylineno, "SEPARATOR ?"); return '?'; }
 \.  { lexprint(yylineno, "SEPARATOR ."); return '.'; }
-\!  { lexprint(yylineno, "SEPARATOR !"); return '!'; }
 \,  { lexprint(yylineno, "SEPARATOR ,"); return ','; }
 \:  { lexprint(yylineno, "SEPARATOR :"); return ':'; }
 
@@ -463,46 +436,21 @@ std::string integerDescription(const std::string& lexeme) {
     else if (lowerLexeme.starts_with("&b")) { message += "BIN "; }
     else                                    { message += "DEC "; }
 
-    if (lowerLexeme.ends_with("us") || 
-        lowerLexeme.ends_with("ui") || 
-        lowerLexeme.ends_with("ul")) {
-        message += "UNSIGNED ";
-    }
-    
-    if      (lowerLexeme.ends_with("s")) { message += "SHORT "; }
-    else if (lowerLexeme.ends_with("l")) { message += "LONG "; }
-    else if (lowerLexeme.ends_with("i")) { message += "INTEGER "; }
-    else                                 { message += "INTEGER "; }
-
-    return message + lexeme;
+    return message + "INTEGER " + lexeme;
 }
 
 std::string floatDescription(const std::string& lexeme) {
-    std::string message("LITERAL ");
-    std::string lowerLexeme = toLower(lexeme);
-
-    if      (lowerLexeme.ends_with("f")) { message += "SINGLE "; }
-    else if (lowerLexeme.ends_with("d")) { message += "DECIMAL "; }
-    else if (lowerLexeme.ends_with("r")) { message += "DOUBLE "; }
-
-    return message + lexeme;
+    return "LITERAL SINGLE " + lexeme;
 }
 
     /* Converting lexemes to values */
 
-long long toInteger(const std::string& lexeme) {
+int toInteger(const std::string& lexeme) {
     std::string number = lexeme;
     std::string lowerLexeme = toLower(lexeme);
     int base = 10;
 
-    if (lowerLexeme.ends_with("us") || 
-        lowerLexeme.ends_with("ui") || 
-        lowerLexeme.ends_with("ul")) {
-        number = number.substr(0, number.length() - 2);
-    }
-    else if (lowerLexeme.ends_with("s") || 
-             lowerLexeme.ends_with("i") || 
-             lowerLexeme.ends_with("l")) {
+    if (lowerLexeme.ends_with("i")) {
         number = number.substr(0, number.length() - 1);
     }
 
@@ -515,13 +463,11 @@ long long toInteger(const std::string& lexeme) {
     return std::stoll(number, nullptr, base);
 }
 
-double toFloat(const std::string& lexeme) {
+float toFloat(const std::string& lexeme) {
     std::string number = lexeme;
     std::string lowerLexeme = toLower(lexeme);
 
-    if (lowerLexeme.ends_with("f") || 
-        lowerLexeme.ends_with("d") || 
-        lowerLexeme.ends_with("r")) {
+    if (lowerLexeme.ends_with("f")) {
         number.pop_back();
     }
 
@@ -538,29 +484,4 @@ std::string toID(const std::string& lexeme) {
     }
 
     return toLower(id);
-}
-
-    /* Lexemes info getters */
-
-bool isUnsignedInteger(const std::string& lexeme) {
-    std::string lowerLexeme = toLower(lexeme);
-    return lowerLexeme.ends_with("us") || 
-            lowerLexeme.ends_with("ui") || 
-            lowerLexeme.ends_with("ul");
-}
-
-IntType typeOfInteger(const std::string& lexeme) {
-    std::string lowerLexeme = toLower(lexeme);
-    if      (lowerLexeme.ends_with("s")) { return IntType::SHORT; }
-    else if (lowerLexeme.ends_with("l")) { return IntType::LONG; }
-    else if (lowerLexeme.ends_with("i")) { return IntType::INTEGER; }
-    else                                 { return IntType::NONE; }
-}
-
-FloatType typeOfFloat(const std::string& lexeme) {
-    std::string lowerLexeme = toLower(lexeme);
-    if      (lowerLexeme.ends_with("f")) { return FloatType::SINGLE; }
-    else if (lowerLexeme.ends_with("d")) { return FloatType::DECIMAL; }
-    else if (lowerLexeme.ends_with("r")) { return FloatType::DOUBLE; }
-    else                                 { return FloatType::NONE; }
 }
