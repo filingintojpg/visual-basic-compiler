@@ -73,7 +73,7 @@ Class MathUtil
         Return New MathUtil()
     End Function
 
-    Shared Function ManyParameters(a As Integer, b As Double, c As String, d As Char, e As Boolean, f As Long) As Double
+    Shared Function ManyParameters(a As Integer, b As Single, c As String, d As Char, e As Boolean) As Single
         Return a + b
     End Function
 

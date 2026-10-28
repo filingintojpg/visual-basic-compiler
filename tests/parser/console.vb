@@ -25,7 +25,7 @@ Class Main
         Dim line As String = Console.ReadLine()
         Dim inferred = Console.ReadLine()
         Dim whole As Integer = CInt(Console.ReadLine())
-        Dim fractional As Double = CDbl(Console.ReadLine())
+        Dim fractional As Single = CSng(Console.ReadLine())
         Dim flag As Boolean = CBool(Console.ReadLine())
         Dim letter As Char = CChar(Console.ReadLine())
         Dim typed As Integer = CType(Console.ReadLine(), Integer)

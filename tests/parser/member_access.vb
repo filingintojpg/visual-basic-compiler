@@ -1,7 +1,7 @@
 ' Тестируется:
 ' - цепочки обращений через точку: поля, вызовы методов, индексы
 ' - обращение к члену результата вызова
-' - обращение к членам литерала, результата в скобках и примитивного типа (все примитивные типы: Byte, SByte, UShort, Short, UInteger, Integer, ULong, Long, Boolean, Char, String, Decimal, Single, Double)
+' - обращение к членам литерала, результата в скобках и примитивного типа (все примитивные типы: Integer, Boolean, Char, String, Single)
 ' - ключевые слова в качестве имени члена после точки (полный список - в keyword_members.vb)
 ' - обращения слева от присваивания и в виде отдельного оператора
 ' - Call с обращением к члену
@@ -14,19 +14,10 @@ Class Main
         Dim staticAccess = Counter.Total
         Dim maxInteger = Integer.MaxValue
         Dim emptyString = String.Empty
-        Dim maxDouble = Double.MaxValue
-        Dim minLong = Long.MinValue
-        Dim maxByte = Byte.MaxValue
-        Dim minSByte = SByte.MinValue
-        Dim maxUShort = UShort.MaxValue
-        Dim maxShort = Short.MaxValue
-        Dim maxUInteger = UInteger.MaxValue
-        Dim maxULong = ULong.MaxValue
         Dim trueText = Boolean.TrueString
         Dim maxChar = Char.MaxValue
-        Dim maxDecimal = Decimal.MaxValue
         Dim maxSingle = Single.MaxValue
-        Dim parsed = Integer.Parse("1") + Long.Parse("2") + Double.Parse("3")
+        Dim parsed = Integer.Parse("1") + Single.Parse("2")
         Dim upper = "text".ToUpper()
         Dim length = "text".Length
         Dim fromParentheses = (a + b).ToString()

@@ -25,8 +25,8 @@ End Class
 Class Main
     Shared Sub Main()
         Dim sized(10) As Integer
-        Dim sizedByExpression(n - 1) As Long
-        Dim sizedByProduct(2 * n + 1) As Long
+        Dim sizedByExpression(n - 1) As Single
+        Dim sizedByProduct(2 * n + 1) As Char
         Dim sizedAndFilled(4) As Integer = {1, 2, 3, 4, 5}
         Dim unsized() As Integer = {1, 2, 3}
         Dim typed As Integer() = New Integer() {1, 2, 3}

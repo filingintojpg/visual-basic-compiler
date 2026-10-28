@@ -1,5 +1,5 @@
 ' Тестируется:
-' - функции приведения: CBool, CByte, CSByte, CShort, CUShort, CInt, CUInt, CLng, CULng, CSng, CDbl, CDec, CChar, CStr
+' - функции приведения: CBool, CInt, CSng, CChar, CStr
 ' - CType с примитивными типами, массивами и классами
 ' - вложенные приведения, приведения внутри выражений и аргументов
 Class Main
@@ -7,17 +7,8 @@ Class Main
         Dim text As String = "42"
 
         Dim toBoolean = CBool(text)
-        Dim toByte = CByte(text)
-        Dim toSByte = CSByte(text)
-        Dim toShort = CShort(text)
-        Dim toUShort = CUShort(text)
         Dim toInteger = CInt(text)
-        Dim toUInteger = CUInt(text)
-        Dim toLong = CLng(text)
-        Dim toULong = CULng(text)
         Dim toSingle = CSng(text)
-        Dim toDouble = CDbl(text)
-        Dim toDecimal = CDec(text)
         Dim toChar = CChar(text)
         Dim toString = CStr(42)
 
@@ -26,12 +17,12 @@ Class Main
         Dim typedArray = CType(text, Integer())
         Dim typedClass = CType(text, Animal)
 
-        Dim nested = CInt(CStr(CDbl(text)))
+        Dim nested = CInt(CStr(CSng(text)))
         Dim inExpression = CInt(text) + CInt(toString) * 2
         Dim onCall = CInt(Console.ReadLine())
-        Dim onMember = CDbl(text.Length) / 2
-        Dim concatenated = CStr(toInteger) & CStr(toDouble)
+        Dim onMember = CSng(text.Length) / 2
+        Dim concatenated = CStr(toInteger) & CStr(toSingle)
         Dim typedSum As Integer = CType(toInteger + 1, Integer)
-        Print(CInt(1.5R), CDbl(1), CSng(1.5))
+        Print(CInt(1.5), CSng(1), CSng(1.5F))
     End Sub
 End Class

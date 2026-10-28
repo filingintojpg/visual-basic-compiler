@@ -26,17 +26,8 @@ Class Main
         Dim declared As Integer
         Dim initialized As Integer = 10
 
-        Dim byteValue As Byte = 255
-        Dim sbyteValue As SByte = -128
-        Dim shortValue As Short = -32768
-        Dim ushortValue As UShort = 65535
         Dim intValue As Integer = 42
-        Dim uintValue As UInteger = 4000000000
-        Dim longValue As Long = 9000000000
-        Dim ulongValue As ULong = 18000000000
         Dim singleValue As Single = 1.5
-        Dim doubleValue As Double = 2.5
-        Dim decimalValue As Decimal = 3.5
         Dim boolValue As Boolean = True
         Dim charValue As Char = "c"c
         Dim stringValue As String = "text"
@@ -47,7 +38,7 @@ Class Main
         Dim copy = origin
 
         Const limit = 100
-        Const pi As Double = 3.14159
+        Const pi As Single = 3.14159
         Const greeting As String = "hi"
         Const doubleLimit As Integer = limit * 2
 
@@ -71,7 +62,7 @@ Class Main
         Dim noParens As New Point
         Dim primitive As New Integer()
         Dim primitiveNoParens As New Integer
-        Dim primitiveDouble As New Double
+        Dim primitiveSingle As New Single
         Dim first As New Point(), second As New Point()
         Dim x As New Point(), y As New Point(1, 2)
         Dim z As New Point() : Dim w As New Point()

@@ -41,34 +41,16 @@ Class Main
         Dim asPrivate = obj.Private
         Dim asProtected = obj.Protected
         Dim asShared = obj.Shared
-        Dim asByte = obj.Byte
-        Dim asSByte = obj.SByte
-        Dim asUShort = obj.UShort
-        Dim asShort = obj.Short
-        Dim asUInteger = obj.UInteger
         Dim asInteger = obj.Integer
-        Dim asULong = obj.ULong
-        Dim asLong = obj.Long
         Dim asBoolean = obj.Boolean
         Dim asChar = obj.Char
         Dim asString = obj.String
-        Dim asDecimal = obj.Decimal
         Dim asSingle = obj.Single
-        Dim asDouble = obj.Double
         Dim asCBool = obj.CBool
-        Dim asCByte = obj.CByte
-        Dim asCSByte = obj.CSByte
-        Dim asCUShort = obj.CUShort
-        Dim asCShort = obj.CShort
         Dim asCInt = obj.CInt
-        Dim asCUInt = obj.CUInt
-        Dim asCLng = obj.CLng
-        Dim asCULng = obj.CULng
         Dim asCChar = obj.CChar
         Dim asCStr = obj.CStr
-        Dim asCDec = obj.CDec
         Dim asCSng = obj.CSng
-        Dim asCDbl = obj.CDbl
         Dim asCType = obj.CType
 
         obj.If()

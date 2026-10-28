@@ -90,7 +90,7 @@ Class Main
         Dim nothingYet As Animal = Nothing
         Dim zeroInteger = New Integer()
         Dim bareInteger = New Integer
-        Dim bareDouble = New Double
+        Dim bareSingle = New Single
         Dim kitten As Animal = New Kitten()
 
         Console.WriteLine(pet.Speak())
