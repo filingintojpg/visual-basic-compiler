@@ -328,11 +328,8 @@ type: simple_type
     ;
 
 simple_type: ID
-           | primitive_type
+           | INTEGER | BOOLEAN | CHAR | STRING | SINGLE
            ;
-
-primitive_type: INTEGER | BOOLEAN | CHAR | STRING | SINGLE
-              ;
 
 /* Keywords */
 
