@@ -248,9 +248,8 @@ var_declaration: var_declarator
 var_declarator: ID '=' ee expr                                      // x = 1, x = MyFunc(), x = {1, 2, 3}, ...
               | ID AS type                                          // x As Integer, x As Integer(), x As MyType, x As MyType()
               | ID AS type '=' ee expr                              // x As MyType = 1, x As MyType() = {1, 2, 3}, ...
-              | ID AS NEW ID                                        // x As New MyType
+              | ID AS NEW simple_type                               // x As New Integer, x As New MyType
               | ID AS NEW ID '(' expr_list_e ')'                    // x As New MyType(1, true)
-              | ID AS NEW primitive_type                            // x As New Integer
               | ID AS NEW primitive_type '(' ee ')'                 // x As New Integer()
               | ID '(' expr_list_e ')' AS simple_type               // x() As MyType, x(2) As MyType
               | ID '(' expr_list_e ')' AS simple_type '=' ee expr   // x() As MyType = {1, 2, 3}
@@ -306,12 +305,9 @@ expr: ID
     | CTYPE '(' ee expr ',' ee type ee ')'          // Оператор преобразования в другой тип, не функция
     | IF '(' ee expr ',' ee expr ',' ee expr ee ')' // Тернарный оператор
     | IF '(' ee expr ',' ee expr ee ')'             // Не тернарный оператор: если expr_1 является NOTHING, то выбрать expr_2
-    | NEW ID                                                        // Объект: New MyType
-    | NEW ID '(' expr_list_e ')'                                    // Объект: New MyType(1, true)
-    | NEW ID '(' expr_list_e ')' '{' expr_list_e '}'                // Массив: New MyType() {1, 2, 3}, New MyType(2) {1, 2, 3}
-    | NEW primitive_type                                            // Объект: New Integer
-    | NEW primitive_type '(' expr_list_e ')'                        // Объект: New Integer(5)
-    | NEW primitive_type '(' expr_list_e ')' '{' expr_list_e '}'    // Массив: New Integer() {1, 2, 3}, New Integer(2) {1, 2, 3}
+    | NEW simple_type                                           // Объект: New Integer, New MyType
+    | NEW simple_type '(' expr_list_e ')'                       // Объект: New Integer(5), New MyType(1, true)
+    | NEW simple_type '(' expr_list_e ')' '{' expr_list_e '}'   // Массив: New Integer() {1, 2, 3}, New Integer(2) {1, 2, 3}, New MyType() {1, 2, 3}, New MyType(2) {1, 2, 3}
     | '{' expr_list_e '}'
     ;
 
