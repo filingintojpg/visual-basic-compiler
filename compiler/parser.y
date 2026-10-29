@@ -113,11 +113,9 @@ class_member: field_declaration
 
 field_declaration: member_modifiers DIM SHARED var_declaration
                  | member_modifiers DIM var_declaration
-                 | member_modifiers CONST SHARED var_declaration
-                 | member_modifiers CONST var_declaration
+                 | access_modifier CONST var_declaration
                  | DIM SHARED var_declaration
                  | DIM var_declaration
-                 | CONST SHARED var_declaration
                  | CONST var_declaration
                  | member_modifiers var_declaration
                  ;
