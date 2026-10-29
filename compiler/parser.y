@@ -136,15 +136,15 @@ function_declaration: member_modifiers FUNCTION ID '(' parameter_list_e ')' AS t
                     | FUNCTION ID AS type block_e END FUNCTION
                     ;
 
-sub_declaration: member_modifiers SUB ID '(' parameter_list_e ')' block_e END SUB
-               | member_modifiers SUB NEW '(' parameter_list_e ')' block_e END SUB // Конструктор
-               | member_modifiers SUB ID block_e END SUB // Процедуру без аргументов можно объявить без скобок
-               | member_modifiers SUB NEW block_e END SUB
-               | SUB ID '(' parameter_list_e ')' block_e END SUB // По умолчанию Public
-               | SUB NEW '(' parameter_list_e ')' block_e END SUB
-               | SUB ID block_e END SUB
-               | SUB NEW block_e END SUB
+sub_declaration: member_modifiers SUB sub_name '(' parameter_list_e ')' block_e END SUB // Конструктор
+               | member_modifiers SUB sub_name block_e END SUB // Процедуру без аргументов можно объявить без скобок
+               | SUB sub_name '(' parameter_list_e ')' block_e END SUB // По умолчанию Public
+               | SUB sub_name block_e END SUB
                ;
+
+sub_name: ID
+        | NEW
+        ;
 
 parameter_list: parameter
               | parameter_list ',' ee parameter
