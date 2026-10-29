@@ -115,7 +115,7 @@ field_declaration: member_modifiers DIM SHARED var_declaration
                  | member_modifiers DIM var_declaration
                  | member_modifiers CONST SHARED var_declaration
                  | member_modifiers CONST var_declaration
-                 | DIM SHARED var_declaration // По умолчанию Private
+                 | DIM SHARED var_declaration
                  | DIM var_declaration
                  | CONST SHARED var_declaration
                  | CONST var_declaration
@@ -131,14 +131,14 @@ member_modifiers: access_modifier
 /* Methods */
 
 function_declaration: member_modifiers FUNCTION ID '(' parameter_list_e ')' AS type block_e END FUNCTION
-                    | member_modifiers FUNCTION ID AS type block_e END FUNCTION // Функцию без аргументов можно объявить без скобок
-                    | FUNCTION ID '(' parameter_list_e ')' AS type block_e END FUNCTION // По умолчанию Public
+                    | member_modifiers FUNCTION ID AS type block_e END FUNCTION
+                    | FUNCTION ID '(' parameter_list_e ')' AS type block_e END FUNCTION
                     | FUNCTION ID AS type block_e END FUNCTION
                     ;
 
-sub_declaration: member_modifiers SUB sub_name '(' parameter_list_e ')' block_e END SUB // Конструктор
-               | member_modifiers SUB sub_name block_e END SUB // Процедуру без аргументов можно объявить без скобок
-               | SUB sub_name '(' parameter_list_e ')' block_e END SUB // По умолчанию Public
+sub_declaration: member_modifiers SUB sub_name '(' parameter_list_e ')' block_e END SUB
+               | member_modifiers SUB sub_name block_e END SUB
+               | SUB sub_name '(' parameter_list_e ')' block_e END SUB
                | SUB sub_name block_e END SUB
                ;
 
@@ -169,8 +169,8 @@ block_e: ecl
        | ecl block
        ;
 
-stmt: expr              // Вызов метода или присваивание expr = expr
-    | CALL expr         // Вызов метода
+stmt: expr
+    | CALL expr
     | expr "+=" ee expr
     | expr "-=" ee expr
     | expr "*=" ee expr
@@ -180,14 +180,14 @@ stmt: expr              // Вызов метода или присваивани
     | expr "&=" ee expr
     | RETURN
     | RETURN expr
-    | CONTINUE DO       // Находят ближайший по вложенности такой цикл и приступают к следующей его итерации
+    | CONTINUE DO
     | CONTINUE FOR
     | CONTINUE WHILE
-    | EXIT DO           // Находят ближайший по вложенности такой цикл и выходят из всех циклов вплоть до нужного
+    | EXIT DO
     | EXIT FOR
     | EXIT WHILE
     | EXIT SELECT
-    | EXIT FUNCTION     // Возвращает дефолт значение для возвращаемого типа: для Integer и Single 0, для Boolean False, для String Nothing и т. д.
+    | EXIT FUNCTION
     | EXIT SUB
     | IF expr THEN block_e else_if_stmts END IF
     | IF expr THEN block_e else_if_stmts ELSE block_e END IF
@@ -245,13 +245,13 @@ var_declaration: var_declarator
                | var_declaration ',' ee var_declarator
                ;
 
-var_declarator: ID '=' ee expr                                      // x = 1, x = MyFunc(), x = {1, 2, 3}, ...
-              | ID AS type                                          // x As Integer, x As Integer(), x As MyType, x As MyType()
-              | ID AS type '=' ee expr                              // x As Type = 1, x As Type() = {1, 2, 3}, ...
-              | ID AS NEW simple_type                               // x As New Integer, x As New SimpleType
-              | ID AS NEW simple_type '(' expr_list_e ')'           // x As New Integer(), x As New SimpleType(1, true)
-              | ID '(' expr_list_e ')' AS simple_type               // x() As SimpleType, x(2) As SimpleType
-              | ID '(' expr_list_e ')' AS simple_type '=' ee expr   // x() As SimpleType = {1, 2, 3}
+var_declarator: ID '=' ee expr
+              | ID AS type
+              | ID AS type '=' ee expr
+              | ID AS NEW simple_type
+              | ID AS NEW simple_type '(' expr_list_e ')'
+              | ID '(' expr_list_e ')' AS simple_type
+              | ID '(' expr_list_e ')' AS simple_type '=' ee expr
               ;
 
 /* Expressions */
@@ -263,10 +263,10 @@ expr: ID
     | CHAR_LIT
     | BOOL_LIT
     | NOTHING
-    | ME        // this
-    | MYCLASS   // MyClass.Foo() - вызов метода класса, в котором была написана данная строка
-    | MYBASE    // MyBase.Foo() - вызов метода родителя класса, в котором была написана данная строка
-    | INTEGER   // Примитивные типы являеются expr, так как имеют свои статические поля и методы
+    | ME
+    | MYCLASS
+    | MYBASE
+    | INTEGER
     | BOOLEAN
     | CHAR
     | STRING
@@ -295,16 +295,16 @@ expr: ID
     | '+' expr %prec UNPLUS
     | '-' expr %prec UNMINUS
     | '(' ee expr ee ')'
-    | ID '(' expr_list_e ')'                                    // Вызов метода или индексация одномерного массива
-    | expr '.' ee id_or_kw                                      // Вызов метода или доступ к полю
-    | expr '.' ee id_or_kw '(' expr_list_e ')'                  // Вызов метода
-    | cast_operator '(' ee expr ee ')'                          // Оператор преобразования в другой тип, не функция
-    | CTYPE '(' ee expr ',' ee type ee ')'                      // Оператор преобразования в другой тип, не функция
-    | IF '(' ee expr ',' ee expr ',' ee expr ee ')'             // Тернарный оператор
-    | IF '(' ee expr ',' ee expr ee ')'                         // Не тернарный оператор: если expr_1 является NOTHING, то выбрать expr_2
-    | NEW simple_type                                           // Объект: New Integer, New MyType
-    | NEW simple_type '(' expr_list_e ')'                       // Объект: New Integer(), New MyType(1, true)
-    | NEW simple_type '(' expr_list_e ')' '{' expr_list_e '}'   // Массив: New Integer() {1, 2, 3}, New Integer(2) {1, 2, 3}, New MyType() {1, 2, 3}, New MyType(2) {1, 2, 3}
+    | ID '(' expr_list_e ')'
+    | expr '.' ee id_or_kw
+    | expr '.' ee id_or_kw '(' expr_list_e ')'
+    | cast_operator '(' ee expr ee ')'
+    | CTYPE '(' ee expr ',' ee type ee ')'
+    | IF '(' ee expr ',' ee expr ',' ee expr ee ')'
+    | IF '(' ee expr ',' ee expr ee ')'
+    | NEW simple_type
+    | NEW simple_type '(' expr_list_e ')'
+    | NEW simple_type '(' expr_list_e ')' '{' expr_list_e '}'
     | '{' expr_list_e '}'
     ;
 
