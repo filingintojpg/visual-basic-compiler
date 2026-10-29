@@ -76,11 +76,11 @@
 
 /* Program */
 
-program: ecle members
+program: ecle members ecle
        ;
 
-members: class_declaration ecle
-       | members class_declaration ecle
+members: class_declaration
+       | members ecle class_declaration
        ;
 
 /* Classes */
