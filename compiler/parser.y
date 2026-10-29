@@ -295,13 +295,13 @@ expr: ID
     | '+' expr %prec UNPLUS
     | '-' expr %prec UNMINUS
     | '(' ee expr ee ')'
-    | ID '(' expr_list_e ')' // Вызов метода или индексация одномерного массива
-    | expr '.' ee id_or_kw
-    | expr '.' ee id_or_kw '(' expr_list_e ')'
-    | cast_operator '(' ee expr ee ')'              // Оператор преобразования в другой тип, не функция
-    | CTYPE '(' ee expr ',' ee type ee ')'          // Оператор преобразования в другой тип, не функция
-    | IF '(' ee expr ',' ee expr ',' ee expr ee ')' // Тернарный оператор
-    | IF '(' ee expr ',' ee expr ee ')'             // Не тернарный оператор: если expr_1 является NOTHING, то выбрать expr_2
+    | ID '(' expr_list_e ')'                                    // Вызов метода или индексация одномерного массива
+    | expr '.' ee id_or_kw                                      // Вызов метода или доступ к полю
+    | expr '.' ee id_or_kw '(' expr_list_e ')'                  // Вызов метода
+    | cast_operator '(' ee expr ee ')'                          // Оператор преобразования в другой тип, не функция
+    | CTYPE '(' ee expr ',' ee type ee ')'                      // Оператор преобразования в другой тип, не функция
+    | IF '(' ee expr ',' ee expr ',' ee expr ee ')'             // Тернарный оператор
+    | IF '(' ee expr ',' ee expr ee ')'                         // Не тернарный оператор: если expr_1 является NOTHING, то выбрать expr_2
     | NEW simple_type                                           // Объект: New Integer, New MyType
     | NEW simple_type '(' expr_list_e ')'                       // Объект: New Integer(), New MyType(1, true)
     | NEW simple_type '(' expr_list_e ')' '{' expr_list_e '}'   // Массив: New Integer() {1, 2, 3}, New Integer(2) {1, 2, 3}, New MyType() {1, 2, 3}, New MyType(2) {1, 2, 3}
