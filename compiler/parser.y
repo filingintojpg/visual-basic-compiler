@@ -264,6 +264,8 @@ expr: ID
     | BOOL_LIT
     | NOTHING
     | ME        // this
+    | MYCLASS   // MyClass.Foo() - вызов метода класса, в котором была написана данная строка
+    | MYBASE    // MyBase.Foo() - вызов метода родителя класса, в котором была написана данная строка
     | INTEGER   // Примитивные типы являеются expr, так как имеют свои статические поля и методы
     | BOOLEAN
     | CHAR
@@ -296,10 +298,6 @@ expr: ID
     | ID '(' expr_list_e ')' // Вызов метода или индексация одномерного массива
     | expr '.' ee id_or_kw
     | expr '.' ee id_or_kw '(' expr_list_e ')'
-    | MYBASE '.' ee id_or_kw
-    | MYBASE '.' ee id_or_kw '(' expr_list_e ')'
-    | MYCLASS '.' ee id_or_kw
-    | MYCLASS '.' ee id_or_kw '(' expr_list_e ')'
     | cast_operator '(' ee expr ee ')'              // Оператор преобразования в другой тип, не функция
     | CTYPE '(' ee expr ',' ee type ee ')'          // Оператор преобразования в другой тип, не функция
     | IF '(' ee expr ',' ee expr ',' ee expr ee ')' // Тернарный оператор
