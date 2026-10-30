@@ -56,6 +56,7 @@
 %token LEQ                  "<="
 %token GEQ                  ">="
 
+%precedence NEW
 %left OR OR_ELSE
 %left AND AND_ALSO
 %right NOT
@@ -293,14 +294,14 @@ expr: ID
     | '+' expr %prec UNPLUS
     | '-' expr %prec UNMINUS
     | '(' ee expr ee ')'
-    | ID '(' expr_list_e ')'
+    | expr '(' expr_list_e ')'
     | expr '.' ee id_or_kw
     | expr '.' ee id_or_kw '(' expr_list_e ')'
     | cast_operator '(' ee expr ee ')'
     | CTYPE '(' ee expr ',' ee type ee ')'
     | IF '(' ee expr ',' ee expr ',' ee expr ee ')'
     | IF '(' ee expr ',' ee expr ee ')'
-    | NEW simple_type
+    | NEW simple_type %prec NEW
     | NEW simple_type '(' expr_list_e ')'
     | NEW simple_type '(' expr_list_e ')' '{' expr_list_e '}'
     | '{' expr_list_e '}'
