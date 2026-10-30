@@ -4,6 +4,7 @@
 ' - тип результата Function: примитивный, массив, класс (тип результата обязателен)
 ' - Return со значением и без, вызов через Call, вызов без скобок
 ' - рекурсия, вызов функции в аргументах и в выражениях
+' - индексация результата функции-массива сразу после вызова
 ' - вызов методов другого класса и собственных методов
 ' - перенос списка параметров на несколько строк
 ' - Optional-параметры со значением по умолчанию, в том числе несколько подряд
@@ -140,6 +141,8 @@ Class Main
         Print(MathUtil.Sum(MathUtil.Sum(1, 2), 3))
         Dim expression = MathUtil.Sum(1, 2) * MathUtil.Sum(3, 4) - MathUtil.Fact(3)
         Dim numbers = MathUtil.ArrayResult()
+        Dim second = MathUtil.ArrayResult()(1)
+        Print(MathUtil.ArrayResult()(0) + MathUtil.ArrayResult()(2))
 
         If MathUtil.IsLess(1, 2) Then
             Print("less")

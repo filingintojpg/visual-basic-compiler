@@ -1,6 +1,7 @@
 ' Тестируется:
 ' - цепочки обращений через точку: поля, вызовы методов, индексы
 ' - обращение к члену результата вызова
+' - индексация результата вызова внутри цепочки (полный набор - в call_indexing.vb)
 ' - обращение к членам литерала, результата в скобках и примитивного типа (все примитивные типы: Integer, Boolean, Char, String, Single)
 ' - ключевые слова в качестве имени члена после точки (полный список - в keyword_members.vb)
 ' - обращения слева от присваивания и в виде отдельного оператора
@@ -11,6 +12,9 @@ Class Main
         Dim calls = a.b().c()
         Dim indexed = a.items(0).name
         Dim afterCall = Foo(1).Bar
+        Dim indexedCall = a.b()(1)
+        Dim memberOfIndexedCall = a.b()(1).c
+        Dim callOfIndexedCall = a.b(1)(2).c()(3).d
         Dim staticAccess = Counter.Total
         Dim maxInteger = Integer.MaxValue
         Dim emptyString = String.Empty
@@ -26,6 +30,7 @@ Class Main
         a.b.c = 5
         a.b(1).c = 6
         a.b(1).c(2) = 7
+        a.b()(1).c = 8
         a.b.c()
         a.b(1)
         a.b

@@ -4,6 +4,7 @@
 ' - массивы разных типов, в том числе объектов
 ' - чтение и запись элемента: индекс - выражение, вызов, другой элемент
 ' - Length и методы массива
+' - индексация массива, возвращённого функцией, сразу после вызова
 ' - массивы как поля класса, параметры и результат функции
 ' - многострочный инициализатор
 Class Holder
@@ -59,6 +60,11 @@ Class Main
         Next
         Dim length = sized.Length
         Dim upper = sized.GetUpperBound(0)
+
+        Dim fromResult = Copy(sized)(0)
+        Dim fromResultExpression = Copy(sized)(i + 1) * 2
+        Copy(sized)(0) = 1
+        Console.WriteLine(Copy(sized)(1))
 
         words(0) = "z"
         letters(1) = "q"c
