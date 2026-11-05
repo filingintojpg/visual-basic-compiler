@@ -4,10 +4,6 @@
 #include <utility>
 #include <vector>
 
-struct stmt_node;
-
-typedef std::vector<stmt_node*> block;
-
 /* Enums */
 
 enum class access_modifier { Public, Private, Protected };
@@ -113,6 +109,10 @@ struct typed_value : node {
 };
 
 /* Statements */
+
+struct stmt_node;
+
+typedef std::vector<stmt_node*> block;
 
 struct elseif_clause {
     expr_node* condition = nullptr;
