@@ -175,7 +175,7 @@ struct stmt_node : node {
 
 /* Class members */
 
-struct procedure_node : node {
+struct method_node : node {
     std::string name;                    // "New" for constructors
     type_node* returnType = nullptr;     // nullptr => Sub
     std::vector<typed_value*> params;
@@ -201,7 +201,7 @@ struct class_node : node {
     std::string parent;
 
     std::vector<field_node*> fields;
-    std::vector<procedure_node*> methods;
+    std::vector<method_node*> methods;
 };
 
 struct program_node : node {
