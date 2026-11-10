@@ -128,20 +128,17 @@ struct case_clause {
     block body;
 };
 
-// One struct for all statements; which fields are used depends on `type`:
-//
-//   Call          expr (the call expression)
-//   Assignment    lvalue, rvalue, assign_type
-//   Return        expr (nullptr for bare Return)
-//   Continue*/Exit*   nothing
-//   If            condition, body, elseifs, else_block
-//   Select        expr (subject), cases, else_block (Case Else)
-//   For           id, id_type (nullable), from_expr, to_expr, step_expr (nullable), body
-//   ForEach       id, id_type (nullable), container_expr, body
-//   While         condition, body
-//   Do            body, condition (nullptr => infinite loop),
-//                 conditionAtEnd (Loop While/Until), isUntil
-//   VarDecl       var_type, declarators
+//   Call               expr
+//   Assignment         lvalue, rvalue, assign_type
+//   Return             expr
+//   Continue*/Exit*
+//   If                 condition, body, elseifs, else_block
+//   Select             expr, cases, else_block
+//   For                id, id_type, from_expr, to_expr, step_expr, body
+//   ForEach            id, id_type, container_expr, body
+//   While              condition, body
+//   Do                 body, condition, conditionAtEnd, isUntil
+//   VarDecl            var_type, declarators
 struct stmt_node : node {
     stmt_type type;
 
@@ -154,7 +151,7 @@ struct stmt_node : node {
     expr_node* condition = nullptr;
     block body;
     std::vector<elseif_clause> elseifs;
-    std::optional<block> else_block;   // empty optional => no Else; Else with empty body is still engaged
+    std::optional<block> else_block;
     std::vector<case_clause> cases;
 
     std::string id;
