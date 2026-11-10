@@ -3,24 +3,24 @@
 #include <vector>
 #include "nodes.hpp"
 
-/* List helpers (for rules like block, expr_list, parameter_list ...) */
+/* List utility */
 
 template <class T>
-std::vector<T>* list_empty() {
+std::vector<T>* list() {
     return new std::vector<T>();
 }
 
 template <class T>
 std::vector<T>* list_of(T first) {
-    auto* list = new std::vector<T>();
-    list->push_back(first);
-    return list;
+    auto* result = list<T>();
+    result->push_back(first);
+    return result;
 }
 
 template <class T>
-std::vector<T>* list_add(std::vector<T>* list, T item) {
-    list->push_back(item);
-    return list;
+std::vector<T>* list_add(std::vector<T>* items, T item) {
+    items->push_back(item);
+    return items;
 }
 
 /* Program and classes */
