@@ -26,7 +26,7 @@ enum class access_modifier { Public, Private, Protected };
 
 enum class var_kind { Dim, Const };
 
-enum class datatype_type { Integer, Boolean, Char, String, Single, UserType };
+enum class data_type { Integer, Boolean, Char, String, Single, UserType };
 
 enum class assignment_type { Assign, AddAssign, SubAssign, MulAssign, DivAssign, FloorDivAssign, ExpAssign, StrConcatAssign };
 
@@ -42,12 +42,12 @@ struct node {
 /* Types */
 
 struct type_node : node {
-    datatype_type kind;
+    data_type kind;
     std::string name;
 
     int arrayRank = 0;
 
-    type_node(datatype_type kind, std::string name = "") : kind(kind), name(name) {}
+    type_node(data_type kind, std::string name = "") : kind(kind), name(name) {}
 };
 
 /* Expressions */
