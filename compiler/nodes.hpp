@@ -88,16 +88,14 @@ struct expr_node : node {
     expr_node(expr_type type) : type(type) {}
 };
 
-/* Declarations shared by variables, fields and parameters */
+/* Variables (locals, fields, parameters) */
 
 struct variable_node : node {
     std::string name;
     type_node* type = nullptr;
     expr_node* value = nullptr;
 
-    // "x(n) As T": type->isArray is true, these are the dimension expressions
-    // (upper bounds, as in VB). Empty for plain "x() As T" parameters.
-    std::vector<expr_node*> array_sizes;
+    std::vector<expr_node*> dimensions;
 
     bool isOptional = false;
 };
