@@ -71,8 +71,8 @@ struct type_node : node {
 struct expr_node : node {
     expr_type type;
 
-    long long intValue = 0;
-    double floatValue = 0.0;
+    int intValue = 0;
+    float floatValue = 0.0f;
     char charValue = 0;
     bool boolValue = false;
 
