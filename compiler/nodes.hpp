@@ -52,6 +52,22 @@ struct type_node : node {
 
 /* Expressions */
 
+// Int                          intValue
+// Float                        floatValue
+// String                       text
+// Char                         charValue
+// Bool                         boolValue
+// Nothing/Me/MyClass/MyBase
+// Id                           text
+// Binary ops                   left, right
+// Unary ops                    operand
+// MemberAccess                 left, text
+// CallOrIndex                  left, args
+// Cast                         datatype, operand
+// If                           condition, then_expr, else_expr
+// Coalesce                     left, right
+// New                          datatype, args, elements, hasInitializer
+// Collection                   elements
 struct expr_node : node {
     expr_type type;
 
@@ -60,28 +76,20 @@ struct expr_node : node {
     char charValue = 0;
     bool boolValue = false;
 
-    // String literal, ID, MemberAccess.
     std::string text;
 
-    // Binary operators, MemberAccess, CallOrIndex, Coalesce
     expr_node* left = nullptr;
     expr_node* right = nullptr;
-
-    // Unary operators, Cast
     expr_node* operand = nullptr;
 
-    // If(condition, then_expr, else_expr)
     expr_node* condition = nullptr;
     expr_node* then_expr = nullptr;
     expr_node* else_expr = nullptr;
 
-    // Cast, New
     type_node* datatype = nullptr;
 
-    // CallOrIndex, New arguments
     std::vector<expr_node*> args;
 
-    // Collection literal, New ... { initializer }
     std::vector<expr_node*> elements;
     bool hasInitializer = false;
 
