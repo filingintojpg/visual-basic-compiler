@@ -190,7 +190,7 @@ struct method_node : node {
 
 struct field_node : node {
     var_kind kind = var_kind::Dim;
-    std::vector<variable_node*> variables;
+    std::vector<variable_node*> declarators;
     
     access_modifier access;
     bool isStatic = false;
