@@ -93,7 +93,7 @@ struct expr_node : node {
 
 /* Declarations shared by variables, fields and parameters */
 
-struct typed_value : node {
+struct variable_node : node {
     std::string name;
     type_node* type = nullptr;
     expr_node* value = nullptr;
@@ -168,7 +168,7 @@ struct stmt_node : node {
     bool isUntil = false;
 
     var_kind var_type = var_kind::Dim;
-    std::vector<typed_value*> declarators;
+    std::vector<variable_node*> declarators;
 
     stmt_node(stmt_type type) : type(type) {}
 };
@@ -178,7 +178,7 @@ struct stmt_node : node {
 struct method_node : node {
     std::string name;
     type_node* returnType = nullptr;
-    std::vector<typed_value*> params;
+    std::vector<variable_node*> params;
     block body;
 
     access_modifier access;
@@ -189,10 +189,11 @@ struct method_node : node {
 };
 
 struct field_node : node {
+    var_kind kind = var_kind::Dim;
+    std::vector<variable_node*> variables;
+    
     access_modifier access;
     bool isStatic = false;
-    var_kind kind = var_kind::Dim;
-    std::vector<typed_value*> declarators;  // Dim a, b As Integer
 };
 
 struct class_node : node {
