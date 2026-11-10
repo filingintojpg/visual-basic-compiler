@@ -3,9 +3,7 @@
 #include <vector>
 #include "nodes.hpp"
 
-/* ------------------------------------------------------------------ */
 /* List helpers (for rules like  block, expr_list, parameter_list ...) */
-/* ------------------------------------------------------------------ */
 
 template <class T>
 std::vector<T>* list_empty() {
@@ -25,9 +23,7 @@ std::vector<T>* list_add(std::vector<T>* list, T item) {
     return list;
 }
 
-/* ------------------------------------------------------------------ */
-/* Program and classes                                                 */
-/* ------------------------------------------------------------------ */
+/* Program and classes */
 
 program_node* create_program(std::vector<class_node*>* classes);
 
@@ -36,9 +32,7 @@ program_node* create_program(std::vector<class_node*>* classes);
 class_node* create_class(access_modifier access, std::string* name, std::string* parent,
                          std::vector<node*>* members);
 
-/* ------------------------------------------------------------------ */
-/* Members                                                             */
-/* ------------------------------------------------------------------ */
+/* Members */
 
 // Value of the `member_modifiers` rule. Plain POD on purpose: it is stored in %union.
 struct member_modifiers {
@@ -66,9 +60,7 @@ method_node* create_function(member_modifiers mods, std::string* name,
 method_node* create_sub(member_modifiers mods, std::string* name,
                         std::vector<variable_node*>* params, block* body);
 
-/* ------------------------------------------------------------------ */
-/* Variables and parameters                                            */
-/* ------------------------------------------------------------------ */
+/* Variables and parameters */
 
 // x = 1 | x As T | x As T = 1 | parameter "x As T". type == nullptr => inferred.
 variable_node* create_variable(std::string* name, type_node* type, expr_node* value = nullptr);
@@ -87,17 +79,13 @@ variable_node* create_variable_new(std::string* name, type_node* type,
 variable_node* create_optional_parameter(std::string* name, type_node* type,
                                          expr_node* defaultValue);
 
-/* ------------------------------------------------------------------ */
-/* Types                                                               */
-/* ------------------------------------------------------------------ */
+/* Types */
 
 type_node* create_type(data_type kind);
 type_node* create_user_type(std::string* name);
 type_node* create_array_type(type_node* elementType);   // T()  => arrayRank = 1
 
-/* ------------------------------------------------------------------ */
-/* Expressions                                                         */
-/* ------------------------------------------------------------------ */
+/* Expressions */
 
 expr_node* create_id(std::string* name);
 expr_node* create_keyword_id(const char* text);          // Integer, String ... used as an expression
@@ -125,9 +113,7 @@ expr_node* create_new(type_node* type, std::vector<expr_node*>* args,
                       std::vector<expr_node*>* initializer);
 expr_node* create_collection(std::vector<expr_node*>* elements);
 
-/* ------------------------------------------------------------------ */
-/* Statements                                                          */
-/* ------------------------------------------------------------------ */
+/* Statements */
 
 // `stmt: expr`. a = b arrives as EqOp, so it becomes Assignment; everything else is a Call.
 // Whether the expression is allowed as a statement is checked in semantics.
