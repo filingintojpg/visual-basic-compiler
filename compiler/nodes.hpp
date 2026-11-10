@@ -176,14 +176,14 @@ struct stmt_node : node {
 /* Class members */
 
 struct method_node : node {
-    std::string name;                    // "New" for constructors
-    type_node* returnType = nullptr;     // nullptr => Sub
+    std::string name;
+    type_node* returnType = nullptr;
     std::vector<typed_value*> params;
     block body;
 
     access_modifier access;
-    bool isStatic = false;               // Shared
-    bool isConstructor = false;          // Sub New
+    bool isStatic = false;
+    bool isConstructor = false;
 
     bool isSub() const { return returnType == nullptr; }
 };
