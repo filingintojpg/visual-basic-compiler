@@ -48,9 +48,9 @@ struct type_node : node {
     std::string name;
 
     bool isArray = false;
-    std::vector<int> dimensions = std::vector<int>();
+    std::vector<int> dimensions;
 
-    type_node(datatype_type kind) : kind(kind) {}
+    type_node(datatype_type kind, std::string name = "") : kind(kind), name(name) {}
 };
 
 /* Expressions */
