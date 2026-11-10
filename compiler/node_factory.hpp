@@ -3,7 +3,7 @@
 #include <vector>
 #include "nodes.hpp"
 
-/* List helpers (for rules like  block, expr_list, parameter_list ...) */
+/* List helpers (for rules like block, expr_list, parameter_list ...) */
 
 template <class T>
 std::vector<T>* list_empty() {
