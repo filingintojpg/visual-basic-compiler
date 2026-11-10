@@ -126,17 +126,17 @@ struct case_clause {
     block body;
 };
 
-//   Call               expr
-//   Assignment         lvalue, rvalue, assign_type
-//   Return             expr
-//   Continue*/Exit*
-//   If                 condition, body, elseifs, else_block
-//   Select             expr, cases, else_block
-//   For                id, id_type, from_expr, to_expr, step_expr, body
-//   ForEach            id, id_type, container_expr, body
-//   While              condition, body
-//   Do                 body, condition, conditionAtEnd, isUntil
-//   VarDecl            var_type, declarators
+// Call             expr
+// Assignment       lvalue, rvalue, assign_type
+// Return           expr
+// Continue*/Exit*
+// If               condition, body, elseifs, else_block
+// Select           expr, cases, else_block
+// For              id, id_type, from_expr, to_expr, step_expr, body
+// ForEach          id, id_type, container_expr, body
+// While            condition, body
+// Do               body, condition, conditionAtEnd, isUntil
+// VarDecl          var_type, declarators
 struct stmt_node : node {
     stmt_type type;
 
