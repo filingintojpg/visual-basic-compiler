@@ -146,7 +146,7 @@ struct stmt_node : node {
     expr_node* condition = nullptr;
     block body;
     std::vector<elseif_clause> elseifs;
-    block* else_block;
+    block else_block;
     std::vector<case_clause> cases;
 
     std::string id;
