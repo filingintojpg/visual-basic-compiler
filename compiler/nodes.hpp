@@ -6,12 +6,6 @@
 
 /* Enums */
 
-enum class access_modifier { Public, Private, Protected };
-
-enum class var_kind { Dim, Const };
-
-enum class datatype_type { Integer, Boolean, Char, String, Single, UserType };
-
 enum class expr_type {
     Int, Float, String, Char, Bool, Nothing, Id, Me, MyClass, MyBase,
     AddOp, SubOp, MulOp, DivOp, FloorDivOp, ExpOp, StrConcatOp, ModOp,
@@ -22,8 +16,6 @@ enum class expr_type {
     If, Coalesce, New, Collection
 };
 
-enum class assignment_type { Assign, AddAssign, SubAssign, MulAssign, DivAssign, FloorDivAssign, ExpAssign, StrConcatAssign };
-
 enum class stmt_type {
     Call, Assignment, Return,
     ContinueDo, ContinueFor, ContinueWhile,
@@ -31,6 +23,14 @@ enum class stmt_type {
     If, Select, For, ForEach, While, Do,
     VarDecl
 };
+
+enum class access_modifier { Public, Private, Protected };
+
+enum class var_kind { Dim, Const };
+
+enum class datatype_type { Integer, Boolean, Char, String, Single, UserType };
+
+enum class assignment_type { Assign, AddAssign, SubAssign, MulAssign, DivAssign, FloorDivAssign, ExpAssign, StrConcatAssign };
 
 enum class case_kind { Value, Range, Compare };
 
