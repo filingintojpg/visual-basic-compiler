@@ -22,10 +22,7 @@ enum class expr_type {
     If, Coalesce, New, Collection
 };
 
-enum class assignment_type {
-    Assign, AddAssign, SubAssign, MulAssign, DivAssign,
-    FloorDivAssign, ExpAssign, StrConcatAssign
-};
+enum class assignment_type { Assign, AddAssign, SubAssign, MulAssign, DivAssign, FloorDivAssign, ExpAssign, StrConcatAssign };
 
 enum class stmt_type {
     Call, Assignment, Return,
@@ -35,9 +32,7 @@ enum class stmt_type {
     VarDecl
 };
 
-enum class case_kind {
-    Value, Range, Compare
-};
+enum class case_kind { Value, Range, Compare };
 
 /* Base */
 
