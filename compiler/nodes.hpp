@@ -45,8 +45,7 @@ struct type_node : node {
     datatype_type kind;
     std::string name;
 
-    bool isArray = false;
-    std::vector<int> dimensions;
+    int arrayRank = 0;
 
     type_node(datatype_type kind, std::string name = "") : kind(kind), name(name) {}
 };
