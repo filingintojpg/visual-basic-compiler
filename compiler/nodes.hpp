@@ -181,7 +181,7 @@ struct procedure_node : node {
     std::vector<typed_value*> params;
     block body;
 
-    access_modifier access = access_modifier::Public;
+    access_modifier access;
     bool isStatic = false;               // Shared
     bool isConstructor = false;          // Sub New
 
@@ -189,7 +189,7 @@ struct procedure_node : node {
 };
 
 struct field_node : node {
-    access_modifier access = access_modifier::Public;
+    access_modifier access;
     bool isStatic = false;
     var_kind kind = var_kind::Dim;
     std::vector<typed_value*> declarators;  // Dim a, b As Integer
@@ -197,7 +197,7 @@ struct field_node : node {
 
 struct class_node : node {
     std::string name;
-    access_modifier access = access_modifier::Public;
+    access_modifier access;
     std::string parent;
 
     std::vector<field_node*> fields;
