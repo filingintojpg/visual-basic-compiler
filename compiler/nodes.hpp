@@ -196,6 +196,8 @@ struct field_node : node {
     bool isStatic = false;
 };
 
+/* Program structure */
+
 struct class_node : node {
     std::string name;
     access_modifier access;
