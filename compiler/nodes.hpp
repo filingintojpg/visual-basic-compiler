@@ -1,5 +1,4 @@
 #pragma once
-#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -151,7 +150,7 @@ struct stmt_node : node {
     expr_node* condition = nullptr;
     block body;
     std::vector<elseif_clause> elseifs;
-    std::optional<block> else_block;
+    block* else_block;
     std::vector<case_clause> cases;
 
     std::string id;
