@@ -31,31 +31,18 @@ class_node* create_class(access_modifier access, std::string* name, std::string*
 
 /* Members */
 
-// Value of the `member_modifiers` rule. Plain POD on purpose: it is stored in %union.
 struct member_modifiers {
     access_modifier access;
-    bool hasAccess;   // false => access was not written, the default is chosen by the member
-    bool isStatic;    // Shared
+    bool isStatic;
 };
 
-member_modifiers modifiers_none();
-member_modifiers modifiers_access(access_modifier access);
-member_modifiers modifiers_static();
-member_modifiers modifiers_access_static(access_modifier access);
+member_modifiers modifiers(access_modifier access, bool isStatic);
 
-// `shared` is the extra SHARED from "member_modifiers DIM SHARED ...".
-// Default access when not written: Private.
-field_node* create_field(var_kind kind, member_modifiers mods, bool shared,
-                         std::vector<variable_node*>* declarators);
+field_node* create_field(var_kind kind, member_modifiers mods, bool extraShared, std::vector<variable_node*>* declarators);
 
-// Default access when not written: Public.
-method_node* create_function(member_modifiers mods, std::string* name,
-                             std::vector<variable_node*>* params, type_node* returnType,
-                             block* body);
+method_node* create_function(member_modifiers mods, std::string* name, std::vector<variable_node*>* params, type_node* returnType, block* body);
 
-// name == "New" makes it a constructor (sub_name: NEW gives the string "New").
-method_node* create_sub(member_modifiers mods, std::string* name,
-                        std::vector<variable_node*>* params, block* body);
+method_node* create_sub(member_modifiers mods, std::string* name, std::vector<variable_node*>* params, block* body);
 
 /* Variables and parameters */
 
