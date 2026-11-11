@@ -81,7 +81,7 @@ expr_node* create_collection(std::vector<expr_node*>* elements);
 
 /* Statements */
 
-stmt_node* create_expr_stmt(expr_node* expr);
+stmt_node* create_assign_or_call_stmt(expr_node* expr);
 stmt_node* create_call_stmt(expr_node* expr);
 stmt_node* create_assignment(expr_node* lvalue, expr_node* rvalue, assignment_type type);
 stmt_node* create_return(expr_node* value);
