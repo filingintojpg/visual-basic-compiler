@@ -56,7 +56,7 @@ type_node* create_array_type(type_node* elementType, int rank = 1);
 /* Expressions */
 
 expr_node* create_id(std::string* name);
-expr_node* create_keyword_id(const char* text);
+expr_node* create_id(const char* name);
 
 expr_node* create_int(int value);
 expr_node* create_float(float value);

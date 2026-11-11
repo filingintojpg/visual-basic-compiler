@@ -142,14 +142,14 @@ type_node* create_array_type(type_node* elementType, int rank) {
 /* Expressions */
 
 expr_node* create_id(std::string* name) {
-    auto* e = make_expr(expr_type::Id);
+    expr_node* e = make_expr(expr_type::Id);
     e->text = take(name);
     return e;
 }
 
-expr_node* create_keyword_id(const char* text) {
-    auto* e = make_expr(expr_type::Id);
-    e->text = text;
+expr_node* create_id(const char* name) {
+    expr_node* e = make_expr(expr_type::Id);
+    e->text = name;
     return e;
 }
 
