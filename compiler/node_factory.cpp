@@ -154,73 +154,75 @@ expr_node* create_id(const char* name) {
 }
 
 expr_node* create_int(int value) {
-    auto* e = make_expr(expr_type::Int);
+    expr_node* e = make_expr(expr_type::Int);
     e->intValue = value;
     return e;
 }
 
 expr_node* create_float(float value) {
-    auto* e = make_expr(expr_type::Float);
+    expr_node* e = make_expr(expr_type::Float);
     e->floatValue = value;
     return e;
 }
 
 expr_node* create_string(std::string* value) {
-    auto* e = make_expr(expr_type::String);
+    expr_node* e = make_expr(expr_type::String);
     e->text = take(value);
     return e;
 }
 
 expr_node* create_char(char value) {
-    auto* e = make_expr(expr_type::Char);
+    expr_node* e = make_expr(expr_type::Char);
     e->charValue = value;
     return e;
 }
 
 expr_node* create_bool(bool value) {
-    auto* e = make_expr(expr_type::Bool);
+    expr_node* e = make_expr(expr_type::Bool);
     e->boolValue = value;
     return e;
 }
 
-expr_node* create_simple_expr(expr_type type) { return make_expr(type); }
+expr_node* create_simple_expr(expr_type type) {
+    return make_expr(type);
+}
 
 expr_node* create_binary(expr_node* left, expr_node* right, expr_type op) {
-    auto* e = make_expr(op);
+    expr_node* e = make_expr(op);
     e->left = left;
     e->right = right;
     return e;
 }
 
 expr_node* create_unary(expr_node* operand, expr_type op) {
-    auto* e = make_expr(op);
+    expr_node* e = make_expr(op);
     e->operand = operand;
     return e;
 }
 
 expr_node* create_member_access(expr_node* left, std::string* name) {
-    auto* e = make_expr(expr_type::MemberAccess);
+    expr_node* e = make_expr(expr_type::MemberAccess);
     e->left = left;
     e->text = take(name);
     return e;
 }
 
 expr_node* create_call_or_index(expr_node* callee, std::vector<expr_node*>* args) {
-    auto* e = make_expr(expr_type::CallOrIndex);
+    expr_node* e = make_expr(expr_type::CallOrIndex);
     e->left = callee;
     e->args = take(args);
     return e;
 }
 
 expr_node* create_cast(expr_node* operand, type_node* type) {
-    auto* e = make_expr(expr_type::Cast);
+    expr_node* e = make_expr(expr_type::Cast);
     e->operand = operand;
     e->datatype = type;
     return e;
 }
 
 expr_node* create_if_expr(expr_node* condition, expr_node* thenExpr, expr_node* elseExpr) {
-    auto* e = make_expr(expr_type::If);
+    expr_node* e = make_expr(expr_type::If);
     e->condition = condition;
     e->then_expr = thenExpr;
     e->else_expr = elseExpr;
@@ -228,15 +230,14 @@ expr_node* create_if_expr(expr_node* condition, expr_node* thenExpr, expr_node* 
 }
 
 expr_node* create_coalesce(expr_node* left, expr_node* right) {
-    auto* e = make_expr(expr_type::Coalesce);
+    expr_node* e = make_expr(expr_type::Coalesce);
     e->left = left;
     e->right = right;
     return e;
 }
 
-expr_node* create_new(type_node* type, std::vector<expr_node*>* args,
-                      std::vector<expr_node*>* initializer) {
-    auto* e = make_expr(expr_type::New);
+expr_node* create_new(type_node* type, std::vector<expr_node*>* args, std::vector<expr_node*>* initializer) {
+    expr_node* e = make_expr(expr_type::New);
     e->datatype = type;
     e->args = take(args);
     if (initializer) {
@@ -247,7 +248,7 @@ expr_node* create_new(type_node* type, std::vector<expr_node*>* args,
 }
 
 expr_node* create_collection(std::vector<expr_node*>* elements) {
-    auto* e = make_expr(expr_type::Collection);
+    expr_node* e = make_expr(expr_type::Collection);
     e->elements = take(elements);
     return e;
 }
