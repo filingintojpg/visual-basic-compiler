@@ -28,8 +28,6 @@ enum class VarKind { Dim, Const };
 
 enum class DataType { Integer, Boolean, Char, String, Single, UserType };
 
-enum class AssignmentType { Assign, AddAssign, SubAssign, MulAssign, DivAssign, FloorDivAssign, ExpAssign, StrConcatAssign };
-
 enum class CaseKind { Value, Range, Compare };
 
 /* Base */
@@ -134,7 +132,7 @@ struct CaseClause {
 };
 
 // Call             expr
-// Assignment       lvalue, rvalue, assign_type
+// Assignment       lvalue, rvalue
 // Return           expr
 // Continue*/Exit*
 // If               condition, body, elseifs, else_block
@@ -151,7 +149,6 @@ struct StmtNode : Node {
 
     ExprNode* lvalue = nullptr;
     ExprNode* rvalue = nullptr;
-    AssignmentType assign_type = AssignmentType::Assign;
 
     ExprNode* condition = nullptr;
     Block body;

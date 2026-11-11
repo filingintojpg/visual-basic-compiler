@@ -281,7 +281,7 @@ ExprNode* create_collection(std::vector<ExprNode*>* elements) {
 
 StmtNode* create_assign_or_call_stmt(ExprNode* expr) {
     if (ExprNode* lvalue = extract_assignment(expr)) {
-        return create_assignment(lvalue, expr, AssignmentType::Assign);
+        return create_assignment(lvalue, expr);
     }
     return create_call_stmt(expr);
 }
@@ -292,11 +292,10 @@ StmtNode* create_call_stmt(ExprNode* expr) {
     return s;
 }
 
-StmtNode* create_assignment(ExprNode* lvalue, ExprNode* rvalue, AssignmentType type) {
+StmtNode* create_assignment(ExprNode* lvalue, ExprNode* rvalue) {
     StmtNode* s = make_stmt(StmtType::Assignment);
     s->lvalue = lvalue;
     s->rvalue = rvalue;
-    s->assign_type = type;
     return s;
 }
 
