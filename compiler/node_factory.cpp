@@ -58,12 +58,14 @@ class_node* create_class(access_modifier access, std::string* name, std::string*
     return c;
 }
 
-/* Members */
+/* Class members */
 
-member_modifiers modifiers(access_modifier access, bool isStatic) { return {access, isStatic}; }
+member_modifiers modifiers(access_modifier access, bool isStatic) {
+    return {access, isStatic};
+}
 
 field_node* create_field(var_kind kind, member_modifiers mods, bool extraShared, std::vector<variable_node*>* declarators) {
-    auto* f = at_line(new field_node());
+    field_node* f = at_line(new field_node());
     f->kind = kind;
     f->access = mods.access;
     f->isStatic = mods.isStatic || extraShared;
@@ -71,10 +73,8 @@ field_node* create_field(var_kind kind, member_modifiers mods, bool extraShared,
     return f;
 }
 
-method_node* create_function(member_modifiers mods, std::string* name,
-                             std::vector<variable_node*>* params, type_node* returnType,
-                             block* body) {
-    auto* m = at_line(new method_node());
+method_node* create_function(member_modifiers mods, std::string* name, std::vector<variable_node*>* params, type_node* returnType, block* body) {
+    method_node* m = at_line(new method_node());
     m->name = take(name);
     m->returnType = returnType;
     m->params = take(params);
@@ -84,9 +84,8 @@ method_node* create_function(member_modifiers mods, std::string* name,
     return m;
 }
 
-method_node* create_sub(member_modifiers mods, std::string* name,
-                        std::vector<variable_node*>* params, block* body) {
-    auto* m = at_line(new method_node());
+method_node* create_sub(member_modifiers mods, std::string* name, std::vector<variable_node*>* params, block* body) {
+    method_node* m = at_line(new method_node());
     m->name = take(name);
     m->returnType = nullptr;
     m->params = take(params);
