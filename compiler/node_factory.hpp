@@ -27,10 +27,7 @@ std::vector<T>* list_add(std::vector<T>* items, T item) {
 
 program_node* create_program(std::vector<class_node*>* classes);
 
-// members: fields and methods in source order (node*, split with dynamic_cast).
-// parent: nullptr when there is no Inherits.
-class_node* create_class(access_modifier access, std::string* name, std::string* parent,
-                         std::vector<node*>* members);
+class_node* create_class(access_modifier access, std::string* name, std::string* parent, std::vector<node*>* members);
 
 /* Members */
 
