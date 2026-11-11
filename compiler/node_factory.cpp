@@ -43,16 +43,15 @@ program_node* create_program(std::vector<class_node*>* classes) {
     return p;
 }
 
-class_node* create_class(access_modifier access, std::string* name, std::string* parent,
-                         std::vector<node*>* members) {
-    auto* c = at_line(new class_node());
+class_node* create_class(access_modifier access, std::string* name, std::string* parent, std::vector<node*>* members) {
+    class_node* c = at_line(new class_node());
     c->access = access;
     c->name = take(name);
     c->parent = take(parent);
-    for (node* m : take(members)) {
-        if (auto* f = dynamic_cast<field_node*>(m)) {
-            c->fields.push_back(f);
-        } else if (auto* method = dynamic_cast<method_node*>(m)) {
+    for (node* member : take(members)) {
+        if (field_node* field = dynamic_cast<field_node*>(member)) {
+            c->fields.push_back(field);
+        } else if (method_node* method = dynamic_cast<method_node*>(member)) {
             c->methods.push_back(method);
         }
     }
