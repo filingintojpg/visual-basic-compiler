@@ -93,6 +93,8 @@ struct expr_node : node {
     std::vector<expr_node*> elements;
     bool hasInitializer = false;
 
+    bool parenthesized = false;
+
     expr_node(expr_type type) : type(type) {}
 };
 

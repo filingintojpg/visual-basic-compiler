@@ -35,6 +35,30 @@ stmt_node* make_stmt(stmt_type type) {
     return at_line(new stmt_node(type));
 }
 
+bool is_binary(const expr_node* expr) {
+    return expr->type >= expr_type::AddOp &&
+           expr->type <= expr_type::IsNotOp;
+}
+
+bool is_lvalue(const expr_node* expr) {
+    return !expr->parenthesized && (
+        expr->type == expr_type::Id ||
+        expr->type == expr_type::MemberAccess ||
+        expr->type == expr_type::CallOrIndex
+    );
+}
+
+expr_node* extract_assignment(expr_node*& root) {
+    if (!is_binary(root) || root->parenthesized) return nullptr;
+
+    if (root->type == expr_type::EqOp && is_lvalue(root->left)) {
+        expr_node* lvalue = root->left;
+        root = root->right;
+        return lvalue;
+    }
+    return extract_assignment(root->left);
+}
+
 /* Program and classes */
 
 program_node* create_program(std::vector<class_node*>* classes) {
@@ -255,11 +279,11 @@ expr_node* create_collection(std::vector<expr_node*>* elements) {
 
 /* Statements */
 
-stmt_node* create_expr_stmt(expr_node* expr) {
-    if (expr->type == expr_type::EqOp) {
-        return create_assignment(expr->left, expr->right, assignment_type::Assign);
+stmt_node* create_expr_stmt(expr_node* root) {
+    if (expr_node* lvalue = extract_assignment(root)) {
+        return create_assignment(lvalue, root, assignment_type::Assign);
     }
-    return create_call_stmt(expr);
+    return create_call_stmt(root);
 }
 
 stmt_node* create_call_stmt(expr_node* expr) {
