@@ -99,7 +99,7 @@ method_node* create_sub(member_modifiers mods, std::string* name, std::vector<va
 /* Variables and parameters */
 
 variable_node* create_variable(std::string* name, type_node* type, expr_node* value) {
-    auto* v = at_line(new variable_node());
+    variable_node* v = at_line(new variable_node());
     v->name = take(name);
     v->type = type;
     v->value = value;
@@ -107,21 +107,19 @@ variable_node* create_variable(std::string* name, type_node* type, expr_node* va
 }
 
 variable_node* create_array_variable(std::string* name, type_node* elementType, std::vector<expr_node*>* dimensions, expr_node* value) {
-    auto* v = create_variable(name, elementType, value);
+    variable_node* v = create_variable(name, elementType, value);
     v->dimensions = take(dimensions);
     elementType->arrayRank = std::max(1, static_cast<int>(v->dimensions.size()));
     return v;
 }
 
 variable_node* create_variable_new(std::string* name, type_node* type, std::vector<expr_node*>* args) {
-    // The New expression gets its own copy of the type: the tree must not share nodes.
     expr_node* value = create_new(new type_node(*type), args, nullptr);
     return create_variable(name, type, value);
 }
 
-variable_node* create_optional_parameter(std::string* name, type_node* type,
-                                         expr_node* defaultValue) {
-    auto* v = create_variable(name, type, defaultValue);
+variable_node* create_optional_parameter(std::string* name, type_node* type, expr_node* defaultValue) {
+    variable_node* v = create_variable(name, type, defaultValue);
     v->isOptional = true;
     return v;
 }
