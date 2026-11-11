@@ -43,7 +43,7 @@ method_node* create_sub(member_modifiers mods, std::string* name, std::vector<va
 /* Variables and parameters */
 
 variable_node* create_variable(std::string* name, type_node* type, expr_node* value);
-variable_node* create_array_variable(std::string* name, type_node* type, std::vector<expr_node*>* dimensions, expr_node* value);
+variable_node* create_array_variable(std::string* name, type_node* elementType, std::vector<expr_node*>* dimensions, expr_node* value);
 variable_node* create_variable_new(std::string* name, type_node* type, std::vector<expr_node*>* args);
 variable_node* create_optional_parameter(std::string* name, type_node* type, expr_node* defaultValue);
 
@@ -51,7 +51,7 @@ variable_node* create_optional_parameter(std::string* name, type_node* type, exp
 
 type_node* create_type(data_type kind);
 type_node* create_user_type(std::string* name);
-type_node* create_array_type(type_node* elementType);   // T()  => arrayRank = 1
+type_node* create_array_type(type_node* elementType, int rank = 1);
 
 /* Expressions */
 
