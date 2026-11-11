@@ -1,38 +1,39 @@
 #include "node_factory.hpp"
-
 #include <algorithm>
 #include <utility>
 
 extern int yylineno;
 
-namespace {
+/* Utility functions */
 
 template <class T>
-T* at_line(T* n) {
-    n->line = yylineno;
-    return n;
+T* at_line(T* node) {
+    node->line = yylineno;
+    return node;
 }
 
-// Move the content out of an owned pointer and delete it. nullptr => empty.
-std::string take(std::string* s) {
-    if (!s) return {};
-    std::string value = std::move(*s);
-    delete s;
+std::string take(std::string* string) {
+    if (!string) return {};
+    std::string value = std::move(*string);
+    delete string;
     return value;
 }
 
 template <class T>
-std::vector<T> take(std::vector<T>* v) {
-    if (!v) return {};
-    std::vector<T> value = std::move(*v);
-    delete v;
-    return value;
+std::vector<T> take(std::vector<T>* value) {
+    if (!value) return {};
+    std::vector<T> result = std::move(*value);
+    delete value;
+    return result;
 }
 
-expr_node* make_expr(expr_type type) { return at_line(new expr_node(type)); }
-stmt_node* make_stmt(stmt_type type) { return at_line(new stmt_node(type)); }
+expr_node* make_expr(expr_type type) {
+    return at_line(new expr_node(type));
+}
 
-}  // namespace
+stmt_node* make_stmt(stmt_type type) {
+    return at_line(new stmt_node(type));
+}
 
 /* Program and classes */
 
