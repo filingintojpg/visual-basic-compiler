@@ -38,7 +38,7 @@ stmt_node* make_stmt(stmt_type type) {
 /* Program and classes */
 
 program_node* create_program(std::vector<class_node*>* classes) {
-    auto* p = at_line(new program_node());
+    program_node* p = at_line(new program_node());
     p->classes = take(classes);
     return p;
 }
