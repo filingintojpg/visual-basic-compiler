@@ -81,24 +81,17 @@ expr_node* create_collection(std::vector<expr_node*>* elements);
 
 /* Statements */
 
-// `stmt: expr`. a = b arrives as EqOp, so it becomes Assignment; everything else is a Call.
-// Whether the expression is allowed as a statement is checked in semantics.
 stmt_node* create_expr_stmt(expr_node* expr);
-stmt_node* create_call_stmt(expr_node* expr);            // CALL expr
+stmt_node* create_call_stmt(expr_node* expr);
 stmt_node* create_assignment(expr_node* lvalue, expr_node* rvalue, assignment_type type);
-stmt_node* create_return(expr_node* value);              // value == nullptr for bare Return
-stmt_node* create_simple_stmt(stmt_type type);           // Continue*/Exit*
+stmt_node* create_return(expr_node* value);
+stmt_node* create_simple_stmt(stmt_type type);
 
-// elseBlock == nullptr => no Else
-stmt_node* create_if(expr_node* condition, block* thenBlock,
-                     std::vector<elseif_clause>* elseifs, block* elseBlock);
-std::vector<elseif_clause>* elseifs_add(std::vector<elseif_clause>* list, expr_node* condition,
-                                        block* body);
+stmt_node* create_if(expr_node* condition, block* thenBlock, std::vector<elseif_clause>* elseifs, block* elseBlock);
+std::vector<elseif_clause>* elseifs_add(std::vector<elseif_clause>* list, expr_node* condition, block* body);
 
-// elseBlock == nullptr => no Case Else
 stmt_node* create_select(expr_node* subject, std::vector<case_clause>* cases, block* elseBlock);
-std::vector<case_clause>* cases_add(std::vector<case_clause>* list,
-                                    std::vector<case_item>* items, block* body);
+std::vector<case_clause>* cases_add(std::vector<case_clause>* list, std::vector<case_item>* items, block* body);
 
 case_item* create_case_value(expr_node* value);
 case_item* create_case_range(expr_node* from, expr_node* to);
@@ -106,14 +99,9 @@ case_item* create_case_compare(expr_type op, expr_node* value);
 std::vector<case_item>* case_items_new(case_item* first);
 std::vector<case_item>* case_items_add(std::vector<case_item>* list, case_item* item);
 
-// idType / step may be nullptr
-stmt_node* create_for(std::string* id, type_node* idType, expr_node* from, expr_node* to,
-                      expr_node* step, block* body);
+stmt_node* create_for(std::string* id, type_node* idType, expr_node* from, expr_node* to, expr_node* step, block* body);
 stmt_node* create_for_each(std::string* id, type_node* idType, expr_node* container, block* body);
-
 stmt_node* create_while(expr_node* condition, block* body);
-
-// condition == nullptr => infinite loop
 stmt_node* create_do(block* body, expr_node* condition, bool conditionAtEnd, bool isUntil);
 
 stmt_node* create_var_decl(var_kind kind, std::vector<variable_node*>* declarators);
