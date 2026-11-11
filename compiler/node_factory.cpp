@@ -126,7 +126,9 @@ variable_node* create_optional_parameter(std::string* name, type_node* type, exp
 
 /* Types */
 
-type_node* create_type(data_type kind) { return at_line(new type_node(kind)); }
+type_node* create_type(data_type kind) {
+    return at_line(new type_node(kind));
+}
 
 type_node* create_user_type(std::string* name) {
     return at_line(new type_node(data_type::UserType, take(name)));
