@@ -26,7 +26,6 @@ std::vector<T>* list_add(std::vector<T>* items, T item) {
 /* Program and classes */
 
 program_node* create_program(std::vector<class_node*>* classes);
-
 class_node* create_class(access_modifier access, std::string* name, std::string* parent, std::vector<node*>* members);
 
 /* Members */
@@ -37,21 +36,15 @@ struct member_modifiers {
 };
 
 member_modifiers modifiers(access_modifier access, bool isStatic);
-
 field_node* create_field(var_kind kind, member_modifiers mods, bool extraShared, std::vector<variable_node*>* declarators);
-
 method_node* create_function(member_modifiers mods, std::string* name, std::vector<variable_node*>* params, type_node* returnType, block* body);
-
 method_node* create_sub(member_modifiers mods, std::string* name, std::vector<variable_node*>* params, block* body);
 
 /* Variables and parameters */
 
 variable_node* create_variable(std::string* name, type_node* type, expr_node* value);
-
 variable_node* create_array_variable(std::string* name, type_node* type, std::vector<expr_node*>* dimensions, expr_node* value);
-
 variable_node* create_variable_new(std::string* name, type_node* type, std::vector<expr_node*>* args);
-
 variable_node* create_optional_parameter(std::string* name, type_node* type, expr_node* defaultValue);
 
 /* Types */
