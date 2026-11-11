@@ -28,7 +28,7 @@ std::vector<T>* list_add(std::vector<T>* items, T item) {
 program_node* create_program(std::vector<class_node*>* classes);
 class_node* create_class(access_modifier access, std::string* name, std::string* parent, std::vector<node*>* members);
 
-/* Members */
+/* Class members */
 
 struct member_modifiers {
     access_modifier access;
