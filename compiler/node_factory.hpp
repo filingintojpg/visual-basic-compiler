@@ -56,7 +56,7 @@ type_node* create_array_type(type_node* elementType, int rank = 1);
 /* Expressions */
 
 expr_node* create_id(std::string* name);
-expr_node* create_keyword_id(const char* text);          // Integer, String ... used as an expression
+expr_node* create_keyword_id(const char* text);
 
 expr_node* create_int(int value);
 expr_node* create_float(float value);
@@ -64,7 +64,7 @@ expr_node* create_string(std::string* value);
 expr_node* create_char(char value);
 expr_node* create_bool(bool value);
 
-expr_node* create_simple_expr(expr_type type);           // Nothing, Me, MyClass, MyBase
+expr_node* create_simple_expr(expr_type type);
 
 expr_node* create_binary(expr_node* left, expr_node* right, expr_type op);
 expr_node* create_unary(expr_node* operand, expr_type op);
@@ -76,9 +76,7 @@ expr_node* create_cast(expr_node* operand, type_node* type);
 expr_node* create_if_expr(expr_node* condition, expr_node* thenExpr, expr_node* elseExpr);
 expr_node* create_coalesce(expr_node* left, expr_node* right);
 
-// args / initializer may be nullptr; initializer != nullptr => hasInitializer = true.
-expr_node* create_new(type_node* type, std::vector<expr_node*>* args,
-                      std::vector<expr_node*>* initializer);
+expr_node* create_new(type_node* type, std::vector<expr_node*>* args, std::vector<expr_node*>* initializer);
 expr_node* create_collection(std::vector<expr_node*>* elements);
 
 /* Statements */
