@@ -279,21 +279,21 @@ expr_node* create_collection(std::vector<expr_node*>* elements) {
 
 /* Statements */
 
-stmt_node* create_expr_stmt(expr_node* root) {
-    if (expr_node* lvalue = extract_assignment(root)) {
-        return create_assignment(lvalue, root, assignment_type::Assign);
+stmt_node* create_assign_or_call_stmt(expr_node* expr) {
+    if (expr_node* lvalue = extract_assignment(expr)) {
+        return create_assignment(lvalue, expr, assignment_type::Assign);
     }
-    return create_call_stmt(root);
+    return create_call_stmt(expr);
 }
 
 stmt_node* create_call_stmt(expr_node* expr) {
-    auto* s = make_stmt(stmt_type::Call);
+    stmt_node* s = make_stmt(stmt_type::Call);
     s->expr = expr;
     return s;
 }
 
 stmt_node* create_assignment(expr_node* lvalue, expr_node* rvalue, assignment_type type) {
-    auto* s = make_stmt(stmt_type::Assignment);
+    stmt_node* s = make_stmt(stmt_type::Assignment);
     s->lvalue = lvalue;
     s->rvalue = rvalue;
     s->assign_type = type;
@@ -301,16 +301,17 @@ stmt_node* create_assignment(expr_node* lvalue, expr_node* rvalue, assignment_ty
 }
 
 stmt_node* create_return(expr_node* value) {
-    auto* s = make_stmt(stmt_type::Return);
+    stmt_node* s = make_stmt(stmt_type::Return);
     s->expr = value;
     return s;
 }
 
-stmt_node* create_simple_stmt(stmt_type type) { return make_stmt(type); }
+stmt_node* create_simple_stmt(stmt_type type) {
+    return make_stmt(type);
+}
 
-stmt_node* create_if(expr_node* condition, block* thenBlock,
-                     std::vector<elseif_clause>* elseifs, block* elseBlock) {
-    auto* s = make_stmt(stmt_type::If);
+stmt_node* create_if(expr_node* condition, block* thenBlock, std::vector<elseif_clause>* elseifs, block* elseBlock) {
+    stmt_node* s = make_stmt(stmt_type::If);
     s->condition = condition;
     s->body = take(thenBlock);
     s->elseifs = take(elseifs);
@@ -318,8 +319,7 @@ stmt_node* create_if(expr_node* condition, block* thenBlock,
     return s;
 }
 
-std::vector<elseif_clause>* elseifs_add(std::vector<elseif_clause>* list, expr_node* condition,
-                                        block* body) {
+std::vector<elseif_clause>* elseifs_add(std::vector<elseif_clause>* list, expr_node* condition, block* body) {
     elseif_clause clause;
     clause.condition = condition;
     clause.body = take(body);
@@ -328,15 +328,14 @@ std::vector<elseif_clause>* elseifs_add(std::vector<elseif_clause>* list, expr_n
 }
 
 stmt_node* create_select(expr_node* subject, std::vector<case_clause>* cases, block* elseBlock) {
-    auto* s = make_stmt(stmt_type::Select);
+    stmt_node* s = make_stmt(stmt_type::Select);
     s->expr = subject;
     s->cases = take(cases);
     s->else_block = take(elseBlock);
     return s;
 }
 
-std::vector<case_clause>* cases_add(std::vector<case_clause>* list,
-                                    std::vector<case_item>* items, block* body) {
+std::vector<case_clause>* cases_add(std::vector<case_clause>* list, std::vector<case_item>* items, block* body) {
     case_clause clause;
     clause.items = take(items);
     clause.body = take(body);
@@ -345,14 +344,14 @@ std::vector<case_clause>* cases_add(std::vector<case_clause>* list,
 }
 
 case_item* create_case_value(expr_node* value) {
-    auto* c = new case_item();
+    case_item* c = new case_item();
     c->kind = case_kind::Value;
     c->value = value;
     return c;
 }
 
 case_item* create_case_range(expr_node* from, expr_node* to) {
-    auto* c = new case_item();
+    case_item* c = new case_item();
     c->kind = case_kind::Range;
     c->value = from;
     c->to = to;
@@ -360,7 +359,7 @@ case_item* create_case_range(expr_node* from, expr_node* to) {
 }
 
 case_item* create_case_compare(expr_type op, expr_node* value) {
-    auto* c = new case_item();
+    case_item* c = new case_item();
     c->kind = case_kind::Compare;
     c->op = op;
     c->value = value;
@@ -368,7 +367,7 @@ case_item* create_case_compare(expr_type op, expr_node* value) {
 }
 
 std::vector<case_item>* case_items_new(case_item* first) {
-    auto* list = new std::vector<case_item>();
+    std::vector<case_item>* list = new std::vector<case_item>();
     list->push_back(*first);
     delete first;
     return list;
@@ -380,9 +379,8 @@ std::vector<case_item>* case_items_add(std::vector<case_item>* list, case_item* 
     return list;
 }
 
-stmt_node* create_for(std::string* id, type_node* idType, expr_node* from, expr_node* to,
-                      expr_node* step, block* body) {
-    auto* s = make_stmt(stmt_type::For);
+stmt_node* create_for(std::string* id, type_node* idType, expr_node* from, expr_node* to, expr_node* step, block* body) {
+    stmt_node* s = make_stmt(stmt_type::For);
     s->id = take(id);
     s->id_type = idType;
     s->from_expr = from;
@@ -392,9 +390,8 @@ stmt_node* create_for(std::string* id, type_node* idType, expr_node* from, expr_
     return s;
 }
 
-stmt_node* create_for_each(std::string* id, type_node* idType, expr_node* container,
-                           block* body) {
-    auto* s = make_stmt(stmt_type::ForEach);
+stmt_node* create_for_each(std::string* id, type_node* idType, expr_node* container, block* body) {
+    stmt_node* s = make_stmt(stmt_type::ForEach);
     s->id = take(id);
     s->id_type = idType;
     s->container_expr = container;
@@ -403,14 +400,14 @@ stmt_node* create_for_each(std::string* id, type_node* idType, expr_node* contai
 }
 
 stmt_node* create_while(expr_node* condition, block* body) {
-    auto* s = make_stmt(stmt_type::While);
+    stmt_node* s = make_stmt(stmt_type::While);
     s->condition = condition;
     s->body = take(body);
     return s;
 }
 
 stmt_node* create_do(block* body, expr_node* condition, bool conditionAtEnd, bool isUntil) {
-    auto* s = make_stmt(stmt_type::Do);
+    stmt_node* s = make_stmt(stmt_type::Do);
     s->body = take(body);
     s->condition = condition;
     s->conditionAtEnd = conditionAtEnd;
@@ -419,7 +416,7 @@ stmt_node* create_do(block* body, expr_node* condition, bool conditionAtEnd, boo
 }
 
 stmt_node* create_var_decl(var_kind kind, std::vector<variable_node*>* declarators) {
-    auto* s = make_stmt(stmt_type::VarDecl);
+    stmt_node* s = make_stmt(stmt_type::VarDecl);
     s->var_type = kind;
     s->declarators = take(declarators);
     return s;
