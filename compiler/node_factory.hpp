@@ -46,22 +46,13 @@ method_node* create_sub(member_modifiers mods, std::string* name, std::vector<va
 
 /* Variables and parameters */
 
-// x = 1 | x As T | x As T = 1 | parameter "x As T". type == nullptr => inferred.
-variable_node* create_variable(std::string* name, type_node* type, expr_node* value = nullptr);
+variable_node* create_variable(std::string* name, type_node* type, expr_node* value);
 
-// x(n, m) As T [= value]  and the parameter form  x() As T
-// elementType->arrayRank is set to max(1, dimensions.size()).
-variable_node* create_array_variable(std::string* name, type_node* elementType,
-                                     std::vector<expr_node*>* dimensions,
-                                     expr_node* value = nullptr);
+variable_node* create_array_variable(std::string* name, type_node* type, std::vector<expr_node*>* dimensions, expr_node* value);
 
-// x As New T [(args)]   -> type = T, value = New expression
-variable_node* create_variable_new(std::string* name, type_node* type,
-                                   std::vector<expr_node*>* args);
+variable_node* create_variable_new(std::string* name, type_node* type, std::vector<expr_node*>* args);
 
-// Optional x As T = defaultValue
-variable_node* create_optional_parameter(std::string* name, type_node* type,
-                                         expr_node* defaultValue);
+variable_node* create_optional_parameter(std::string* name, type_node* type, expr_node* defaultValue);
 
 /* Types */
 
