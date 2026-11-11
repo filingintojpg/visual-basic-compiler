@@ -4,7 +4,7 @@
 
 /* Enums */
 
-enum class expr_type {
+enum class ExprType {
     Int, Float, String, Char, Bool, Nothing, Id, Me, MyClass, MyBase,
     AddOp, SubOp, MulOp, DivOp, FloorDivOp, ExpOp, StrConcatOp, ModOp,
     LtOp, GtOp, LteOp, GteOp, EqOp, NeqOp,
@@ -14,7 +14,7 @@ enum class expr_type {
     If, Coalesce, New, Collection
 };
 
-enum class stmt_type {
+enum class StmtType {
     Call, Assignment, Return,
     ContinueDo, ContinueFor, ContinueWhile,
     ExitDo, ExitFor, ExitWhile, ExitSelect, ExitFunction, ExitSub,
@@ -22,32 +22,32 @@ enum class stmt_type {
     VarDecl
 };
 
-enum class access_modifier { Public, Private, Protected };
+enum class AccessModifier { Public, Private, Protected };
 
-enum class var_kind { Dim, Const };
+enum class VarKind { Dim, Const };
 
-enum class data_type { Integer, Boolean, Char, String, Single, UserType };
+enum class DataType { Integer, Boolean, Char, String, Single, UserType };
 
-enum class assignment_type { Assign, AddAssign, SubAssign, MulAssign, DivAssign, FloorDivAssign, ExpAssign, StrConcatAssign };
+enum class AssignmentType { Assign, AddAssign, SubAssign, MulAssign, DivAssign, FloorDivAssign, ExpAssign, StrConcatAssign };
 
-enum class case_kind { Value, Range, Compare };
+enum class CaseKind { Value, Range, Compare };
 
 /* Base */
 
-struct node {
+struct Node {
     int line = 0;
-    virtual ~node() = default;
+    virtual ~Node() = default;
 };
 
 /* Types */
 
-struct type_node : node {
-    data_type kind;
+struct TypeNode : Node {
+    DataType kind;
     std::string name;
 
     int arrayRank = 0;
 
-    type_node(data_type kind, std::string name = "") : kind(kind), name(name) {}
+    TypeNode(DataType kind, std::string name = "") : kind(kind), name(name) {}
 };
 
 /* Expressions */
@@ -68,8 +68,8 @@ struct type_node : node {
 // Coalesce                     left, right
 // New                          datatype, args, elements, hasInitializer
 // Collection                   elements
-struct expr_node : node {
-    expr_type type;
+struct ExprNode : Node {
+    ExprType type;
 
     int intValue = 0;
     float floatValue = 0.0f;
@@ -78,59 +78,59 @@ struct expr_node : node {
 
     std::string text;
 
-    expr_node* left = nullptr;
-    expr_node* right = nullptr;
-    expr_node* operand = nullptr;
+    ExprNode* left = nullptr;
+    ExprNode* right = nullptr;
+    ExprNode* operand = nullptr;
 
-    expr_node* condition = nullptr;
-    expr_node* then_expr = nullptr;
-    expr_node* else_expr = nullptr;
+    ExprNode* condition = nullptr;
+    ExprNode* then_expr = nullptr;
+    ExprNode* else_expr = nullptr;
 
-    type_node* datatype = nullptr;
+    TypeNode* datatype = nullptr;
 
-    std::vector<expr_node*> args;
+    std::vector<ExprNode*> args;
 
-    std::vector<expr_node*> elements;
+    std::vector<ExprNode*> elements;
     bool hasInitializer = false;
 
     bool parenthesized = false;
 
-    expr_node(expr_type type) : type(type) {}
+    ExprNode(ExprType type) : type(type) {}
 };
 
 /* Variables (locals, fields, parameters) */
 
-struct variable_node : node {
+struct VariableNode : Node {
     std::string name;
-    type_node* type = nullptr;
-    expr_node* value = nullptr;
+    TypeNode* type = nullptr;
+    ExprNode* value = nullptr;
 
-    std::vector<expr_node*> dimensions;
+    std::vector<ExprNode*> dimensions;
 
     bool isOptional = false;
 };
 
 /* Statements */
 
-struct stmt_node;
+struct StmtNode;
 
-typedef std::vector<stmt_node*> block;
+typedef std::vector<StmtNode*> Block;
 
-struct elseif_clause {
-    expr_node* condition = nullptr;
-    block body;
+struct ElseifClause {
+    ExprNode* condition = nullptr;
+    Block body;
 };
 
-struct case_item {
-    case_kind kind = case_kind::Value;
-    expr_node* value = nullptr;
-    expr_node* to = nullptr;
-    expr_type op = expr_type::EqOp;
+struct CaseItem {
+    CaseKind kind = CaseKind::Value;
+    ExprNode* value = nullptr;
+    ExprNode* to = nullptr;
+    ExprType op = ExprType::EqOp;
 };
 
-struct case_clause {
-    std::vector<case_item> items;
-    block body;
+struct CaseClause {
+    std::vector<CaseItem> items;
+    Block body;
 };
 
 // Call             expr
@@ -144,71 +144,71 @@ struct case_clause {
 // While            condition, body
 // Do               body, condition, conditionAtEnd, isUntil
 // VarDecl          var_type, declarators
-struct stmt_node : node {
-    stmt_type type;
+struct StmtNode : Node {
+    StmtType type;
 
-    expr_node* expr = nullptr;
+    ExprNode* expr = nullptr;
 
-    expr_node* lvalue = nullptr;
-    expr_node* rvalue = nullptr;
-    assignment_type assign_type = assignment_type::Assign;
+    ExprNode* lvalue = nullptr;
+    ExprNode* rvalue = nullptr;
+    AssignmentType assign_type = AssignmentType::Assign;
 
-    expr_node* condition = nullptr;
-    block body;
-    std::vector<elseif_clause> elseifs;
-    block else_block;
-    std::vector<case_clause> cases;
+    ExprNode* condition = nullptr;
+    Block body;
+    std::vector<ElseifClause> elseifs;
+    Block else_block;
+    std::vector<CaseClause> cases;
 
     std::string id;
-    type_node* id_type = nullptr;
-    expr_node* from_expr = nullptr;
-    expr_node* to_expr = nullptr;
-    expr_node* step_expr = nullptr;
-    expr_node* container_expr = nullptr;
+    TypeNode* id_type = nullptr;
+    ExprNode* from_expr = nullptr;
+    ExprNode* to_expr = nullptr;
+    ExprNode* step_expr = nullptr;
+    ExprNode* container_expr = nullptr;
 
     bool conditionAtEnd = false;
     bool isUntil = false;
 
-    var_kind var_type = var_kind::Dim;
-    std::vector<variable_node*> declarators;
+    VarKind var_type = VarKind::Dim;
+    std::vector<VariableNode*> declarators;
 
-    stmt_node(stmt_type type) : type(type) {}
+    StmtNode(StmtType type) : type(type) {}
 };
 
 /* Class members */
 
-struct method_node : node {
+struct MethodNode : Node {
     std::string name;
-    type_node* returnType = nullptr;
-    std::vector<variable_node*> params;
-    block body;
+    TypeNode* returnType = nullptr;
+    std::vector<VariableNode*> params;
+    Block body;
 
-    access_modifier access;
+    AccessModifier access;
     bool isStatic = false;
     bool isConstructor = false;
 
     bool isSub() const { return returnType == nullptr; }
 };
 
-struct field_node : node {
-    var_kind kind = var_kind::Dim;
-    std::vector<variable_node*> declarators;
+struct FieldNode : Node {
+    VarKind kind = VarKind::Dim;
+    std::vector<VariableNode*> declarators;
     
-    access_modifier access;
+    AccessModifier access;
     bool isStatic = false;
 };
 
 /* Program structure */
 
-struct class_node : node {
+struct ClassNode : Node {
     std::string name;
-    access_modifier access;
+    AccessModifier access;
     std::string parent;
 
-    std::vector<field_node*> fields;
-    std::vector<method_node*> methods;
+    std::vector<FieldNode*> fields;
+    std::vector<MethodNode*> methods;
 };
 
-struct program_node : node {
-    std::vector<class_node*> classes;
+struct ProgramNode : Node {
+    std::vector<ClassNode*> classes;
 };

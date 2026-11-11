@@ -27,32 +27,32 @@ std::vector<T> take(std::vector<T>* value) {
     return result;
 }
 
-expr_node* make_expr(expr_type type) {
-    return at_line(new expr_node(type));
+ExprNode* make_expr(ExprType type) {
+    return at_line(new ExprNode(type));
 }
 
-stmt_node* make_stmt(stmt_type type) {
-    return at_line(new stmt_node(type));
+StmtNode* make_stmt(StmtType type) {
+    return at_line(new StmtNode(type));
 }
 
-bool is_binary(const expr_node* expr) {
-    return expr->type >= expr_type::AddOp &&
-           expr->type <= expr_type::IsNotOp;
+bool is_binary(const ExprNode* expr) {
+    return expr->type >= ExprType::AddOp &&
+           expr->type <= ExprType::IsNotOp;
 }
 
-bool is_lvalue(const expr_node* expr) {
+bool is_lvalue(const ExprNode* expr) {
     return !expr->parenthesized && (
-        expr->type == expr_type::Id ||
-        expr->type == expr_type::MemberAccess ||
-        expr->type == expr_type::CallOrIndex
+        expr->type == ExprType::Id ||
+        expr->type == ExprType::MemberAccess ||
+        expr->type == ExprType::CallOrIndex
     );
 }
 
-expr_node* extract_assignment(expr_node*& root) {
+ExprNode* extract_assignment(ExprNode*& root) {
     if (!is_binary(root) || root->parenthesized) return nullptr;
 
-    if (root->type == expr_type::EqOp && is_lvalue(root->left)) {
-        expr_node* lvalue = root->left;
+    if (root->type == ExprType::EqOp && is_lvalue(root->left)) {
+        ExprNode* lvalue = root->left;
         root = root->right;
         return lvalue;
     }
@@ -61,21 +61,21 @@ expr_node* extract_assignment(expr_node*& root) {
 
 /* Program and classes */
 
-program_node* create_program(std::vector<class_node*>* classes) {
-    program_node* p = at_line(new program_node());
+ProgramNode* create_program(std::vector<ClassNode*>* classes) {
+    ProgramNode* p = at_line(new ProgramNode());
     p->classes = take(classes);
     return p;
 }
 
-class_node* create_class(access_modifier access, std::string* name, std::string* parent, std::vector<node*>* members) {
-    class_node* c = at_line(new class_node());
+ClassNode* create_class(AccessModifier access, std::string* name, std::string* parent, std::vector<Node*>* members) {
+    ClassNode* c = at_line(new ClassNode());
     c->access = access;
     c->name = take(name);
     c->parent = take(parent);
-    for (node* member : take(members)) {
-        if (field_node* field = dynamic_cast<field_node*>(member)) {
+    for (Node* member : take(members)) {
+        if (FieldNode* field = dynamic_cast<FieldNode*>(member)) {
             c->fields.push_back(field);
-        } else if (method_node* method = dynamic_cast<method_node*>(member)) {
+        } else if (MethodNode* method = dynamic_cast<MethodNode*>(member)) {
             c->methods.push_back(method);
         }
     }
@@ -84,12 +84,12 @@ class_node* create_class(access_modifier access, std::string* name, std::string*
 
 /* Class members */
 
-member_modifiers modifiers(access_modifier access, bool isStatic) {
+MemberModifiers modifiers(AccessModifier access, bool isStatic) {
     return {access, isStatic};
 }
 
-field_node* create_field(var_kind kind, member_modifiers mods, bool extraShared, std::vector<variable_node*>* declarators) {
-    field_node* f = at_line(new field_node());
+FieldNode* create_field(VarKind kind, MemberModifiers mods, bool extraShared, std::vector<VariableNode*>* declarators) {
+    FieldNode* f = at_line(new FieldNode());
     f->kind = kind;
     f->access = mods.access;
     f->isStatic = mods.isStatic || extraShared;
@@ -97,8 +97,8 @@ field_node* create_field(var_kind kind, member_modifiers mods, bool extraShared,
     return f;
 }
 
-method_node* create_function(member_modifiers mods, std::string* name, std::vector<variable_node*>* params, type_node* returnType, block* body) {
-    method_node* m = at_line(new method_node());
+MethodNode* create_function(MemberModifiers mods, std::string* name, std::vector<VariableNode*>* params, TypeNode* returnType, Block* body) {
+    MethodNode* m = at_line(new MethodNode());
     m->name = take(name);
     m->returnType = returnType;
     m->params = take(params);
@@ -108,8 +108,8 @@ method_node* create_function(member_modifiers mods, std::string* name, std::vect
     return m;
 }
 
-method_node* create_sub(member_modifiers mods, std::string* name, std::vector<variable_node*>* params, block* body) {
-    method_node* m = at_line(new method_node());
+MethodNode* create_sub(MemberModifiers mods, std::string* name, std::vector<VariableNode*>* params, Block* body) {
+    MethodNode* m = at_line(new MethodNode());
     m->name = take(name);
     m->returnType = nullptr;
     m->params = take(params);
@@ -122,146 +122,146 @@ method_node* create_sub(member_modifiers mods, std::string* name, std::vector<va
 
 /* Variables and parameters */
 
-variable_node* create_variable(std::string* name, type_node* type, expr_node* value) {
-    variable_node* v = at_line(new variable_node());
+VariableNode* create_variable(std::string* name, TypeNode* type, ExprNode* value) {
+    VariableNode* v = at_line(new VariableNode());
     v->name = take(name);
     v->type = type;
     v->value = value;
     return v;
 }
 
-variable_node* create_array_variable(std::string* name, type_node* elementType, std::vector<expr_node*>* dimensions, expr_node* value) {
-    variable_node* v = create_variable(name, elementType, value);
+VariableNode* create_array_variable(std::string* name, TypeNode* elementType, std::vector<ExprNode*>* dimensions, ExprNode* value) {
+    VariableNode* v = create_variable(name, elementType, value);
     v->dimensions = take(dimensions);
     elementType->arrayRank = std::max(1, static_cast<int>(v->dimensions.size()));
     return v;
 }
 
-variable_node* create_variable_new(std::string* name, type_node* type, std::vector<expr_node*>* args) {
-    expr_node* value = create_new(new type_node(*type), args, nullptr);
+VariableNode* create_variable_new(std::string* name, TypeNode* type, std::vector<ExprNode*>* args) {
+    ExprNode* value = create_new(new TypeNode(*type), args, nullptr);
     return create_variable(name, type, value);
 }
 
-variable_node* create_optional_parameter(std::string* name, type_node* type, expr_node* defaultValue) {
-    variable_node* v = create_variable(name, type, defaultValue);
+VariableNode* create_optional_parameter(std::string* name, TypeNode* type, ExprNode* defaultValue) {
+    VariableNode* v = create_variable(name, type, defaultValue);
     v->isOptional = true;
     return v;
 }
 
 /* Types */
 
-type_node* create_type(data_type kind) {
-    return at_line(new type_node(kind));
+TypeNode* create_type(DataType kind) {
+    return at_line(new TypeNode(kind));
 }
 
-type_node* create_user_type(std::string* name) {
-    return at_line(new type_node(data_type::UserType, take(name)));
+TypeNode* create_user_type(std::string* name) {
+    return at_line(new TypeNode(DataType::UserType, take(name)));
 }
 
-type_node* create_array_type(type_node* elementType, int rank) {
+TypeNode* create_array_type(TypeNode* elementType, int rank) {
     elementType->arrayRank = rank;
     return elementType;
 }
 
 /* Expressions */
 
-expr_node* create_id(std::string* name) {
-    expr_node* e = make_expr(expr_type::Id);
+ExprNode* create_id(std::string* name) {
+    ExprNode* e = make_expr(ExprType::Id);
     e->text = take(name);
     return e;
 }
 
-expr_node* create_id(const char* name) {
-    expr_node* e = make_expr(expr_type::Id);
+ExprNode* create_id(const char* name) {
+    ExprNode* e = make_expr(ExprType::Id);
     e->text = name;
     return e;
 }
 
-expr_node* create_int(int value) {
-    expr_node* e = make_expr(expr_type::Int);
+ExprNode* create_int(int value) {
+    ExprNode* e = make_expr(ExprType::Int);
     e->intValue = value;
     return e;
 }
 
-expr_node* create_float(float value) {
-    expr_node* e = make_expr(expr_type::Float);
+ExprNode* create_float(float value) {
+    ExprNode* e = make_expr(ExprType::Float);
     e->floatValue = value;
     return e;
 }
 
-expr_node* create_string(std::string* value) {
-    expr_node* e = make_expr(expr_type::String);
+ExprNode* create_string(std::string* value) {
+    ExprNode* e = make_expr(ExprType::String);
     e->text = take(value);
     return e;
 }
 
-expr_node* create_char(char value) {
-    expr_node* e = make_expr(expr_type::Char);
+ExprNode* create_char(char value) {
+    ExprNode* e = make_expr(ExprType::Char);
     e->charValue = value;
     return e;
 }
 
-expr_node* create_bool(bool value) {
-    expr_node* e = make_expr(expr_type::Bool);
+ExprNode* create_bool(bool value) {
+    ExprNode* e = make_expr(ExprType::Bool);
     e->boolValue = value;
     return e;
 }
 
-expr_node* create_simple_expr(expr_type type) {
+ExprNode* create_simple_expr(ExprType type) {
     return make_expr(type);
 }
 
-expr_node* create_binary(expr_node* left, expr_node* right, expr_type op) {
-    expr_node* e = make_expr(op);
+ExprNode* create_binary(ExprNode* left, ExprNode* right, ExprType op) {
+    ExprNode* e = make_expr(op);
     e->left = left;
     e->right = right;
     return e;
 }
 
-expr_node* create_unary(expr_node* operand, expr_type op) {
-    expr_node* e = make_expr(op);
+ExprNode* create_unary(ExprNode* operand, ExprType op) {
+    ExprNode* e = make_expr(op);
     e->operand = operand;
     return e;
 }
 
-expr_node* create_member_access(expr_node* left, std::string* name) {
-    expr_node* e = make_expr(expr_type::MemberAccess);
+ExprNode* create_member_access(ExprNode* left, std::string* name) {
+    ExprNode* e = make_expr(ExprType::MemberAccess);
     e->left = left;
     e->text = take(name);
     return e;
 }
 
-expr_node* create_call_or_index(expr_node* callee, std::vector<expr_node*>* args) {
-    expr_node* e = make_expr(expr_type::CallOrIndex);
+ExprNode* create_call_or_index(ExprNode* callee, std::vector<ExprNode*>* args) {
+    ExprNode* e = make_expr(ExprType::CallOrIndex);
     e->left = callee;
     e->args = take(args);
     return e;
 }
 
-expr_node* create_cast(expr_node* operand, type_node* type) {
-    expr_node* e = make_expr(expr_type::Cast);
+ExprNode* create_cast(ExprNode* operand, TypeNode* type) {
+    ExprNode* e = make_expr(ExprType::Cast);
     e->operand = operand;
     e->datatype = type;
     return e;
 }
 
-expr_node* create_if_expr(expr_node* condition, expr_node* thenExpr, expr_node* elseExpr) {
-    expr_node* e = make_expr(expr_type::If);
+ExprNode* create_if_expr(ExprNode* condition, ExprNode* thenExpr, ExprNode* elseExpr) {
+    ExprNode* e = make_expr(ExprType::If);
     e->condition = condition;
     e->then_expr = thenExpr;
     e->else_expr = elseExpr;
     return e;
 }
 
-expr_node* create_coalesce(expr_node* left, expr_node* right) {
-    expr_node* e = make_expr(expr_type::Coalesce);
+ExprNode* create_coalesce(ExprNode* left, ExprNode* right) {
+    ExprNode* e = make_expr(ExprType::Coalesce);
     e->left = left;
     e->right = right;
     return e;
 }
 
-expr_node* create_new(type_node* type, std::vector<expr_node*>* args, std::vector<expr_node*>* initializer) {
-    expr_node* e = make_expr(expr_type::New);
+ExprNode* create_new(TypeNode* type, std::vector<ExprNode*>* args, std::vector<ExprNode*>* initializer) {
+    ExprNode* e = make_expr(ExprType::New);
     e->datatype = type;
     e->args = take(args);
     if (initializer) {
@@ -271,47 +271,47 @@ expr_node* create_new(type_node* type, std::vector<expr_node*>* args, std::vecto
     return e;
 }
 
-expr_node* create_collection(std::vector<expr_node*>* elements) {
-    expr_node* e = make_expr(expr_type::Collection);
+ExprNode* create_collection(std::vector<ExprNode*>* elements) {
+    ExprNode* e = make_expr(ExprType::Collection);
     e->elements = take(elements);
     return e;
 }
 
 /* Statements */
 
-stmt_node* create_assign_or_call_stmt(expr_node* expr) {
-    if (expr_node* lvalue = extract_assignment(expr)) {
-        return create_assignment(lvalue, expr, assignment_type::Assign);
+StmtNode* create_assign_or_call_stmt(ExprNode* expr) {
+    if (ExprNode* lvalue = extract_assignment(expr)) {
+        return create_assignment(lvalue, expr, AssignmentType::Assign);
     }
     return create_call_stmt(expr);
 }
 
-stmt_node* create_call_stmt(expr_node* expr) {
-    stmt_node* s = make_stmt(stmt_type::Call);
+StmtNode* create_call_stmt(ExprNode* expr) {
+    StmtNode* s = make_stmt(StmtType::Call);
     s->expr = expr;
     return s;
 }
 
-stmt_node* create_assignment(expr_node* lvalue, expr_node* rvalue, assignment_type type) {
-    stmt_node* s = make_stmt(stmt_type::Assignment);
+StmtNode* create_assignment(ExprNode* lvalue, ExprNode* rvalue, AssignmentType type) {
+    StmtNode* s = make_stmt(StmtType::Assignment);
     s->lvalue = lvalue;
     s->rvalue = rvalue;
     s->assign_type = type;
     return s;
 }
 
-stmt_node* create_return(expr_node* value) {
-    stmt_node* s = make_stmt(stmt_type::Return);
+StmtNode* create_return(ExprNode* value) {
+    StmtNode* s = make_stmt(StmtType::Return);
     s->expr = value;
     return s;
 }
 
-stmt_node* create_simple_stmt(stmt_type type) {
+StmtNode* create_simple_stmt(StmtType type) {
     return make_stmt(type);
 }
 
-stmt_node* create_if(expr_node* condition, block* thenBlock, std::vector<elseif_clause>* elseifs, block* elseBlock) {
-    stmt_node* s = make_stmt(stmt_type::If);
+StmtNode* create_if(ExprNode* condition, Block* thenBlock, std::vector<ElseifClause>* elseifs, Block* elseBlock) {
+    StmtNode* s = make_stmt(StmtType::If);
     s->condition = condition;
     s->body = take(thenBlock);
     s->elseifs = take(elseifs);
@@ -319,68 +319,68 @@ stmt_node* create_if(expr_node* condition, block* thenBlock, std::vector<elseif_
     return s;
 }
 
-std::vector<elseif_clause>* elseifs_add(std::vector<elseif_clause>* list, expr_node* condition, block* body) {
-    elseif_clause clause;
+std::vector<ElseifClause>* elseifs_add(std::vector<ElseifClause>* list, ExprNode* condition, Block* body) {
+    ElseifClause clause;
     clause.condition = condition;
     clause.body = take(body);
     list->push_back(std::move(clause));
     return list;
 }
 
-stmt_node* create_select(expr_node* subject, std::vector<case_clause>* cases, block* elseBlock) {
-    stmt_node* s = make_stmt(stmt_type::Select);
+StmtNode* create_select(ExprNode* subject, std::vector<CaseClause>* cases, Block* elseBlock) {
+    StmtNode* s = make_stmt(StmtType::Select);
     s->expr = subject;
     s->cases = take(cases);
     s->else_block = take(elseBlock);
     return s;
 }
 
-std::vector<case_clause>* cases_add(std::vector<case_clause>* list, std::vector<case_item>* items, block* body) {
-    case_clause clause;
+std::vector<CaseClause>* cases_add(std::vector<CaseClause>* list, std::vector<CaseItem>* items, Block* body) {
+    CaseClause clause;
     clause.items = take(items);
     clause.body = take(body);
     list->push_back(std::move(clause));
     return list;
 }
 
-case_item* create_case_value(expr_node* value) {
-    case_item* c = new case_item();
-    c->kind = case_kind::Value;
+CaseItem* create_case_value(ExprNode* value) {
+    CaseItem* c = new CaseItem();
+    c->kind = CaseKind::Value;
     c->value = value;
     return c;
 }
 
-case_item* create_case_range(expr_node* from, expr_node* to) {
-    case_item* c = new case_item();
-    c->kind = case_kind::Range;
+CaseItem* create_case_range(ExprNode* from, ExprNode* to) {
+    CaseItem* c = new CaseItem();
+    c->kind = CaseKind::Range;
     c->value = from;
     c->to = to;
     return c;
 }
 
-case_item* create_case_compare(expr_type op, expr_node* value) {
-    case_item* c = new case_item();
-    c->kind = case_kind::Compare;
+CaseItem* create_case_compare(ExprType op, ExprNode* value) {
+    CaseItem* c = new CaseItem();
+    c->kind = CaseKind::Compare;
     c->op = op;
     c->value = value;
     return c;
 }
 
-std::vector<case_item>* case_items_new(case_item* first) {
-    std::vector<case_item>* list = new std::vector<case_item>();
+std::vector<CaseItem>* case_items_new(CaseItem* first) {
+    std::vector<CaseItem>* list = new std::vector<CaseItem>();
     list->push_back(*first);
     delete first;
     return list;
 }
 
-std::vector<case_item>* case_items_add(std::vector<case_item>* list, case_item* item) {
+std::vector<CaseItem>* case_items_add(std::vector<CaseItem>* list, CaseItem* item) {
     list->push_back(*item);
     delete item;
     return list;
 }
 
-stmt_node* create_for(std::string* id, type_node* idType, expr_node* from, expr_node* to, expr_node* step, block* body) {
-    stmt_node* s = make_stmt(stmt_type::For);
+StmtNode* create_for(std::string* id, TypeNode* idType, ExprNode* from, ExprNode* to, ExprNode* step, Block* body) {
+    StmtNode* s = make_stmt(StmtType::For);
     s->id = take(id);
     s->id_type = idType;
     s->from_expr = from;
@@ -390,8 +390,8 @@ stmt_node* create_for(std::string* id, type_node* idType, expr_node* from, expr_
     return s;
 }
 
-stmt_node* create_for_each(std::string* id, type_node* idType, expr_node* container, block* body) {
-    stmt_node* s = make_stmt(stmt_type::ForEach);
+StmtNode* create_for_each(std::string* id, TypeNode* idType, ExprNode* container, Block* body) {
+    StmtNode* s = make_stmt(StmtType::ForEach);
     s->id = take(id);
     s->id_type = idType;
     s->container_expr = container;
@@ -399,15 +399,15 @@ stmt_node* create_for_each(std::string* id, type_node* idType, expr_node* contai
     return s;
 }
 
-stmt_node* create_while(expr_node* condition, block* body) {
-    stmt_node* s = make_stmt(stmt_type::While);
+StmtNode* create_while(ExprNode* condition, Block* body) {
+    StmtNode* s = make_stmt(StmtType::While);
     s->condition = condition;
     s->body = take(body);
     return s;
 }
 
-stmt_node* create_do(block* body, expr_node* condition, bool conditionAtEnd, bool isUntil) {
-    stmt_node* s = make_stmt(stmt_type::Do);
+StmtNode* create_do(Block* body, ExprNode* condition, bool conditionAtEnd, bool isUntil) {
+    StmtNode* s = make_stmt(StmtType::Do);
     s->body = take(body);
     s->condition = condition;
     s->conditionAtEnd = conditionAtEnd;
@@ -415,8 +415,8 @@ stmt_node* create_do(block* body, expr_node* condition, bool conditionAtEnd, boo
     return s;
 }
 
-stmt_node* create_var_decl(var_kind kind, std::vector<variable_node*>* declarators) {
-    stmt_node* s = make_stmt(stmt_type::VarDecl);
+StmtNode* create_var_decl(VarKind kind, std::vector<VariableNode*>* declarators) {
+    StmtNode* s = make_stmt(StmtType::VarDecl);
     s->var_type = kind;
     s->declarators = take(declarators);
     return s;
