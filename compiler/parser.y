@@ -7,6 +7,7 @@
     #include <stdio.h>
     #include <stdarg.h>
     #include <string>
+    #include "compiler/node_factory.hpp"
 
     extern int yylex();
     extern int yylineno;
