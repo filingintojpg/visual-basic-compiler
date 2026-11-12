@@ -49,13 +49,6 @@
     int                         arrayRank;
 }
 
-%printer { fprintf(yyo, "\"%s\"", $$->c_str()); } <id>
-%printer { fprintf(yyo, "%d",     $$);          } <intLiteral>
-%printer { fprintf(yyo, "%f",     $$);          } <floatLiteral>
-%printer { fprintf(yyo, "\"%s\"", $$->c_str()); } <stringLiteral>
-%printer { fprintf(yyo, "%c",     $$);          } <charLiteral>
-%printer { fprintf(yyo, "%d",     $$);          } <boolLiteral>
-
 %token <id>            ID
 %token <intLiteral>    INT_LIT
 %token <floatLiteral>  FLOAT_LIT

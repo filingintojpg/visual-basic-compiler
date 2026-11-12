@@ -14,11 +14,6 @@ docker compose build
 docker compose run --rm vb <file.vb>
 ```
 
-### Run AST visualizer
-```bash
-docker compose run --rm ast <file.vb>
-```
-
 ## Useful information
 
 [Language Reference Manual](https://metanit.com/visualbasic/tutorial/)
