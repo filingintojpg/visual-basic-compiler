@@ -5,6 +5,7 @@
 extern bool DEBUG_LEXER;
 extern bool DEBUG_LEXER_BY_LINE;
 extern bool DEBUG_LEXER_EOL;
+extern bool DEBUG_PARSER_AST;
 
 extern int yydebug;
 extern int yyparse();
@@ -23,6 +24,7 @@ void setDebugOptions() {
 
     // Parser
     yydebug = 0;
+    DEBUG_PARSER_AST = true;
 }
 
 int main(int argc, char* argv[]) {
@@ -46,7 +48,9 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    render_ast(program_root, argv[1]);
+    if (DEBUG_PARSER_AST) {
+        render_ast(program_root, argv[1]);
+    }
 
     return 0;
 }

@@ -15,6 +15,8 @@
 
     ProgramNode* program_root = nullptr;
 
+    bool DEBUG_PARSER_AST;
+
     int parserErrors = 0;
     void yyerror(const char* s) { parserErrors++; fprintf(stderr, "\nPARSER ERROR at line %d: %s - %s\n", yylineno, yytext, s); }
 %}
