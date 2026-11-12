@@ -22,7 +22,7 @@ void setDebugOptions() {
     DEBUG_LEXER_EOL = false;
 
     // Parser
-    yydebug = 1;
+    yydebug = 0;
 }
 
 int main(int argc, char* argv[]) {
