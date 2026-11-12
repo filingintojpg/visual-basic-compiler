@@ -46,6 +46,7 @@
     std::vector<ElseifClause>*  elseifList;
     std::vector<CaseClause>*    caseList;
     std::vector<CaseItem>*      caseItemList;
+    int                         arrayRank;
 }
 
 %printer { fprintf(yyo, "\"%s\"", $$->c_str()); } <id>
@@ -102,6 +103,7 @@
 %type <exprList>     expr_list expr_list_e
 %type <dataType>     cast_operator
 %type <type>         type simple_type
+%type <arrayRank>    array_rank
 
 %precedence NEW
 %left OR OR_ELSE
@@ -200,9 +202,9 @@ parameter_list_e: ee                { $$ = list<VariableNode*>(); }
                 | parameter_list ee { $$ = $1; }
                 ;
 
-parameter: ID AS type                      { $$ = create_variable($1, $3, nullptr); }
-         | ID '(' ee ')' AS simple_type    { $$ = create_array_variable($1, $6, nullptr, nullptr); }
-         | OPTIONAL ID AS type '=' ee expr { $$ = create_optional_parameter($2, $4, $7); }
+parameter: ID AS type                           { $$ = create_variable($1, $3, nullptr); }
+         | ID '(' array_rank ')' AS simple_type { $$ = create_array_parameter($1, $6, $3); }
+         | OPTIONAL ID AS type '=' ee expr      { $$ = create_optional_parameter($2, $4, $7); }
          ;
 
 /* Statements */
@@ -371,8 +373,8 @@ cast_operator: CBOOL { $$ = DataType::Boolean; }
 
 /* Types */
 
-type: simple_type            { $$ = $1; }
-    | simple_type '(' ee ')' { $$ = create_array_type($1); }
+type: simple_type                    { $$ = $1; }
+    | simple_type '(' array_rank ')' { $$ = create_array_type($1, $3); }
     ;
 
 simple_type: ID      { $$ = create_user_type($1); }
@@ -382,6 +384,10 @@ simple_type: ID      { $$ = create_user_type($1); }
            | STRING  { $$ = create_type(DataType::String); }
            | SINGLE  { $$ = create_type(DataType::Single); }
            ;
+
+array_rank: ee                { $$ = 1; }
+          | array_rank ',' ee { $$ = $1 + 1; }
+          ;
 
 /* Keywords */
 

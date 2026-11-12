@@ -137,6 +137,11 @@ VariableNode* create_array_variable(std::string* name, TypeNode* elementType, st
     return v;
 }
 
+VariableNode* create_array_parameter(std::string* name, TypeNode* elementType, int rank) {
+    elementType->arrayRank = rank;
+    return create_variable(name, elementType, nullptr);
+}
+
 VariableNode* create_variable_new(std::string* name, TypeNode* type, std::vector<ExprNode*>* args) {
     ExprNode* value = create_new(new TypeNode(*type), args, nullptr);
     return create_variable(name, type, value);
@@ -267,6 +272,7 @@ ExprNode* create_new(TypeNode* type, std::vector<ExprNode*>* args, std::vector<E
     if (initializer) {
         e->hasInitializer = true;
         e->elements = take(initializer);
+        type->arrayRank = std::max(1, static_cast<int>(e->args.size()));
     }
     return e;
 }

@@ -44,6 +44,7 @@ MethodNode* create_sub(MemberModifiers mods, std::string* name, std::vector<Vari
 
 VariableNode* create_variable(std::string* name, TypeNode* type, ExprNode* value);
 VariableNode* create_array_variable(std::string* name, TypeNode* elementType, std::vector<ExprNode*>* dimensions, ExprNode* value);
+VariableNode* create_array_parameter(std::string* name, TypeNode* elementType, int rank);
 VariableNode* create_variable_new(std::string* name, TypeNode* type, std::vector<ExprNode*>* args);
 VariableNode* create_optional_parameter(std::string* name, TypeNode* type, ExprNode* defaultValue);
 
@@ -51,7 +52,7 @@ VariableNode* create_optional_parameter(std::string* name, TypeNode* type, ExprN
 
 TypeNode* create_type(DataType kind);
 TypeNode* create_user_type(std::string* name);
-TypeNode* create_array_type(TypeNode* elementType, int rank = 1);
+TypeNode* create_array_type(TypeNode* elementType, int rank);
 
 /* Expressions */
 
