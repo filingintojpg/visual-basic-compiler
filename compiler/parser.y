@@ -1,9 +1,7 @@
 %define parse.trace
 %define parse.error detailed
 
-%code requires {
-    #include "compiler/node_factory.hpp"
-}
+%code requires { #include "compiler/node_factory.hpp" }
 
 %{
     #include <stdio.h>
