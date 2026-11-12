@@ -402,5 +402,5 @@ parser.output
 parser.tab.c
 parser.tab.h
 
-# AST visualizer output
-ast-visualizer/output/
+# AST output
+output/
