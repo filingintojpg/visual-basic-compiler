@@ -17,12 +17,10 @@ extern int parserErrors;
 extern ProgramNode* program_root;
 
 void setDebugOptions() {
-    // Lexer
     DEBUG_LEXER = false;
     DEBUG_LEXER_BY_LINE = false;
     DEBUG_LEXER_EOL = false;
 
-    // Parser
     yydebug = 0;
     DEBUG_PARSER_AST = true;
 }
