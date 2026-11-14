@@ -489,7 +489,7 @@ Public Class FormMain
                     If Not DoInputChar(Me, ptr) Then
                         DoBreak()
                     End If
-                ElseаIf prg(i) = ocWleStr Then
+                ElseIf prg(i) = ocWleStr Then
                     j = brq(i)
                     Dim loopBody As Boolean
                     loopBody = True
