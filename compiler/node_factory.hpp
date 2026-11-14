@@ -12,7 +12,7 @@ std::vector<T>* list() {
 
 template <class T>
 std::vector<T>* list_of(T first) {
-    auto* result = list<T>();
+    std::vector<T>* result = list<T>();
     result->push_back(first);
     return result;
 }
