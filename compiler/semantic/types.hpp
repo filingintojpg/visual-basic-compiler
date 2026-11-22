@@ -29,7 +29,6 @@ struct Type {
     std::string name() const;
     std::string descriptor() const;
 
-    // Этот класс является потомком other (или им самим)? Только для Class.
     bool isSubclassOf(const Type* other) const;
 
     // Можно ли без преобразования положить значение типа `from` в переменную этого типа

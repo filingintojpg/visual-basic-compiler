@@ -36,7 +36,9 @@ bool Types::same(const Type* a, const Type* b) {
 
 bool Type::isSubclassOf(const Type* other) const {
     for (const Type* t = this; t; t = t->parent) {
-        if (Types::same(t, other)) return true;
+        if (Types::same(t, other)) {
+            return true;
+        }
     }
     return false;
 }
