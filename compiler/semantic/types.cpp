@@ -70,10 +70,11 @@ Type* Types::common(Type* a, Type* b) {
     if (a->isAssignableFrom(b)) return a;
     if (b->isAssignableFrom(a)) return b;
 
-    // Два разных класса с общим предком: берём ближайшего общего предка
     if (a->kind == TypeKind::Class && b->kind == TypeKind::Class) {
         for (Type* p = a->parent; p; p = p->parent) {
-            if (b->isSubclassOf(p)) return p;
+            if (b->isSubclassOf(p)) {
+                return p;
+            }
         }
     }
     return nullptr;

@@ -48,7 +48,6 @@ struct Types {
 
     static bool same(const Type* a, const Type* b);
 
-    // Общий тип двух выражений (для If(cond, a, b) и литералов массивов); nullptr, если его нет
     static Type* common(Type* a, Type* b);
 
     // Насколько значение типа `from` подходит приёмнику `to` при неявном приведении (как в VB без Option Strict):
