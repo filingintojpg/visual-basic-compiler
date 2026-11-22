@@ -100,36 +100,34 @@ int Types::conversionRank(const Type* from, const Type* to) {
     }
 }
 
-/* ===== Текстовые представления ===== */
-
 std::string Type::name() const {
     switch (kind) {
-        case TypeKind::Void: return "Void";
+        case TypeKind::Void:    return "Void";
         case TypeKind::Integer: return "Integer";
         case TypeKind::Boolean: return "Boolean";
-        case TypeKind::Char: return "Char";
-        case TypeKind::String: return "String";
-        case TypeKind::Single: return "Single";
-        case TypeKind::Null: return "Nothing";
-        case TypeKind::Error: return "<error>";
-        case TypeKind::Class: return className;
-        case TypeKind::Array: return elem->name() + "(" + std::string(rank > 1 ? rank - 1 : 0, ',') + ")";
+        case TypeKind::Char:    return "Char";
+        case TypeKind::String:  return "String";
+        case TypeKind::Single:  return "Single";
+        case TypeKind::Null:    return "Nothing";
+        case TypeKind::Error:   return "<error>";
+        case TypeKind::Class:   return className;
+        case TypeKind::Array:   return elem->name() + "(" + std::string(rank > 1 ? rank - 1 : 0, ',') + ")";
     }
     return "?";
 }
 
 std::string Type::descriptor() const {
     switch (kind) {
-        case TypeKind::Void: return "V";
+        case TypeKind::Void:    return "V";
         case TypeKind::Integer: return "I";
         case TypeKind::Boolean: return "Z";
-        case TypeKind::Char: return "C";
-        case TypeKind::Single: return "F";
-        case TypeKind::String: return "Ljava/lang/String;";
-        case TypeKind::Class: return "L" + className + ";";
-        case TypeKind::Array: return std::string(rank, '[') + elem->descriptor();
+        case TypeKind::Char:    return "C";
+        case TypeKind::Single:  return "F";
+        case TypeKind::String:  return "Ljava/lang/String;";
+        case TypeKind::Class:   return "L" + className + ";";
+        case TypeKind::Array:   return std::string(rank, '[') + elem->descriptor();
         case TypeKind::Null:
-        case TypeKind::Error: return "Ljava/lang/Object;";
+        case TypeKind::Error:   return "Ljava/lang/Object;";
     }
     return "?";
 }

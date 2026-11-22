@@ -26,8 +26,8 @@ struct Type {
     bool isConstType() const { return isPrimitive() || kind == TypeKind::String; }
     bool isArray() const { return kind == TypeKind::Array; }
 
-    std::string name() const;        // как показывать тип в сообщениях об ошибках: "Integer", "Dog", "Integer()"
-    std::string descriptor() const;  // JVM-дескриптор: I, Z, C, F, Ljava/lang/String;, LDog;, [I
+    std::string name() const;
+    std::string descriptor() const;
 
     // Этот класс является потомком other (или им самим)? Только для Class.
     bool isSubclassOf(const Type* other) const;
