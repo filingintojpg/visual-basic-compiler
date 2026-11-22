@@ -5,9 +5,6 @@ struct ClassRecord;
 
 enum class TypeKind { Void, Integer, Boolean, Char, String, Single, Null, Class, Array, Error };
 
-// Тип данных в смысле семантического анализа.
-// В AST тип описан узлом TypeNode ("то, что написал программист"), а Type - это
-// "настоящий" тип, с которым можно сравнивать, приводить и проверять совместимость.
 struct Type {
     TypeKind kind;
 
