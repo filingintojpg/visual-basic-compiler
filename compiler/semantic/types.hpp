@@ -1,8 +1,6 @@
 #pragma once
 #include <string>
 
-// Запись о классе (таблица символов). Появится на одном из следующих шагов,
-// пока нужен только как "непрозрачный" указатель внутри Type.
 struct ClassRecord;
 
 enum class TypeKind { Void, Integer, Boolean, Char, String, Single, Null, Class, Array, Error };
