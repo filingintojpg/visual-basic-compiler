@@ -58,8 +58,8 @@ struct Types {
     static Type* Null();
     static Type* Error();
 
-    static Type* classType(const std::string& name);  // новый тип класса (вызывается один раз на класс)
-    static Type* arrayOf(Type* elem, int rank);       // массив: для одной пары (elem, rank) создаётся один раз
+    static Type* classType(const std::string& name);
+    static Type* arrayOf(Type* elem, int rank);
 
     // Один и тот же тип? (для массивов и классов сравнивает по содержимому)
     static bool same(const Type* a, const Type* b);
