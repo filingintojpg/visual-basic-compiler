@@ -8,14 +8,12 @@ enum class TypeKind { Void, Integer, Boolean, Char, String, Single, Null, Class,
 struct Type {
     TypeKind kind;
 
-    // Для Class
     std::string className;
-    Type* parent = nullptr;       // тип класса-предка (nullptr - предка нет)
-    ClassRecord* cls = nullptr;   // запись класса (заполним на шаге с таблицей символов)
+    Type* parent = nullptr;
+    ClassRecord* cls = nullptr;
 
-    // Для Array
-    Type* elem = nullptr;         // тип элементов
-    int rank = 0;                 // число измерений: Integer() - 1, Integer(,) - 2
+    Type* elem = nullptr;
+    int rank = 0;
 
     explicit Type(TypeKind kind) : kind(kind) {}
 
