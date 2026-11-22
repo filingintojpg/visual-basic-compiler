@@ -21,17 +21,8 @@ struct Type {
 
     bool isError() const { return kind == TypeKind::Error; }
     bool isNumeric() const { return kind == TypeKind::Integer || kind == TypeKind::Single; }
-    // Примитивы JVM (хранятся в переменной "как есть", а не ссылкой на объект)
-    bool isPrimitive() const {
-        return kind == TypeKind::Integer || kind == TypeKind::Boolean ||
-               kind == TypeKind::Char || kind == TypeKind::Single;
-    }
-    // Ссылочные типы: значение - ссылка на объект, поэтому подходит Nothing
-    bool isReference() const {
-        return kind == TypeKind::String || kind == TypeKind::Class ||
-               kind == TypeKind::Array || kind == TypeKind::Null;
-    }
-    // Какие типы разрешены у констант (Const)
+    bool isPrimitive() const { return kind == TypeKind::Integer || kind == TypeKind::Boolean || kind == TypeKind::Char || kind == TypeKind::Single; }
+    bool isReference() const { return kind == TypeKind::String || kind == TypeKind::Class || kind == TypeKind::Array || kind == TypeKind::Null; }
     bool isConstType() const { return isPrimitive() || kind == TypeKind::String; }
     bool isArray() const { return kind == TypeKind::Array; }
 
