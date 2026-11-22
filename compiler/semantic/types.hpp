@@ -16,6 +16,7 @@ struct Type {
     int rank = 0;
 
     explicit Type(TypeKind kind) : kind(kind) {}
+    explicit Type(TypeKind kind, const std::string& className) : kind(kind), className(className) {}
 
     bool isError() const { return kind == TypeKind::Error; }
     bool isNumeric() const { return kind == TypeKind::Integer || kind == TypeKind::Single; }

@@ -11,13 +11,7 @@ Type* Types::Single()  { static Type* t = new Type(TypeKind::Single);  return t;
 Type* Types::Null()    { static Type* t = new Type(TypeKind::Null);    return t; }
 Type* Types::Error()   { static Type* t = new Type(TypeKind::Error);   return t; }
 
-/* ===== Составные типы ===== */
-
-Type* Types::classType(const std::string& name) {
-    Type* t = new Type(TypeKind::Class);
-    t->className = name;
-    return t;
-}
+Type* Types::classType(const std::string& name) { return new Type(TypeKind::Class, name); }
 
 Type* Types::arrayOf(Type* elem, int rank) {
     // Кэш: Integer() всегда один и тот же объект, сколько бы раз его ни запросили
