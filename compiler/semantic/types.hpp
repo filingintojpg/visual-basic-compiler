@@ -30,9 +30,6 @@ struct Type {
     std::string descriptor() const;
 
     bool isSubclassOf(const Type* other) const;
-
-    // Можно ли без преобразования положить значение типа `from` в переменную этого типа
-    // (тот же тип, Integer -> Single, Char -> String, потомок -> предок, Nothing -> ссылка)
     bool isAssignableFrom(const Type* from) const;
 };
 

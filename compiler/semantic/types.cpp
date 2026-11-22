@@ -48,19 +48,17 @@ bool Type::isAssignableFrom(const Type* from) const {
     if (Types::same(this, from)) return true;
 
     switch (kind) {
-        case TypeKind::Single:
-            return from->kind == TypeKind::Integer;                          // Integer -> Single
-        case TypeKind::String:
-            return from->kind == TypeKind::Char || from->kind == TypeKind::Null;  // Char -> String, Nothing -> String
-        case TypeKind::Class:
+        case TypeKind::Single: // Integer -> Single
+            return from->kind == TypeKind::Integer;
+        case TypeKind::String: // Char, Nothing -> String
+            return from->kind == TypeKind::Char || from->kind == TypeKind::Null;
+        case TypeKind::Class: // Nothing, Dog -> Animal
             if (from->kind == TypeKind::Null) return true;
-            return from->kind == TypeKind::Class && from->isSubclassOf(this);     // Dog -> Animal
-        case TypeKind::Array:
+            return from->kind == TypeKind::Class && from->isSubclassOf(this);
+        case TypeKind::Array: // Nothing(), Dog() -> Animal()
             if (from->kind == TypeKind::Null) return true;
             if (from->kind != TypeKind::Array || from->rank != rank) return false;
-            if (elem->kind == TypeKind::Class && from->elem->kind == TypeKind::Class) {
-                return elem->isAssignableFrom(from->elem);                       // Dog() -> Animal()
-            }
+            if (elem->kind == TypeKind::Class && from->elem->kind == TypeKind::Class) return elem->isAssignableFrom(from->elem);
             return Types::same(elem, from->elem);
         default:
             return false;
