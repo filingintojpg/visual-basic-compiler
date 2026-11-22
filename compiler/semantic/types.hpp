@@ -33,8 +33,6 @@ struct Type {
     bool isAssignableFrom(const Type* from) const;
 };
 
-// Фабрика типов: простые типы создаются один раз и дальше используются по указателю,
-// поэтому их можно сравнивать через ==.
 struct Types {
     static Type* Void();
     static Type* Integer();
