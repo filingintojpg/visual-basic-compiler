@@ -2,20 +2,14 @@
 #include <map>
 #include <utility>
 
-/* ===== Простые типы: по одному объекту на всю программу ===== */
-
-static Type* makeSimple(TypeKind kind) {
-    return new Type(kind);
-}
-
-Type* Types::Void()    { static Type* t = makeSimple(TypeKind::Void);    return t; }
-Type* Types::Integer() { static Type* t = makeSimple(TypeKind::Integer); return t; }
-Type* Types::Boolean() { static Type* t = makeSimple(TypeKind::Boolean); return t; }
-Type* Types::Char()    { static Type* t = makeSimple(TypeKind::Char);    return t; }
-Type* Types::String()  { static Type* t = makeSimple(TypeKind::String);  return t; }
-Type* Types::Single()  { static Type* t = makeSimple(TypeKind::Single);  return t; }
-Type* Types::Null()    { static Type* t = makeSimple(TypeKind::Null);    return t; }
-Type* Types::Error()   { static Type* t = makeSimple(TypeKind::Error);   return t; }
+Type* Types::Void()    { static Type* t = new Type(TypeKind::Void);    return t; }
+Type* Types::Integer() { static Type* t = new Type(TypeKind::Integer); return t; }
+Type* Types::Boolean() { static Type* t = new Type(TypeKind::Boolean); return t; }
+Type* Types::Char()    { static Type* t = new Type(TypeKind::Char);    return t; }
+Type* Types::String()  { static Type* t = new Type(TypeKind::String);  return t; }
+Type* Types::Single()  { static Type* t = new Type(TypeKind::Single);  return t; }
+Type* Types::Null()    { static Type* t = new Type(TypeKind::Null);    return t; }
+Type* Types::Error()   { static Type* t = new Type(TypeKind::Error);   return t; }
 
 /* ===== Составные типы ===== */
 

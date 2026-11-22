@@ -5,19 +5,7 @@
 // пока нужен только как "непрозрачный" указатель внутри Type.
 struct ClassRecord;
 
-// Какие бывают типы данных
-enum class TypeKind {
-    Void,     // "ничего": тип результата у Sub
-    Integer,
-    Boolean,
-    Char,
-    String,
-    Single,
-    Null,     // тип литерала Nothing
-    Class,    // пользовательский класс (Dog, Animal...)
-    Array,    // массив чего-то (Integer(), Dog(,)...)
-    Error     // тип-заглушка после ошибки: подходит ко всему, чтобы не плодить лишние сообщения
-};
+enum class TypeKind { Void, Integer, Boolean, Char, String, Single, Null, Class, Array, Error };
 
 // Тип данных в смысле семантического анализа.
 // В AST тип описан узлом TypeNode ("то, что написал программист"), а Type - это
