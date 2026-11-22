@@ -14,16 +14,13 @@ Type* Types::Error()   { static Type* t = new Type(TypeKind::Error);   return t;
 Type* Types::classType(const std::string& name) { return new Type(TypeKind::Class, name); }
 
 Type* Types::arrayOf(Type* elem, int rank) {
-    // Кэш: Integer() всегда один и тот же объект, сколько бы раз его ни запросили
-    static std::map<std::pair<Type*, int>, Type*> cache;
+    static std::map<std::pair<Type*, int>, Type*> cachedArrayTypes;
     auto key = std::make_pair(elem, rank);
-    auto it = cache.find(key);
-    if (it != cache.end()) return it->second;
+    auto it = cachedArrayTypes.find(key);
+    if (it != cachedArrayTypes.end()) return it->second;
 
-    Type* t = new Type(TypeKind::Array);
-    t->elem = elem;
-    t->rank = rank;
-    cache[key] = t;
+    Type* t = new Type(TypeKind::Array, elem, rank);
+    cachedArrayTypes[key] = t;
     return t;
 }
 
