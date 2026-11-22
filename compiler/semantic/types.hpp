@@ -50,11 +50,9 @@ struct Types {
 
     static Type* common(Type* a, Type* b);
 
-    // Насколько значение типа `from` подходит приёмнику `to` при неявном приведении (как в VB без Option Strict):
-    //   3 - тот же тип
-    //   2 - расширение или подтип (Integer -> Single, Char -> String, Dog -> Animal, Nothing -> ссылка)
-    //   1 - преобразование с возможной потерей или проверкой (Single -> Integer, String <-> числа,
-    //       Integer <-> Boolean, числа -> String, String -> Char, Animal -> Dog)
-    //   0 - неявное приведение невозможно
+    // 3 - same type
+    // 2 - extension or subtype (Integer -> Single, Char -> String, Dog -> Animal, Nothing -> reference)
+    // 1 - lost or needs check (Single -> Integer, String <-> numbers, Integer <-> Boolean, numbers -> String, String -> Char, Animal -> Dog)
+    // 0 - convertion is not possible
     static int conversionRank(const Type* from, const Type* to);
 };

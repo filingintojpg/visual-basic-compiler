@@ -88,16 +88,11 @@ int Types::conversionRank(const Type* from, const Type* to) {
     switch (to->kind) {
         case TypeKind::Integer:
         case TypeKind::Single:
-        case TypeKind::Boolean:
-            return (from->isNumeric() || from->kind == TypeKind::Boolean || from->kind == TypeKind::String) ? 1 : 0;
-        case TypeKind::String:
-            return from->isPrimitive() ? 1 : 0;
-        case TypeKind::Char:
-            return from->kind == TypeKind::String ? 1 : 0;
-        case TypeKind::Class:  // Animal -> Dog: проверяется во время выполнения
-            return from->kind == TypeKind::Class && to->isSubclassOf(from) ? 1 : 0;
-        default:
-            return 0;
+        case TypeKind::Boolean: return (from->isNumeric() || from->kind == TypeKind::Boolean || from->kind == TypeKind::String) ? 1 : 0;
+        case TypeKind::String:  return from->isPrimitive() ? 1 : 0;
+        case TypeKind::Char:    return from->kind == TypeKind::String ? 1 : 0;
+        case TypeKind::Class:   return from->kind == TypeKind::Class && to->isSubclassOf(from) ? 1 : 0;
+        default:                return 0;
     }
 }
 
