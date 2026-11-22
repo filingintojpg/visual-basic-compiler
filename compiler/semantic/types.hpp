@@ -61,7 +61,6 @@ struct Types {
     static Type* classType(const std::string& name);
     static Type* arrayOf(Type* elem, int rank);
 
-    // Один и тот же тип? (для массивов и классов сравнивает по содержимому)
     static bool same(const Type* a, const Type* b);
 
     // Общий тип двух выражений (для If(cond, a, b) и литералов массивов); nullptr, если его нет

@@ -24,15 +24,13 @@ Type* Types::arrayOf(Type* elem, int rank) {
     return t;
 }
 
-/* ===== Сравнение типов ===== */
-
 bool Types::same(const Type* a, const Type* b) {
     if (a == b) return true;
     if (!a || !b || a->kind != b->kind) return false;
     switch (a->kind) {
         case TypeKind::Class: return a->className == b->className;
         case TypeKind::Array: return a->rank == b->rank && same(a->elem, b->elem);
-        default: return true;
+        default:              return true;
     }
 }
 
