@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <cstdio>
 #include "compiler/ast.hpp"
+#include "compiler/semantic/analyzer.hpp"
 
 extern bool DEBUG_LEXER;
 extern bool DEBUG_LEXER_BY_LINE;
@@ -48,6 +49,12 @@ int main(int argc, char* argv[]) {
 
     if (DEBUG_PARSER_AST) {
         render_ast(program_root, argv[1]);
+    }
+
+    SemanticAnalyzer analyzer;
+    if (!analyzer.analyze(program_root)) {
+        analyzer.diagnostics.print();
+        return 1;
     }
 
     return 0;
