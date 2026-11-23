@@ -185,7 +185,7 @@ void SemanticAnalyzer::declareMethod(ClassRecord* cls, MethodNode* node) {
         return;
     }
     for (const MethodRecord* other : cls->methods[method->name]) {
-        if (sameSignature(*other, *method)) {
+        if (sameParams(*other, *method)) {
             nameError(node->line, "Method '%s' is already declared in class '%s' with the same signature",
                       method->displayName().c_str(), cls->name.c_str());
             return;
@@ -202,7 +202,7 @@ void SemanticAnalyzer::checkOverrides(ClassRecord* cls) {
     for (MethodRecord* m : cls->methodList) {
         if (m->name == "<init>" || m->name == "<clinit>") continue;
         for (MethodRecord* base : cls->parent->findMethods(m->name)) {
-            if (!sameSignature(*base, *m)) continue;
+            if (!sameParams(*base, *m)) continue;
 
             int line = m->node ? m->node->line : 0;
             if (base->isStatic != m->isStatic) {
