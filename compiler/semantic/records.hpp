@@ -90,4 +90,5 @@ struct ClassRecord : Record {
     MethodRecord* staticConstructor() const;
 };
 
+bool sameParams(const MethodRecord& a, const MethodRecord& b);
 int accessRank(AccessModifier access);
