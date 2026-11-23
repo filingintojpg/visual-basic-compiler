@@ -98,16 +98,6 @@ MethodRecord* ClassRecord::staticConstructor() const {
 
 /* Utility functions */
 
-bool sameParams(const MethodRecord& a, const MethodRecord& b) {
-    if (a.params.size() != b.params.size()) return false;
-    for (size_t i = 0; i < a.params.size(); ++i) {
-        if (!Types::same(a.params[i]->type, b.params[i]->type)) {
-            return false;
-        }
-    }
-    return true;
-}
-
 int accessRank(AccessModifier access) {
     switch (access) {
         case AccessModifier::Private:   return 0;
