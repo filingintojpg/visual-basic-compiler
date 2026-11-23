@@ -16,8 +16,8 @@ bool SemanticAnalyzer::analyze(ProgramNode* program) {
 /* ===== Проход 1: классы ===== */
 
 ClassRecord* SemanticAnalyzer::findClass(const std::string& name) const {
-    auto it = classMap_.find(name);
-    return it == classMap_.end() ? nullptr : it->second;
+    auto it = _classMap.find(name);
+    return it == _classMap.end() ? nullptr : it->second;
 }
 
 void SemanticAnalyzer::declareClasses(ProgramNode* program) {
@@ -30,7 +30,7 @@ void SemanticAnalyzer::declareClasses(ProgramNode* program) {
         cls->node = node;
         cls->access = node->access;
         node->ref = cls;                 // связываем AST с записью
-        classMap_[cls->name] = cls;
+        _classMap[cls->name] = cls;
         classes.push_back(cls);
     }
 }
