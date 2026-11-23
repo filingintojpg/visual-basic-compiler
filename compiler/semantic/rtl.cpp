@@ -1,9 +1,6 @@
 #include "compiler/semantic/rtl.hpp"
 #include <initializer_list>
 
-/* ===== Вспомогательные функции для описания встроенных членов ===== */
-
-// Добавляет в класс метод: addMethod(класс, "имя", тип результата, {типы параметров}, Shared ли)
 static MethodRecord* addMethod(ClassRecord* cls, const std::string& name, Type* returnType, std::initializer_list<Type*> paramTypes, bool isStatic, bool isVariadic = false) {
     MethodRecord* m = new MethodRecord();
     m->name = name;
@@ -26,17 +23,16 @@ static MethodRecord* addMethod(ClassRecord* cls, const std::string& name, Type* 
     return m;
 }
 
-// Добавляет в класс поле только для чтения: addField(класс, "имя", тип, Shared ли)
 static FieldRecord* addField(ClassRecord* cls, const std::string& name, Type* type, bool isStatic) {
     FieldRecord* f = new FieldRecord();
     f->name = name;
     f->type = type;
     f->owner = cls;
     f->isStatic = isStatic;
-    f->isConst = true;       // значения встроенных полей менять нельзя
+    f->isConst = true;
     f->isBuiltin = true;
     f->access = AccessModifier::Public;
-    f->initDone = true;      // тип известен сразу, разбирать инициализатор не нужно
+    f->initDone = true;
     cls->fields[name] = f;
     cls->fieldList.push_back(f);
     return f;
@@ -46,12 +42,12 @@ ClassRecord* Rtl::makeClass(const std::string& name, const std::string& jvmName,
     ClassRecord* cls = new ClassRecord(name);
     cls->jvmName = jvmName;
     cls->isBuiltin = true;
-    if (type) cls->type = type;  // для String, Integer... "типом класса" служит сам примитивный тип
+    if (type) {
+        cls->type = type;
+    }
     _classes[name] = cls;
     return cls;
 }
-
-/* ===== Доступ ===== */
 
 Rtl& Rtl::instance() {
     static Rtl rtl;
@@ -60,18 +56,20 @@ Rtl& Rtl::instance() {
 
 ClassRecord* Rtl::find(const std::string& lowerName) const {
     auto it = _classes.find(lowerName);
-    if (it == _classes.end() || it->second == _globals) return nullptr;
+    if (it == _classes.end() || it->second == _globals) {
+        return nullptr;
+    }
     return it->second;
 }
 
 ClassRecord* Rtl::classFor(const Type* type) const {
     switch (type->kind) {
         case TypeKind::Integer: return find("integer");
-        case TypeKind::Single: return find("single");
+        case TypeKind::Single:  return find("single");
         case TypeKind::Boolean: return find("boolean");
-        case TypeKind::Char: return find("char");
-        case TypeKind::String: return find("string");
-        default: return nullptr;
+        case TypeKind::Char:    return find("char");
+        case TypeKind::String:  return find("string");
+        default:                return nullptr;
     }
 }
 
@@ -79,8 +77,6 @@ FieldRecord* Rtl::findGlobal(const std::string& lowerName) const {
     auto it = _globals->fields.find(lowerName);
     return it == _globals->fields.end() ? nullptr : it->second;
 }
-
-/* ===== Содержимое библиотеки ===== */
 
 Rtl::Rtl() {
     Type* I = Types::Integer();
@@ -90,18 +86,16 @@ Rtl::Rtl() {
     Type* S = Types::String();
     Type* V = Types::Void();
 
-    // Console.WriteLine(...), Console.ReadLine()
     ClassRecord* console = makeClass("console", "vb/rtl/Console", nullptr);
     for (Type* t : {I, F, B, C}) {
         addMethod(console, "write", V, {t}, true);
         addMethod(console, "writeline", V, {t}, true);
     }
-    addMethod(console, "write", V, {S}, true, true);      // Write("{0} {1}", a, b): после строки можно любые аргументы
+    addMethod(console, "write", V, {S}, true, true);
     addMethod(console, "writeline", V, {S}, true, true);
     addMethod(console, "writeline", V, {}, true);
     addMethod(console, "readline", S, {}, true);
 
-    // String: "abc".Length, "abc".ToUpper(), String.Empty
     ClassRecord* str = makeClass("string", "java/lang/String", S);
     addField(str, "length", I, false);
     addField(str, "empty", S, true);
@@ -116,7 +110,6 @@ Rtl::Rtl() {
     addMethod(str, "replace", S, {S, S}, false);
     addMethod(str, "isnullorempty", B, {S}, true);
 
-    // Integer.Parse("5"), Integer.MaxValue, x.ToString()
     ClassRecord* integer = makeClass("integer", "vb/rtl/Integer", I);
     addField(integer, "maxvalue", I, true);
     addField(integer, "minvalue", I, true);
