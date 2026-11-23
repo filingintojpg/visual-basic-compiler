@@ -4,8 +4,7 @@
 /* ===== Вспомогательные функции для описания встроенных членов ===== */
 
 // Добавляет в класс метод: addMethod(класс, "имя", тип результата, {типы параметров}, Shared ли)
-static MethodRecord* addMethod(ClassRecord* cls, const std::string& name, Type* returnType,
-                               std::initializer_list<Type*> paramTypes, bool isStatic, bool isVariadic = false) {
+static MethodRecord* addMethod(ClassRecord* cls, const std::string& name, Type* returnType, std::initializer_list<Type*> paramTypes, bool isStatic, bool isVariadic = false) {
     MethodRecord* m = new MethodRecord();
     m->name = name;
     m->owner = cls;
@@ -143,12 +142,8 @@ Rtl::Rtl() {
     addMethod(chr, "isletter", B, {C}, true);
     addMethod(chr, "tostring", S, {}, false);
 
-    // Глобальные строковые константы: vbLf, vbCr, vbCrLf, vbNewLine, vbTab, vbBack, vbFormFeed,
-    // vbVerticalTab, vbNullChar, vbNullString. Они не принадлежат никакому "настоящему" классу,
-    // поэтому лежат в служебном классе <globals>, который find() не отдаёт.
     _globals = makeClass("<globals>", "vb/rtl/Constants", nullptr);
-    for (const char* name : {"vblf", "vbcr", "vbcrlf", "vbnewline", "vbtab", "vbback", "vbformfeed",
-                             "vbverticaltab", "vbnullchar", "vbnullstring"}) {
+    for (const char* name : {"vblf", "vbcr", "vbcrlf", "vbnewline", "vbtab", "vbback", "vbformfeed", "vbverticaltab", "vbnullchar", "vbnullstring"}) {
         addField(_globals, name, S, true);
     }
 }
