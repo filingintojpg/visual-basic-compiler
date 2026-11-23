@@ -71,26 +71,14 @@ FieldRecord* ClassRecord::findField(const std::string& fieldName) const {
 }
 
 std::vector<MethodRecord*> ClassRecord::findMethods(const std::string& methodName) const {
-    std::vector<MethodRecord*> result;
     for (const ClassRecord* c = this; c; c = c->parent) {
         auto it = c->methods.find(methodName);
         if (it == c->methods.end()) {
             continue;
         }
-
-        for (MethodRecord* m : it->second) {
-            bool isHiddenMethod = false;
-            for (const MethodRecord* found : result) {
-                if (sameParams(*found, *m)) {
-                    isHiddenMethod = true;
-                }
-            }
-            if (!isHiddenMethod) {
-                result.push_back(m);
-            }
-        }
+        return it->second;
     }
-    return result;
+    return {};
 }
 
 const std::vector<MethodRecord*>& ClassRecord::constructors() const {
